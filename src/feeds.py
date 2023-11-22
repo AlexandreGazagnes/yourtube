@@ -4,7 +4,7 @@ from src.paths import RSS
 
 
 def clean_video_dict(video_dict, id_channel=""):
-    """ """
+    """clean a video dict from a rss feed"""
 
     keys = [
         # "link",
@@ -30,9 +30,9 @@ def clean_video_dict(video_dict, id_channel=""):
     video_dict["views"] = int(video_dict.get("media_statistics", {}).get("views", 0))
 
     video_dict = {
-        i: j
-        for i, j in video_dict.items()
-        if i not in ["media_starrating", "media_statistics"]
+        k: v
+        for k, v in video_dict.items()
+        if k not in ["media_starrating", "media_statistics"]
     }
 
     video_dict["id_channel"] = id_channel
@@ -41,31 +41,31 @@ def clean_video_dict(video_dict, id_channel=""):
 
 
 def clean_entries(entries, id_channel=""):
-    """ """
+    """clean a list of entries from a rss feed"""
 
     entries = [clean_video_dict(i, id_channel) for i in entries]
 
     return entries
 
 
-def extract_rss(rss_url):
-    """ """
+def extract_rss(id_channel):
+    """extract the rss feed from a channel id"""
 
-    if not rss_url:
+    if not id_channel:
         return []
 
-    feeds = feedparser.parse(RSS + rss_url)
+    feeds = feedparser.parse(RSS + id_channel)
     entries = feeds.entries
-    entries_cleaned = clean_entries(entries, id_channel=rss_url)
+    entries_cleaned = clean_entries(entries, id_channel=id_channel)
 
     return entries_cleaned
 
 
 def build_rss(df: pd.DataFrame):
-    """ """
+    """build a dataframe from a list of channel ids"""
 
-    df.rss_url.fillna("", inplace=True)
-    clean_entries = df.rss_url.parallel_apply(extract_rss)
+    df.id_channel.fillna("", inplace=True)
+    clean_entries = df.id_channel.parallel_apply(extract_rss)
 
     li = []
     _ = [li.extend(i) for i in clean_entries]
