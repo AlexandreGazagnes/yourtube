@@ -10,6 +10,6 @@ from bs4 import BeautifulSoup
 import requests
 import feedparser
 
-from src.feeds import *
-from src.extracts import *
-from src.paths import *
+from src.core.feeds import *
+from src.core.extracts import *
+from src.core.paths import *
