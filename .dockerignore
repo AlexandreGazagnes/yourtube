@@ -1,0 +1,6 @@
+tests/*
+sandbox/*
+utils/*
+data/*
+notebooks/*
+.github/*
