@@ -25,6 +25,7 @@ services:
       MYSQL_PASSWORD: password
     networks:
       - mysql-phpmyadmin
+      # - mysql-api
 
   # phpmyadmin
   phpmyadmin:
@@ -40,8 +41,23 @@ services:
     networks:
       - mysql-phpmyadmin
 
+  # api
+  # api:
+  #   restart: always
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     # - "3306:3306"
+  #     - "8000:80"
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - mysql-api
+
 networks:
   mysql-phpmyadmin:
+  # mysql-api:
 
 volumes:
   db_data:
