@@ -7,11 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship,
 from src.helpers import make_now, make_token
 
 
-class Base(DeclarativeBase):
-    pass
-    # def serialize(self):
-    #     # return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-    #     return self.__dict__
+from src.models.base import Base
 
 
 class UsersChannels(Base):

@@ -47,15 +47,15 @@ from src.models.userschannels import UsersChannels
 def _create_all():
     """Create all tables in the engine"""
 
-    from src.models.base import Base
-    from src.models.categ_1 import Categ1
-    from src.models.categ_2 import Categ2
-    from src.models.channels import Channels
-    from src.models.languages import Language
-    from src.models.videos import Videos
-    from src.models.status import Status
-    from src.models.users import Users
-    from src.models.userschannels import UsersChannels
+    # from src.models.base import Base
+    # from src.models.categ_1 import Categ1
+    # from src.models.categ_2 import Categ2
+    # from src.models.channels import Channels
+    # from src.models.languages import Language
+    # from src.models.videos import Videos
+    # from src.models.status import Status
+    # from src.models.users import Users
+    # from src.models.userschannels import UsersChannels
 
     Base.metadata.create_all(engine)
 
@@ -63,15 +63,15 @@ def _create_all():
 def _drop_all():
     """Drop all tables in the engine"""
 
-    from src.models.base import Base
-    from src.models.categ_1 import Categ1
-    from src.models.categ_2 import Categ2
-    from src.models.channels import Channels
-    from src.models.languages import Language
-    from src.models.videos import Videos
-    from src.models.status import Status
-    from src.models.users import Users
-    from src.models.userschannels import UsersChannels
+    # from src.models.base import Base
+    # from src.models.categ_1 import Categ1
+    # from src.models.categ_2 import Categ2
+    # from src.models.channels import Channels
+    # from src.models.languages import Language
+    # from src.models.videos import Videos
+    # from src.models.status import Status
+    # from src.models.users import Users
+    # from src.models.userschannels import UsersChannels
 
     Base.metadata.drop_all(engine)
 

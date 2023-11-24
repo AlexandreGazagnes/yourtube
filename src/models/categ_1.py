@@ -17,11 +17,13 @@ from sqlalchemy import (
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
 
-class Base(DeclarativeBase):
-    pass
-    # def serialize(self):
-    #     # return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-    #     return self.__dict__
+from src.models.base import Base
+
+# class Base(DeclarativeBase):
+#     pass
+#     # def serialize(self):
+#     #     # return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+#     #     return self.__dict__
 
 
 class Categ1(Base):
