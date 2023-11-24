@@ -16,12 +16,41 @@ class Base(DeclarativeBase):
 
 class Channels(Base):
     __tablename__ = "channels"
-    id_channel: Mapped[str] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column()
-    interest: Mapped[float] = mapped_column(default=2.5, nullable=False)
-    date: Mapped[str] = mapped_column(default=make_now(), nullable=False)
-    id_language: Mapped[str] = mapped_column(default="?", nullable=False)
-    id_categ_1: Mapped[str] = mapped_column(default="Misc.", nullable=False)
+    id_channel: Mapped[str] = mapped_column(
+        String(30),
+        primary_key=True,
+        nullable=False,
+        unique=True,
+    )
+    name: Mapped[str] = mapped_column(
+        String(30),
+        unique=False,
+        nullable=False,
+    )
+    interest: Mapped[float] = mapped_column(
+        Float(),
+        default=2.5,
+        unique=False,
+        nullable=False,
+    )
+    date: Mapped[str] = mapped_column(
+        Date(),
+        default=make_now(),
+        unique=False,
+        nullable=False,
+    )
+    id_language: Mapped[str] = mapped_column(
+        String(12),
+        default="?",
+        unique=False,
+        nullable=False,
+    )
+    id_categ_1: Mapped[str] = mapped_column(
+        String(12),
+        default="Misc.",
+        unique=False,
+        nullable=False,
+    )
 
     def __repr__(self) -> str:
         return f"Channels(id_channel={self.id_channel}, name={self.name}, id_categ_1={self.id_categ_1}"

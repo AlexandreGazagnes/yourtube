@@ -15,7 +15,12 @@ class Base(DeclarativeBase):
 
 class Language(Base):
     __tablename__ = "language"
-    id_language: Mapped[str] = mapped_column(primary_key=True)
+    id_language: Mapped[str] = mapped_column(
+        String(12),
+        primary_key=True,
+        nullable=False,
+        unique=True,
+    )
 
     def __repr__(self) -> str:
         return f"Language(id_language={self.id_language}"

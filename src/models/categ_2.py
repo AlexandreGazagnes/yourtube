@@ -15,7 +15,13 @@ class Base(DeclarativeBase):
 
 class Categ2(Base):
     __tablename__ = "categ_2"
-    id_categ_2: Mapped[str] = mapped_column(primary_key=True)
+
+    id_categ_2: Mapped[str] = mapped_column(
+        String(12),
+        primary_key=True,
+        nullable=False,
+        unique=True,
+    )
 
     def __repr__(self) -> str:
         return f"Categ2(id_categ_2={self.id_categ_2}"

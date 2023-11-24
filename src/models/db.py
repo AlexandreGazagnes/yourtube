@@ -16,6 +16,8 @@ from sqlalchemy.orm import Session
 # from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
+import pandas as pd
+
 load_dotenv("./.env/.env.dev")
 
 url_object = URL.create(
@@ -42,7 +44,116 @@ from src.models.users import Users
 from src.models.userschannels import UsersChannels
 
 
+def _create_all():
+    """Create all tables in the engine"""
+
+    from src.models.base import Base
+    from src.models.categ_1 import Categ1
+    from src.models.categ_2 import Categ2
+    from src.models.channels import Channels
+    from src.models.languages import Language
+    from src.models.videos import Videos
+    from src.models.status import Status
+    from src.models.users import Users
+    from src.models.userschannels import UsersChannels
+
+    Base.metadata.create_all(engine)
+
+
+def _drop_all():
+    """Drop all tables in the engine"""
+
+    from src.models.base import Base
+    from src.models.categ_1 import Categ1
+    from src.models.categ_2 import Categ2
+    from src.models.channels import Channels
+    from src.models.languages import Language
+    from src.models.videos import Videos
+    from src.models.status import Status
+    from src.models.users import Users
+    from src.models.userschannels import UsersChannels
+
+    Base.metadata.drop_all(engine)
+
+
+def _boot():
+    """ """
+
+    categ_1_df = pd.read_csv("./data/tables/categ_1.csv")
+    with Session(engine) as session:
+        try:
+            for _, row in categ_1_df.iterrows():
+                session.add(Categ1(**row.to_dict()))
+                session.commit()
+        except Exception as e:
+            print(e)
+
+    categ_2_df = pd.read_csv("./data/tables/categ_2.csv")
+    with Session(engine) as session:
+        for _, row in categ_2_df.iterrows():
+            session.add(Categ2(**row.to_dict()))
+            session.commit()
+
+    channels_df = pd.read_csv("./data/tables/channels.csv")
+    with Session(engine) as session:
+        for _, row in channels_df.iterrows():
+            session.add(Channels(**row.to_dict()))
+            session.commit()
+
+    language_df = pd.read_csv("./data/tables/languages.csv")
+    with Session(engine) as session:
+        for _, row in language_df.iterrows():
+            session.add(Language(**row.to_dict()))
+            session.commit()
+
+    status_df = pd.read_csv("./data/tables/status.csv")
+    with Session(engine) as session:
+        for _, row in status_df.iterrows():
+            session.add(Status(**row.to_dict()))
+            session.commit()
+
+    users_df = pd.read_csv("./data/tables/users.csv")
+    with Session(engine) as session:
+        for _, row in users_df.iterrows():
+            session.add(Users(**row.to_dict()))
+            session.commit()
+
+    userschannels_df = pd.read_csv("./data/tables/userschannels.csv")
+    with Session(engine) as session:
+        for _, row in userschannels_df.iterrows():
+            session.add(UsersChannels(**row.to_dict()))
+            session.commit()
+
+    videos_df = pd.read_csv("./data/tables/videos.csv")
+    with Session(engine) as session:
+        for _, row in videos_df.iterrows():
+            session.add(Videos(**row.to_dict()))
+            session.commit()
+
+
+def _reboot():
+    """ """
+
+    from src.models.base import Base
+    from src.models.categ_1 import Categ1
+    from src.models.categ_2 import Categ2
+    from src.models.channels import Channels
+    from src.models.languages import Language
+    from src.models.videos import Videos
+    from src.models.status import Status
+    from src.models.users import Users
+    from src.models.userschannels import UsersChannels
+
+    Base.metadata.drop_all(engine)
+
+    _drop_all()
+    _create_all()
+    _boot()
+
+
 class Db:
+    """Db class to manage the database"""
+
     users = Users
     userschannels = UsersChannels
     categ_1 = Categ1
@@ -53,3 +164,7 @@ class Db:
     videos = Videos
     engine = engine
     session = session
+    create_all = _create_all
+    drop_all = _drop_all
+    boot = _boot
+    reboot = _reboot

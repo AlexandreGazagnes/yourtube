@@ -17,10 +17,22 @@ class Base(DeclarativeBase):
 class UsersChannels(Base):
     __tablename__ = "userschannels"
     id_userschannels: Mapped[int] = mapped_column(
-        primary_key=True, autoincrement=True, nullable=False
+        Integer(),
+        primary_key=True,
+        autoincrement=True,
+        nullable=False,
+        unique=True,
     )
-    id_user: Mapped[int] = mapped_column()
-    id_channel: Mapped[str] = mapped_column()
+    id_user: Mapped[int] = mapped_column(
+        Integer(),
+        nullable=False,
+        unique=False,
+    )
+    id_channel: Mapped[str] = mapped_column(
+        String(30),
+        nullable=False,
+        unique=False,
+    )
 
     def __repr__(self) -> str:
         return f"UsersChannels(id_userschannels={self.id_userschannels}, id_user={self.id_user}, id_channel={self.id_channel})"

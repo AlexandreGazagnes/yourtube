@@ -16,7 +16,12 @@ class Base(DeclarativeBase):
 class Status(Base):
     __tablename__ = "status"
 
-    id_status: Mapped[str] = mapped_column(primary_key=True)
+    id_status: Mapped[str] = mapped_column(
+        String(12),
+        primary_key=True,
+        nullable=False,
+        unique=True,
+    )
 
     def __repr__(self) -> str:
         return f"Status(id_status={self.id_status}"
