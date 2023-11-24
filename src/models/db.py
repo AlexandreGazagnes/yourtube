@@ -14,7 +14,9 @@ from sqlalchemy.orm import Session
 # from sqlalchemy.orm import mapped_column
 # from sqlalchemy.orm import relationship
 # from sqlalchemy.orm import Session
+from dotenv import load_dotenv
 
+load_dotenv("./.env/.env.dev")
 
 url_object = URL.create(
     drivername="mysql+mysqlconnector",
@@ -36,14 +38,18 @@ from src.models.channels import Channels
 from src.models.languages import Language
 from src.models.videos import Videos
 from src.models.status import Status
+from src.models.users import Users
+from src.models.userschannels import UsersChannels
 
 
-# class Db:
-#     categ_1 = Categ1
-#     categ_2 = Categ2
-#     channels = Channels
-#     languages = Language
-#     language = Language
-#     videos = Videos
-#     engine = engine
-#     session = session
+class Db:
+    users = Users
+    userschannels = UsersChannels
+    categ_1 = Categ1
+    categ_2 = Categ2
+    channels = Channels
+    languages = Language
+    language = Language
+    videos = Videos
+    engine = engine
+    session = session
