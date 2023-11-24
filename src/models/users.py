@@ -40,7 +40,7 @@ class Users(Base):
         unique=True,
     )
     token: Mapped[str] = mapped_column(
-        String(16),
+        String(20),
         default=make_token(),
         nullable=False,
         unique=True,

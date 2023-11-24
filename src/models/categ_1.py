@@ -37,10 +37,11 @@ class Categ1(Base):
     )
 
     id_categ_2: Mapped[str] = mapped_column(
-        String(30),
+        String(12),
         default="Misc.",
         unique=False,
         nullable=False,
+        # FK
     )
 
     def __repr__(self) -> str:

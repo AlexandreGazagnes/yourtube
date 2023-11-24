@@ -100,7 +100,7 @@ def _boot():
             session.add(Channels(**row.to_dict()))
             session.commit()
 
-    language_df = pd.read_csv("./data/tables/languages.csv")
+    language_df = pd.read_csv("./data/tables/language.csv")
     with Session(engine) as session:
         for _, row in language_df.iterrows():
             session.add(Language(**row.to_dict()))
@@ -134,15 +134,15 @@ def _boot():
 def _reboot():
     """ """
 
-    from src.models.base import Base
-    from src.models.categ_1 import Categ1
-    from src.models.categ_2 import Categ2
-    from src.models.channels import Channels
-    from src.models.languages import Language
-    from src.models.videos import Videos
-    from src.models.status import Status
-    from src.models.users import Users
-    from src.models.userschannels import UsersChannels
+    # from src.models.base import Base
+    # from src.models.categ_1 import Categ1
+    # from src.models.categ_2 import Categ2
+    # from src.models.channels import Channels
+    # from src.models.languages import Language
+    # from src.models.videos import Videos
+    # from src.models.status import Status
+    # from src.models.users import Users
+    # from src.models.userschannels import UsersChannels
 
     Base.metadata.drop_all(engine)
 

@@ -23,11 +23,13 @@ class UsersChannels(Base):
         Integer(),
         nullable=False,
         unique=False,
+        # FK
     )
     id_channel: Mapped[str] = mapped_column(
-        String(30),
+        String(40),
         nullable=False,
         unique=False,
+        # FK
     )
 
     def __repr__(self) -> str:

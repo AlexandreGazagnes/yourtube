@@ -12,13 +12,13 @@ from src.models.base import Base
 class Channels(Base):
     __tablename__ = "channels"
     id_channel: Mapped[str] = mapped_column(
-        String(30),
+        String(40),
         primary_key=True,
         nullable=False,
         unique=True,
     )
     name: Mapped[str] = mapped_column(
-        String(30),
+        String(50),
         unique=False,
         nullable=False,
     )
@@ -28,8 +28,8 @@ class Channels(Base):
         unique=False,
         nullable=False,
     )
-    date: Mapped[str] = mapped_column(
-        Date(),
+    created_at: Mapped[str] = mapped_column(
+        DateTime(),
         default=make_now(),
         unique=False,
         nullable=False,
@@ -39,12 +39,14 @@ class Channels(Base):
         default="?",
         unique=False,
         nullable=False,
+        # FK
     )
     id_categ_1: Mapped[str] = mapped_column(
         String(12),
         default="Misc.",
         unique=False,
         nullable=False,
+        # FK
     )
 
     def __repr__(self) -> str:
