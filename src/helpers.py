@@ -3,15 +3,6 @@ from datetime import datetime, timedelta
 from secrets import token_hex
 
 
-def verify_token(token: str):
-    """verify token"""
-
-    params = dotenv_values(".env")
-    if token == params.get("TOKEN", None):
-        return True
-    return False
-
-
 def make_now():
     """return current date and time"""
 

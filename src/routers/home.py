@@ -1,10 +1,12 @@
-from fastapi import FastAPI, HTTPException, APIRouter
+from fastapi import FastAPI, HTTPException, APIRouter, Depends
 from src.models import *
 from src.routers.helpers import jsonify
 from src.queries import query_all, VideoQuery
 from src.models.db import Channels, Videos, session, engine, Session
 from src.core.feeds import extract_rss
 import logging
+
+from src.routers.helpers import jsonify, token_required, validate_token
 
 # from src.queries import query_all, jsonify
 
@@ -25,11 +27,13 @@ async def root():
 
 
 @home.get("/update", status_code=200)
-async def update():
+async def update(token: str = Depends(validate_token)):
     """ """
 
     # load channels
     channel_list = [i.get("id_channel") for i in query_all(Channels, limit=1_000)]
+    channel_list = [i for i in channel_list if not i.lower().startswith("fake")]
+    channel_list = [i for i in channel_list if not i.lower().startswith("test")]
 
     # feeds
     feeds = [extract_rss(i) for i in channel_list]
