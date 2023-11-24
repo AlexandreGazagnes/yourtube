@@ -12,6 +12,7 @@ def create_app():
     app.include_router(Router.categ_1)
     app.include_router(Router.videos)
     app.include_router(Router.channels)
+    app.include_router(Router.status)
 
     return app
 

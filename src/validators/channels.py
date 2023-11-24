@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from src.helpers import make_now, make_token
 
 
-class ChannelBase(BaseModel):
+class _ChannelBase(BaseModel):
     id_channel: str = ""
     name: str
     interest: float = 2.5
@@ -11,7 +11,7 @@ class ChannelBase(BaseModel):
     id_categ_1: str
 
 
-default_channel = ChannelBase(
+_default_channel = _ChannelBase(
     id_channel=make_token(4),
     name=make_token(4),
     id_language="En",
@@ -19,6 +19,6 @@ default_channel = ChannelBase(
 )
 
 
-class Channel:
-    base = ChannelBase
-    default = default_channel
+class ChannelValidator:
+    base = _ChannelBase
+    default = _default_channel

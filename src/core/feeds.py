@@ -1,6 +1,6 @@
 import pandas as pd
 import feedparser
-from src.paths import RSS
+from src.core.paths import RSS
 
 
 def clean_video_dict(video_dict, id_channel=""):

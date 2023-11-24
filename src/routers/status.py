@@ -8,12 +8,12 @@ from src.routers.helpers import jsonify
 
 import logging
 
-languages = APIRouter(
-    prefix="/languages",
-    tags=["languages"],
+status = APIRouter(
+    prefix="/status",
+    tags=["status"],
 )
 
 
-@languages.get("")
-async def get_all_languages():
-    return jsonify(query_all(Language))
+@status.get("")
+async def get_all_status():
+    return jsonify(query_all(Status))

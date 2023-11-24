@@ -4,6 +4,8 @@ from src.routers.home import home
 from src.routers.languages import languages
 from src.routers.videos import videos
 
+from src.routers.status import status
+
 
 class Router:
     videos = videos
@@ -11,3 +13,4 @@ class Router:
     channels = channels
     home = home
     categ_1 = categ_1
+    status = status

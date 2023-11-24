@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, APIRouter
-from src.models import *
+from src.models.db import *
 from src.queries import query_all
+from src.routers.helpers import jsonify
 
 # from src.validators import ChannelBase, default_channel
 
@@ -14,4 +15,4 @@ categ_1 = APIRouter(
 
 @categ_1.get("")
 async def get_all_categ_1():
-    return query_all(Categ1)
+    return jsonify(query_all(Categ1))

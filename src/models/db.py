@@ -35,6 +35,7 @@ from src.models.categ_2 import Categ2
 from src.models.channels import Channels
 from src.models.languages import Language
 from src.models.videos import Videos
+from src.models.status import Status
 
 
 # class Db:

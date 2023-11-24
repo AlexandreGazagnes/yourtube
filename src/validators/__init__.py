@@ -1,5 +1,7 @@
-from src.validators.channels import Channel
+from src.validators.channels import ChannelValidator
+from src.validators.videos import VideoValidator
 
 
 class Validators:
-    channels = Channel
+    videos = VideoValidator
+    channels = ChannelValidator
