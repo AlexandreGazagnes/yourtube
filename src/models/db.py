@@ -18,14 +18,18 @@ from dotenv import load_dotenv
 
 import pandas as pd
 
-load_dotenv("./.env/.env.dev")
+from src.params import get_params
+import os
+
+params = get_params(os.getenv("MODE", "dev"))
 
 url_object = URL.create(
     drivername="mysql+mysqlconnector",
     username="root",
-    password="password",  # plain (unescaped) text
-    host="localhost",
-    database="yourdb",
+    password=params.get("MYSQL_ROOT_PASSWORD"),  # plain (unescaped) text
+    host=params.get("MYSQL_HOST"),
+    database=params.get("MYSQL_DATABASE"),
+    port=params.get("MYSQL_PORT"),
 )
 
 
