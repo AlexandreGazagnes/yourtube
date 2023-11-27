@@ -24,7 +24,7 @@ def get_params(MODE: str = "dev") -> dict:
         if MODE == "dev":
             _params = dotenv_values(".env/.env.dev")
         elif MODE == "main":
-            _params = dotenv_values(".env/.env.main")
+            _params = dotenv_values(".env")
     except Exception as e:
         logging.error(e)
         _params = {}

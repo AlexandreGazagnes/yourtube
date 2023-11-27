@@ -26,6 +26,11 @@ async def root():
     return jsonify(None, message="Hello World")
 
 
+@home.get("/ping", status_code=200)
+async def root():
+    return jsonify(None, message="pong")
+
+
 @home.get("/update", status_code=200)
 async def update(token: str = Depends(validate_token)):
     """ """
