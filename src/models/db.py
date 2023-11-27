@@ -16,20 +16,23 @@ from sqlalchemy.orm import Session
 # from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
+import logging
 import pandas as pd
 
 from src.params import get_params
 import os
 
+# import psycopg2
+
 params = get_params(os.getenv("MODE", "dev"))
 
 url_object = URL.create(
-    drivername="mysql+mysqlconnector",
-    username="root",
-    password=params.get("MYSQL_ROOT_PASSWORD"),  # plain (unescaped) text
-    host=params.get("MYSQL_HOST"),
-    database=params.get("MYSQL_DATABASE"),
-    port=params.get("MYSQL_PORT"),
+    drivername="postgresql",
+    username=params.get("POSTGRES_USER"),
+    password=params.get("POSTGRES_PASSWORD"),  # plain (unescaped) text
+    host=params.get("POSTGRES_HOST"),
+    database=params.get("POSTGRES_DB"),
+    port=params.get("POSTGRES_PORT"),
 )
 
 

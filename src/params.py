@@ -31,17 +31,20 @@ def get_params(MODE: str = "dev") -> dict:
 
     # set params from os.environ as default
     _default_params = {
+        # API
         "API_TOKEN": os.getenv("API_TOKEN", None),
         "API_HOST": os.getenv("API_HOST", None),
         "API_PORT": os.getenv("API_PORT", None),
         "API_MODE": os.getenv("API_MODE", None),
-        "MYSQL_ROOT_PASSWORD": os.getenv("MYSQL_ROOT_PASSWORD", None),
-        "MYSQL_DATABASE": os.getenv("MYSQL_DATABASE", None),
-        "MYSQL_PASSWORD": os.getenv("MYSQL_PASSWORD", None),
-        "MYSQL_HOST": os.getenv("MYSQL_HOST", None),
-        "MYSQL_PORT": os.getenv("MYSQL_PORT", None),
-        "PMA_HOST": os.getenv("PMA_HOST", None),
-        "MYSQL_MODE": os.getenv("MYSQL_MODE", None),
+        # DB
+        "POSTGRES_HOST": os.getenv("POSTGRES_HOST", None),
+        "POSTGRES_PORT": os.getenv("POSTGRES_PORT", None),
+        # "POSTGRES_ROOT_PASSWORD": os.getenv("POSTGRES_ROOT_PASSWORD", None),
+        "POSTGRES_DB": os.getenv("POSTGRES_DB", None),
+        "POSTGRES_USER": os.getenv("POSTGRES_USER", None),
+        "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", None),
+        # "PMA_HOST": os.getenv("PMA_HOST", None),
+        "POSTGRES_MODE": os.getenv("POSTGRES_MODE", None),
     }
 
     # if not in dotenv load from os.environ
