@@ -1,5 +1,6 @@
-from src.models.db import Session, engine
-from src.queries.videos import VideoQuery
+from src.db import Session, engine
+
+# from src.queries. import VideoQuery
 
 # from src.queries.videos import query_all_videos
 
@@ -17,5 +18,3 @@ def query_all(Table, engine=engine, limit: int = 300):
 
 class Query:
     all = query_all
-    videos = VideoQuery
-

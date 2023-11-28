@@ -4,7 +4,7 @@ from fastapi import HTTPException
 
 from src.channels.validators import ChannelValidator
 from src.channels.queries import ChannelQuery
-from src.channels.models import Channels
+from src.channels.models import Channel
 
 from src.helpers.routers import jsonify
 
@@ -48,7 +48,7 @@ def _create_channel(channel: ChannelValidator.base):
 
     try:
         with Session(engine) as session:
-            channel = Channels(**channel.model_dump())
+            channel = Channel(**channel.model_dump())
             session.add(channel)
             session.commit()
 
