@@ -26,19 +26,29 @@ import os
 
 params = get_params(os.getenv("MODE", "dev"))
 
-url_object = URL.create(
-    drivername="postgresql",
-    username=params.get("POSTGRES_USER"),
-    password=params.get("POSTGRES_PASSWORD"),  # plain (unescaped) text
-    host=params.get("POSTGRES_HOST"),
-    database=params.get("POSTGRES_DB"),
-    port=params.get("POSTGRES_PORT"),
-)
+
+def _get_engine(params: dict):
+    url_object = URL.create(
+        drivername="postgresql",
+        username=params.get("POSTGRES_USER"),
+        password=params.get("POSTGRES_PASSWORD"),  # plain (unescaped) text
+        host=params.get("POSTGRES_HOST"),
+        database=params.get("POSTGRES_DB"),
+        port=params.get("POSTGRES_PORT"),
+    )
+
+    engine = create_engine(url_object)
+    return engine
 
 
-engine = create_engine(url_object)
-session = Session(engine)
+def _get_session(params: dict):
+    engine = _get_engine(params)
+    session = Session(engine)
+    return session
 
+
+engine = _get_engine(params=params)
+session = _get_session(params=params)
 
 from src.models.base import Base
 from src.models.categ_1 import Categ1
@@ -169,8 +179,8 @@ class Db:
     languages = Language
     language = Language
     videos = Videos
-    engine = engine
-    session = session
+    engine = _get_engine
+    session = _get_session
     create_all = _create_all
     drop_all = _drop_all
     boot = _boot
