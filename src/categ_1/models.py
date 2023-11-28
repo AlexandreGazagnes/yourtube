@@ -1,5 +1,4 @@
-from typing import List
-from typing import Optional
+from typing import List, Optional
 
 from sqlalchemy import create_engine, URL, select
 from sqlalchemy import (
@@ -13,9 +12,7 @@ from sqlalchemy import (
     Boolean,
 )
 
-# from sqlalchemy.orm
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
-
 
 from src.base.models import Base
 
