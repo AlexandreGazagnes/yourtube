@@ -1,12 +1,12 @@
-from typing import List
-from typing import Optional
+import logging
+from typing import List, Optional
 
 from sqlalchemy import create_engine, URL, select
 from sqlalchemy import ForeignKey, String, Column, Integer, Float, DateTime, Date
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-
-from src.models.base import Base
+from src.helpers.helpers import make_now, make_token
+from src.base.models import Base
 
 
 class Language(Base):
@@ -18,6 +18,18 @@ class Language(Base):
         unique=True,
     )
 
+    created_at: Mapped[str] = mapped_column(
+        DateTime(),
+        default=make_now(),
+        unique=False,
+        nullable=False,
+    )
+    updated_at: Mapped[str] = mapped_column(
+        DateTime(),
+        default=make_now(),
+        unique=False,
+        nullable=False,
+    )
+
     def __repr__(self) -> str:
         return f"Language(id_language={self.id_language}"
-
