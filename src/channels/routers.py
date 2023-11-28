@@ -1,11 +1,12 @@
-from fastapi import FastAPI, HTTPException, APIRouter
-from src.models.db import *
-from src.queries import query_all
-from src.routers.helpers import jsonify
-
-from src.validators import ChannelValidator
-
 import logging
+
+from fastapi import FastAPI, HTTPException, APIRouter
+
+from src.helpers.queries import query_all
+from src.helpers.routers import jsonify
+
+from src.channels.models import Channels
+from src.channels.validators import ChannelValidator
 
 
 channels = APIRouter(
@@ -18,7 +19,7 @@ channels = APIRouter(
 async def add_channel(
     channel: ChannelValidator.base = ChannelValidator.default,
 ):
-    """ """
+    """Add a channel"""
 
     if channel == ChannelValidator.default:
         logging.warning("Using default channel")
@@ -42,17 +43,19 @@ async def add_channel(
 
 @channels.put("/{id_channel}", status_code=201)
 async def update_channel(id_channel: str, channel: ChannelValidator.base):
-    """ """
+    """Update a channel"""
 
     raise HTTPException(status_code=501, detail="Not implemented")
 
 
 @channels.get("/", status_code=200)
 async def get_all_channels():
+    """Get all channels"""
     return jsonify(query_all(Channels))
 
 
 @channels.get("/by_user/{id_user}", status_code=200)
 async def get_all_channels(id_user: int):
-    return jsonify(query_all(Channels))
+    """Get all channels by user"""
 
+    return jsonify(query_all(Channels))

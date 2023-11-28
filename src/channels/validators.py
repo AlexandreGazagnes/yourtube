@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from src.helpers import make_now, make_token
+from src.helpers.helpers import make_now, make_token
 
 
 class _ChannelBase(BaseModel):
@@ -22,4 +22,3 @@ _default_channel = _ChannelBase(
 class ChannelValidator:
     base = _ChannelBase
     default = _default_channel
-
