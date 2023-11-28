@@ -27,8 +27,15 @@ async def root():
 
 
 @home.get("/ping", status_code=200)
-async def root():
+async def ping():
     return jsonify(None, message="pong")
+
+
+@home.get("/state", status_code=200)
+async def state():
+    with Session(engine) as session:
+        result = session.query(Videos).count()
+    return jsonify({"video_count": result}, message="success")
 
 
 @home.get("/update", status_code=200)
