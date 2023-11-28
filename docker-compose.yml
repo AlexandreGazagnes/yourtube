@@ -1,45 +1,53 @@
-version: '3.8'
+version: '3.9'
 
-# services:
-#   db:
-#     image: mysql:8.0
-#     command: --default-authentication-plugin=mysql_native_password
-#     restart: always
-#     environment:
-#       MYSQL_ROOT_PASSWORD: root_password
-#     ports:
-#       - "3306:3306"
 
 services:
   # Database
-  db:
-    image: mysql:8
+  postgres:
+    image: postgres:15
     volumes:
-      - db_data:/var/lib/mysql
+      - .data/db:/var/lib/postgresql/data
     restart: always
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: yourdb
-      MYSQL_PASSWORD: password
+      - 5432:5432
+    env_file:
+      - .env/.env.dev
+    # environment:
+    #   - POSTGRES_PASSWORD: password 
+    #   - POSTGRES_USER : hello
+    #   - POSTGRES_DB: yourdb
+    #   - POSTGRES_PORT: 5432
     networks:
-      - mysql-phpmyadmin
-      # - mysql-api
+      - postgres
 
-  # phpmyadmin
-  phpmyadmin:
-    depends_on:
-      - db
-    image: phpmyadmin
-    restart: always
-    ports:
-      - "8090:80"
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: password
-    networks:
-      - mysql-phpmyadmin
+  # db:
+  #   image: mysql:8
+  #   volumes:
+  #     - db_data:/var/lib/mysql
+  #   restart: always
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: password
+  #     MYSQL_DATABASE: yourdb
+  #     MYSQL_PASSWORD: password
+  #   networks:
+  #     - mysql-phpmyadmin
+  #     # - mysql-api
+
+  # # phpmyadmin
+  # phpmyadmin:
+  #   depends_on:
+  #     - db
+  #   image: phpmyadmin
+  #   restart: always
+  #   ports:
+  #     - "8090:80"
+  #   environment:
+  #     PMA_HOST: db
+  #     MYSQL_ROOT_PASSWORD: password
+  #   networks:
+  #     - mysql-phpmyadmin
 
   # api
   # api:
@@ -56,7 +64,8 @@ services:
   #     - mysql-api
 
 networks:
-  mysql-phpmyadmin:
+  postgres:
+  # mysql-phpmyadmin:
   # mysql-api:
 
 volumes:

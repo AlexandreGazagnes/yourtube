@@ -6,7 +6,7 @@ from src.helpers import make_time_delta
 
 def _query_all_videos(
     limit: int = 10_000,
-    last_days: int = 1_000,
+    last_days: int = 10_000,
 ):
     """query all rows from a table"""
 
@@ -22,6 +22,15 @@ def _query_all_videos(
         json = [row.__dict__ for row in result]
 
         return json
+    return []
+
+
+def _querry_all_id_videos(limit: int = 10_000, last_days: int = 10_000):
+    with Session(engine) as session:
+        result = session.query(Videos.id_video).all()
+        result = [row[0].strip() for row in result]
+        return list(set(result))
+
     return []
 
 
@@ -57,6 +66,7 @@ class VideoQuery:
     by_status = _query_by_status
     by_watched = _query_by_watched
     by_channel = _query_by_channel
+    all_id_videos = _querry_all_id_videos
 
 
 if __name__ == "__main__":

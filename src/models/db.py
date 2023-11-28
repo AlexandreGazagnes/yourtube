@@ -16,22 +16,39 @@ from sqlalchemy.orm import Session
 # from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
+import logging
 import pandas as pd
 
-load_dotenv("./.env/.env.dev")
+from src.params import get_params
+import os
 
-url_object = URL.create(
-    drivername="mysql+mysqlconnector",
-    username="root",
-    password="password",  # plain (unescaped) text
-    host="localhost",
-    database="yourdb",
-)
+# import psycopg2
+
+params = get_params(os.getenv("MODE", "dev"))
 
 
-engine = create_engine(url_object)
-session = Session(engine)
+def _get_engine(params: dict):
+    url_object = URL.create(
+        drivername="postgresql",
+        username=params.get("POSTGRES_USER"),
+        password=params.get("POSTGRES_PASSWORD"),  # plain (unescaped) text
+        host=params.get("POSTGRES_HOST"),
+        database=params.get("POSTGRES_DB"),
+        port=params.get("POSTGRES_PORT"),
+    )
 
+    engine = create_engine(url_object)
+    return engine
+
+
+def _get_session(params: dict):
+    engine = _get_engine(params)
+    session = Session(engine)
+    return session
+
+
+engine = _get_engine(params=params)
+session = _get_session(params=params)
 
 from src.models.base import Base
 from src.models.categ_1 import Categ1
@@ -162,8 +179,8 @@ class Db:
     languages = Language
     language = Language
     videos = Videos
-    engine = engine
-    session = session
+    engine = _get_engine
+    session = _get_session
     create_all = _create_all
     drop_all = _drop_all
     boot = _boot

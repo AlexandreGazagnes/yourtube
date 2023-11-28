@@ -50,3 +50,8 @@ async def update_channel(id_channel: str, channel: ChannelValidator.base):
 @channels.get("/", status_code=200)
 async def get_all_channels():
     return jsonify(query_all(Channels))
+
+
+@channels.get("/by_user/{id_user}", status_code=200)
+async def get_all_channels(id_user: int):
+    return jsonify(query_all(Channels))

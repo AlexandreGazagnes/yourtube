@@ -1,2 +1,7 @@
 selenium = "^4.15.2"    
 gsutil = "^5.27"
+# mysql-connector-python = "^8.2.0"
+gcloud = "^0.18.3"
+gsutil = "^5.27"
+alembic = "^1.12.1"
+python = "3.10.12"
