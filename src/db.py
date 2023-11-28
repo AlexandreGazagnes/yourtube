@@ -1,49 +1,35 @@
-# from typing import List
-# from typing import Optional
+import logging, os
+
+from typing import List, Optional
 
 from sqlalchemy import create_engine, URL, select
-from sqlalchemy.orm import Session
-
-# from sqlalchemy import ForeignKey, String, Column, Integer, Float, DateTime, Date
-# from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
-
-# from sqlalchemy import
-# from sqlalchemy import DateTime
-
-# from sqlalchemy.orm import Mapped
-# from sqlalchemy.orm import mapped_column
-# from sqlalchemy.orm import relationship
-# from sqlalchemy.orm import Session
-from dotenv import load_dotenv
-
-
-from typing import List
-from typing import Optional
-
-from sqlalchemy import create_engine, URL, select
-from sqlalchemy import ForeignKey, String, Column, Integer, Float, DateTime, Date
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
+from dotenv import load_dotenv
 
-class Base(DeclarativeBase):
-    pass
-    # def serialize(self):
-    #     # return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-    #     return self.__dict__
-
-
-import logging
 import pandas as pd
 
-from src.params import get_params
-import os
+from src.params import get_params, params
 
-# import psycopg2
+from src.base.models import Base
+from src.categ_1.models import Categ1
+from src.categ_2.models import Categ2
+from src.channels.models import Channel
+from src.languages.models import Language
+from src.videos.models import Video
+from src.status.models import Status
+from src.users.models import User
+from src.userschannels.models import UserChannel
 
-params = get_params(os.getenv("MODE", "dev"))
+
+# class Base(DeclarativeBase):
+#     pass
+#     # def serialize(self):
+#     #     # return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+#     #     return self.__dict__
 
 
-def _get_engine(params: dict):
+def _get_engine(params: dict = params):
     url_object = URL.create(
         drivername="postgresql",
         username=params.get("POSTGRES_USER"),
@@ -57,7 +43,7 @@ def _get_engine(params: dict):
     return engine
 
 
-def _get_session(params: dict):
+def _get_session(params: dict = params):
     engine = _get_engine(params)
     session = Session(engine)
     return session
@@ -66,50 +52,20 @@ def _get_session(params: dict):
 engine = _get_engine(params=params)
 session = _get_session(params=params)
 
-from src.models.base import Base
-from src.models.categ_1 import Categ1
-from src.models.categ_2 import Categ2
-from src.models.channels import Channels
-from src.models.languages import Language
-from src.models.videos import Videos
-from src.models.status import Status
-from src.models.users import Users
-from src.models.userschannels import UsersChannels
 
-
-def _create_all():
+def _create_all(engine=engine):
     """Create all tables in the engine"""
-
-    # from src.models.base import Base
-    # from src.models.categ_1 import Categ1
-    # from src.models.categ_2 import Categ2
-    # from src.models.channels import Channels
-    # from src.models.languages import Language
-    # from src.models.videos import Videos
-    # from src.models.status import Status
-    # from src.models.users import Users
-    # from src.models.userschannels import UsersChannels
 
     Base.metadata.create_all(engine)
 
 
-def _drop_all():
+def _drop_all(engine=engine):
     """Drop all tables in the engine"""
-
-    # from src.models.base import Base
-    # from src.models.categ_1 import Categ1
-    # from src.models.categ_2 import Categ2
-    # from src.models.channels import Channels
-    # from src.models.languages import Language
-    # from src.models.videos import Videos
-    # from src.models.status import Status
-    # from src.models.users import Users
-    # from src.models.userschannels import UsersChannels
 
     Base.metadata.drop_all(engine)
 
 
-def _boot():
+def _boot(engine=engine):
     """ """
 
     categ_1_df = pd.read_csv("./data/tables/categ_1.csv")
@@ -164,37 +120,24 @@ def _boot():
             session.commit()
 
 
-def _reboot():
+def _reboot(engine=engine):
     """ """
 
-    # from src.models.base import Base
-    # from src.models.categ_1 import Categ1
-    # from src.models.categ_2 import Categ2
-    # from src.models.channels import Channels
-    # from src.models.languages import Language
-    # from src.models.videos import Videos
-    # from src.models.status import Status
-    # from src.models.users import Users
-    # from src.models.userschannels import UsersChannels
-
-    Base.metadata.drop_all(engine)
-
-    _drop_all()
-    _create_all()
-    _boot()
+    _drop_all(engine=engine)
+    _create_all(engine=engine)
+    _boot(engine=engine)
 
 
 class Db:
     """Db class to manage the database"""
 
-    users = Users
-    userschannels = UsersChannels
+    user = User
+    userchannel = UserChannel
     categ_1 = Categ1
     categ_2 = Categ2
-    channels = Channels
-    languages = Language
+    channel = Channel
     language = Language
-    videos = Videos
+    video = Video
     engine = _get_engine
     session = _get_session
     create_all = _create_all
