@@ -36,6 +36,10 @@ def get_params(MODE: str = "dev") -> dict:
         "API_HOST": os.getenv("API_HOST", None),
         "API_PORT": os.getenv("API_PORT", None),
         "API_MODE": os.getenv("API_MODE", None),
+        # RAPIDAPI
+        "RAPIDAPI_URL": os.getenv("RAPIDAPI_URL", None),
+        "X-RapidAPI-Key": os.getenv("X-RapidAPI-Key", None),
+        "X-RapidAPI-Host": os.getenv("X-RapidAPI-Host", None),
         # DB
         "POSTGRES_HOST": os.getenv("POSTGRES_HOST", None),
         "POSTGRES_PORT": os.getenv("POSTGRES_PORT", None),
