@@ -9,7 +9,7 @@ from src.helpers.helpers import make_now, make_token
 from src.base.models import Base
 
 
-class Channels(Base):
+class Channel(Base):
     """Channels model"""
 
     __tablename__ = "channels"

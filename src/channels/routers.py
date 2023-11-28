@@ -5,8 +5,9 @@ from fastapi import FastAPI, HTTPException, APIRouter
 from src.helpers.queries import query_all
 from src.helpers.routers import jsonify
 
-from src.channels.models import Channels
+from src.channels.models import Channel
 from src.channels.validators import ChannelValidator
+from src.channels.helpers import ChannelHelper
 
 
 channels = APIRouter(
@@ -21,24 +22,19 @@ async def add_channel(
 ):
     """Add a channel"""
 
-    if channel == ChannelValidator.default:
-        logging.warning("Using default channel")
+    if response := ChannelHelper.default(channel):
+        raise response
 
-        # return {"message": "Using default channel no db changes"}
-        raise HTTPException(
-            status_code=204, detail="Using default channel no db changes"
-        )
+    if response := ChannelHelper.no_channel_id(channel):
+        raise response
 
-    if not channel.id_channel:
-        logging.error("id_channel is required")
-        # TODO ADD GATHER THE TRUE ID CHANNEL
-        pass
+    if response := ChannelHelper.already_in_db(channel):
+        raise response
 
-    with Session(engine) as session:
-        channel = Channels(**channel.model_dump())
-        session.add(channel)
-        session.commit()
-        return jsonify(None, message="Channel added")
+    if response := ChannelHelper.create_channel(channel):
+        raise response
+
+    return jsonify(channel, message="Channel added")
 
 
 @channels.put("/{id_channel}", status_code=201)
@@ -51,11 +47,14 @@ async def update_channel(id_channel: str, channel: ChannelValidator.base):
 @channels.get("/", status_code=200)
 async def get_all_channels():
     """Get all channels"""
-    return jsonify(query_all(Channels))
+
+    payload = query_all(Channel)
+    return jsonify(payload=payload, message="done")
 
 
 @channels.get("/by_user/{id_user}", status_code=200)
 async def get_all_channels(id_user: int):
     """Get all channels by user"""
 
-    return jsonify(query_all(Channels))
+    payload = query_all(Channel)
+    return jsonify(payload=payload, message="done")
