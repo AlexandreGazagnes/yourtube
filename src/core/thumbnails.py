@@ -40,8 +40,14 @@ def _clean_api_response(json: dict) -> dict:
     }
 
 
-def extract_video_details(id_video: str = "kJQP7kiw5Fk", MODE="dev") -> dict:
+def enhance_video(video_dict, MODE="dev") -> dict:
     """get the thumbnail details of a video"""
 
+    id_video = video_dict.get("id_video")
+
     json = _request_rapid_api_details(id_video=id_video, MODE=MODE)
-    return _clean_api_response(json)
+    json = _clean_api_response(json)
+
+    video_dict.update(json)
+
+    return video_dict
