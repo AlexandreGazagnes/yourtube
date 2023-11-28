@@ -166,3 +166,5 @@ cython_debug/
 ./env/.env.local
 ./env/.env.test
 ./env/.env.main
+.env
+.env.main
