@@ -9,7 +9,7 @@ from src.helpers.helpers import make_now, make_token
 from src.base.models import Base
 
 
-class Users(Base):
+class User(Base):
     __tablename__ = "users"
     id_user: Mapped[int] = mapped_column(
         Integer(),
