@@ -86,7 +86,7 @@ def _boot(engine=engine):
     channels_df = pd.read_csv("./data/tables/channels.csv")
     with Session(engine) as session:
         for _, row in channels_df.iterrows():
-            session.add(Channels(**row.to_dict()))
+            session.add(Channel(**row.to_dict()))
             session.commit()
 
     language_df = pd.read_csv("./data/tables/language.csv")
@@ -104,19 +104,19 @@ def _boot(engine=engine):
     users_df = pd.read_csv("./data/tables/users.csv")
     with Session(engine) as session:
         for _, row in users_df.iterrows():
-            session.add(Users(**row.to_dict()))
+            session.add(User(**row.to_dict()))
             session.commit()
 
     userschannels_df = pd.read_csv("./data/tables/userschannels.csv")
     with Session(engine) as session:
         for _, row in userschannels_df.iterrows():
-            session.add(UsersChannels(**row.to_dict()))
+            session.add(UserChannel(**row.to_dict()))
             session.commit()
 
     videos_df = pd.read_csv("./data/tables/videos.csv")
     with Session(engine) as session:
         for _, row in videos_df.iterrows():
-            session.add(Videos(**row.to_dict()))
+            session.add(Video(**row.to_dict()))
             session.commit()
 
 
