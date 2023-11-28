@@ -1,13 +1,12 @@
-from typing import List
-from typing import Optional
+import logging
+from typing import List, Optional
 
 from sqlalchemy import create_engine, URL, select
 from sqlalchemy import ForeignKey, String, Column, Integer, Float, DateTime, Date
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
-from src.helpers import make_now, make_token
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-
-from src.models.base import Base
+from src.helpers.helpers import make_now, make_token
+from src.base.models import Base
 
 
 class Users(Base):
@@ -63,10 +62,15 @@ class Users(Base):
     created_at: Mapped[str] = mapped_column(
         DateTime(),
         default=make_now(),
-        nullable=False,
         unique=False,
+        nullable=False,
+    )
+    updated_at: Mapped[str] = mapped_column(
+        DateTime(),
+        default=make_now(),
+        unique=False,
+        nullable=False,
     )
 
     def __repr__(self) -> str:
         return f"Users(id_user={self.id_user}, firstname={self.firstname}, lastname={self.lastname}, email={self.email}, password={self.password}, token={self.token}, birthdate={self.birthdate}, is_active={self.is_active}, is_admin={self.is_admin}, created_at={self.created_at})"
-
