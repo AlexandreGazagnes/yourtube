@@ -8,7 +8,9 @@ import logging
 import time
 import pandas as pd
 
+from src.core.thumbnails import enhance_video
 from src.routers.helpers import jsonify, validate_token  # token_required
+import random
 
 # from src.queries import query_all, jsonify
 
@@ -100,6 +102,9 @@ async def update(token: str = Depends(validate_token)):
 
         # add the video to the db if needed
         if id_video not in old_videos:
+            # add thumbnail details
+            video = enhance_video(video)
+            # add to db
             try:
                 with Session(engine) as session:
                     session.add(Videos(**video))
@@ -112,6 +117,10 @@ async def update(token: str = Depends(validate_token)):
                 errors_added += 1
         # else update the video
         else:
+            # do not update each time
+            if not random.randint(0, 3):
+                continue
+            # update the video
             try:
                 with Session(engine) as session:
                     session.query(Videos).filter_by(id_video=id_video).update(video)
@@ -148,3 +157,25 @@ async def update(token: str = Depends(validate_token)):
     }
 
     return jsonify(payload, message="Done")
+
+
+if __name__ == "__main__":
+    from src.params import get_params
+    from src.models.db import Db
+
+    from fastapi import FastAPI, HTTPException, APIRouter, Depends
+    from src.models import *
+    from src.routers.helpers import jsonify
+    from src.queries import query_all, VideoQuery
+    from src.models.db import Channels, Videos, session, engine, Session
+    from src.core.feeds import extract_rss
+    import logging
+    import time
+    import pandas as pd
+
+    from src.core.thumbnails import enhance_video
+    from src.routers.helpers import jsonify, validate_token  # token_required
+    import random
+
+    params = get_params(MODE="dev")
+    engine = Db.engine(params=params)
