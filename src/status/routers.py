@@ -1,12 +1,12 @@
-from fastapi import FastAPI, HTTPException, APIRouter
-from src.models.db import *
-from src.queries import query_all
-from src.routers.helpers import jsonify
-
-
-# from src.validators import ChannelBase, default_channel
-
 import logging
+
+from fastapi import FastAPI, HTTPException, APIRouter
+
+from src.helpers.queries import query_all
+from src.helpers.routers import jsonify
+
+from src.status.models import Status
+
 
 status = APIRouter(
     prefix="/status",
@@ -16,5 +16,7 @@ status = APIRouter(
 
 @status.get("")
 async def get_all_status():
-    return jsonify(query_all(Status))
+    """Get all status"""
 
+    payload = query_all(Status)
+    return jsonify(payload=payload, message="done")
