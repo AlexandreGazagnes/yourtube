@@ -9,7 +9,7 @@ from src.helpers.helpers import make_now, make_token
 from src.base.models import Base
 
 
-class Videos(Base):
+class Video(Base):
     __tablename__ = "videos"
     id_video: Mapped[str] = mapped_column(
         String(40),
