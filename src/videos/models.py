@@ -1,13 +1,12 @@
-from typing import List
-from typing import Optional
+import logging
+from typing import List, Optional
 
 from sqlalchemy import create_engine, URL, select
 from sqlalchemy import ForeignKey, String, Column, Integer, Float, DateTime, Date
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.helpers import make_now, make_token
-
-from src.models.base import Base
+from src.helpers.helpers import make_now, make_token
+from src.base.models import Base
 
 
 class Videos(Base):
@@ -100,4 +99,3 @@ class Videos(Base):
 
     def __repr__(self) -> str:
         return f"Videos(id_video={self.id_video}, title={self.title}, author={self.author}, published={self.published}, stars={self.stars}, views={self.views}, id_channel={self.id_channel}"
-

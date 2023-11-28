@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from src.helpers import make_now, make_token
+from src.helpers.helpers import make_now, make_token
 
 
 class _VideoBase(BaseModel):
@@ -32,4 +32,3 @@ _default_video = _VideoBase(
 class VideoValidator:
     base = _VideoBase
     default = _default_video
-
