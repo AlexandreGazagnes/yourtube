@@ -6,7 +6,7 @@ from sqlalchemy import ForeignKey, String, Column, Integer, Float, DateTime, Dat
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
 
-from src.models.base import Base
+from src.base.models import Base
 
 
 class Categ2(Base):
@@ -21,4 +21,3 @@ class Categ2(Base):
 
     def __repr__(self) -> str:
         return f"Categ2(id_categ_2={self.id_categ_2}"
-
