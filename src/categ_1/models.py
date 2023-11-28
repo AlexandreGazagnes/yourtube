@@ -17,13 +17,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
 
-from src.models.base import Base
-
-# class Base(DeclarativeBase):
-#     pass
-#     # def serialize(self):
-#     #     # return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-#     #     return self.__dict__
+from src.base.models import Base
 
 
 class Categ1(Base):
@@ -46,4 +40,3 @@ class Categ1(Base):
 
     def __repr__(self) -> str:
         return f"Categ1(id_categ_1={self.id_categ_1}, id_categ_2={self.id_categ_2}"
-
