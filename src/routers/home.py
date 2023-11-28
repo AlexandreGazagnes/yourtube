@@ -5,6 +5,8 @@ from src.queries import query_all, VideoQuery
 from src.models.db import Channels, Videos, session, engine, Session
 from src.core.feeds import extract_rss
 import logging
+import time
+import pandas as pd
 
 from src.routers.helpers import jsonify, validate_token  # token_required
 
@@ -14,6 +16,7 @@ from src.routers.helpers import jsonify, validate_token  # token_required
 
 import logging
 
+logging.basicConfig(level=logging.INFO)
 
 home = APIRouter(
     prefix="",
@@ -42,49 +45,106 @@ async def state():
 async def update(token: str = Depends(validate_token)):
     """ """
 
+    t0, T0 = time.time(), time.time()
+
     # load channels
-    channel_list = [i.get("id_channel") for i in query_all(Channels, limit=1_000)]
+    logging.warning("load channels")
+    with Session(engine) as session:
+        channel_list = [i.get("id_channel") for i in query_all(Channels, limit=10_000)]
     channel_list = [i for i in channel_list if not i.lower().startswith("fake")]
     channel_list = [i for i in channel_list if not i.lower().startswith("test")]
 
+    time_load_channels = round(time.time() - t0, 4)
+    t0 = time.time()
+
     # feeds
+    logging.warning("get feeds")
     feeds = [extract_rss(i) for i in channel_list]
     new_videos = []
     _ = [new_videos.extend(i) for i in feeds]
+    time_get_feeds = round(time.time() - t0, 4)
 
-    # load videos
-    old_videos = [
-        i.get("id_video") for i in VideoQuery.all(limit=5_000, last_days=1_000)
-    ]
-
-    for video in new_videos:
+    # clean video
+    for i, video in enumerate(new_videos):
         # manage the id video
         if "id_video" not in video.keys():
-            id_video = video.get("yt_videoid")
-            video["id_video"] = id_video
-
+            new_videos[i]["id_video"] = video.get("yt_videoid")
         # clean the video dict
-        video = {i: j for i, j in video.items() if i in Videos.__table__.columns.keys()}
+        new_videos[i] = {
+            i: j
+            for i, j in new_videos[i].items()
+            if i in Videos.__table__.columns.keys()
+        }
+
+    # load videos
+    logging.warning("load videos")
+    t0 = time.time()
+    with Session(engine) as session:
+        old_videos = VideoQuery.all_id_videos()
+
+    time_load_videos = round(time.time() - t0, 4)
+
+    # place holders
+    added = 0
+    updated = 0
+    errors_added = 0
+    errors_updated = 0
+    old_videos_count = len(old_videos)
+    new_videos_count = len(new_videos)
+
+    t0 = time.time()
+    logging.warning("add/update videos")
+    for video in new_videos:
+        # id video
+        id_video = str(video["id_video"]).strip()
 
         # add the video to the db if needed
-        if video["id_video"] not in old_videos:
+        if id_video not in old_videos:
             try:
                 with Session(engine) as session:
                     session.add(Videos(**video))
                     session.commit()
+                    added += 1
             except Exception as e:
+                logging.error("add video")
                 logging.error(e)
                 logging.error(video)
+                errors_added += 1
         # else update the video
         else:
             try:
                 with Session(engine) as session:
-                    session.query(Videos).filter_by(id_video=video["id_video"]).update(
-                        video
-                    )
+                    session.query(Videos).filter_by(id_video=id_video).update(video)
                     session.commit()
+                    updated += 1
             except Exception as e:
+                logging.error("update video")
                 logging.error(e)
                 logging.error(video)
+                errors_updated += 1
 
-    # #     return jsonify(None, message="Done")
+    time_add_update_videos = round(time.time() - t0, 4)
+
+    payload = {
+        "ok": {
+            "added": added,
+            "updated": updated,
+        },
+        "errors": {
+            "errors_added": errors_added,
+            "errors_updated": errors_updated,
+        },
+        "counts": {
+            "old_videos_count": old_videos_count,
+            "new_videos_count": new_videos_count,
+        },
+        "timers": {
+            "time_load_channels": time_load_channels,
+            "time_get_feeds": time_get_feeds,
+            "time_load_videos": time_load_videos,
+            "time_add_update_videos": time_add_update_videos,
+            "time_total": round(time.time() - T0, 4),
+        },
+    }
+
+    return jsonify(payload, message="Done")
