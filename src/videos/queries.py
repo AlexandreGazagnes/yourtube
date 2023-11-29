@@ -9,6 +9,8 @@ def _query_all_videos(
     limit: int = 10_000,
     last_days: int = 10_000,
     short_videos: bool = False,
+    categ_1: list = ["F1"],
+    language: list = ["en"],
 ):
     """query all rows from a table"""
 
