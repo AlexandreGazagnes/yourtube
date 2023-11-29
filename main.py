@@ -18,10 +18,12 @@ def main():
         sys.exit()
 
     # argv1 : dev main
-    if sys.argv[1] == "main":
-        params = get_params("main")
-    else:
-        params = get_params("dev")
+
+    if not sys.argv[1] in ["dev", "main"]:
+        print("Error: unknown argument: ", sys.argv[1])
+        sys.exit()
+
+    params = get_params("main") if sys.argv[1] == "main" else get_params("dev")
 
     engine = Db.engine(params=params)
     # session = Db.session(params=params)
