@@ -21,7 +21,17 @@ def _request_rapid_api_details(id_video: str = "kJQP7kiw5Fk", MODE="dev") -> dic
         "X-RapidAPI-Host": params.get("X-RapidAPI-Host"),
     }
 
-    response = requests.get(url, headers=headers, params=querystring)
+    try:
+        response = requests.get(url, headers=headers, params=querystring)
+
+        if not response.ok or not response.json():
+            logging.error(
+                f"no response from the api : {response} - response recieved but non ok"
+            )
+            return {}
+    except Exception as e:
+        logging.error(f"api error call  : {e}")
+        return {}
 
     return response.json()
 
@@ -29,15 +39,25 @@ def _request_rapid_api_details(id_video: str = "kJQP7kiw5Fk", MODE="dev") -> dic
 def _clean_api_response(json: dict) -> dict:
     """clean the api response to get only the needed data"""
 
-    thumbnail_url = json["thumbnails"][-2]["url"]
-    category = json["category"]
-    keywords = ",".join(json["keywords"][:5])
+    try:
+        thumbnail_list = json["thumbnails"]
 
-    return {
-        "thumbnail_url": thumbnail_url,
-        "category": category,
-        "keywords": keywords,
-    }
+        thumbnail_url = (
+            thumbnail_list[-2]["url"]
+            if len(thumbnail_list) > 1
+            else thumbnail_list[0]["url"]
+        )
+        category = json["category"]
+        keywords = ",".join(json["keywords"][:5])
+
+        return {
+            "thumbnail_video_url": thumbnail_url,
+            "category": category,
+            "keywords": keywords,
+        }
+    except Exception as e:
+        logging.error(f"{e} : {json} - no good format for the api response")
+        return {}
 
 
 def enhance_video(video_dict, MODE="dev") -> dict:

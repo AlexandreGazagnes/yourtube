@@ -45,7 +45,7 @@ class Video(Base):
         nullable=False,
         unique=False,
     )
-    thumbnail_url: Mapped[str] = mapped_column(
+    thumbnail_video_url: Mapped[str] = mapped_column(
         String(300),
         default="https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A",
         nullable=False,
