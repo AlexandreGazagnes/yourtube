@@ -8,7 +8,7 @@ def _alternative_rss_url(
     pattern={"type": "application/rss+xml"},
     verbose=1,
 ):
-    """ """
+    """alternative url extractor"""
 
     url = url.split("/")
     url[-1] = "@" + url[-1]
@@ -31,33 +31,79 @@ def _alternative_rss_url(
     return links
 
 
-def extract_rss_url(
-    url, pattern={"type": "application/rss+xml"}, sleeper=0.2, verbose=1
+def extract_rss_from(
+    channel_url,
+    pattern={"type": "application/rss+xml"},
+    sleeper=0.1,
+    verbose=1,
 ):
-    """ """
+    """extract the rss link from the channel url"""
 
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
+    # response
+    try:
+        response = requests.get(channel_url)
+    except Exception as e:
+        logging.error(f"requests - {e} - {channel_url} - {links}")
+        return ""
 
-    links = soup.find_all("link", pattern)
+    # soup and links
+    try:
+        soup = BeautifulSoup(response.text, "html.parser")
+        links = soup.find_all("link", pattern)
+    except Exception as e:
+        logging.error(f"BeautifulSoup - {e} - {channel_url}")
+        return ""
 
+    # if not links, try alternative url
     if not links:
         links = _alternative_rss_url(
-            url=url,
+            url=channel_url,
             pattern=pattern,
             verbose=verbose,
         )
 
+    # else return empty string
     if not links:
         return ""
 
-    link = links[0].get("href")
-    link = link.split("channel_id=")[1]
+    # do extract rss links
+    try:
+        link = links[0].get("href")
+        link = link.split("channel_id=")[1]
+    except Exception as e:
+        logging.error(f"extract rss from - {e} - {channel_url} - {links}")
+        return ""
 
-    if sleeper > 0:
+    if sleeper > 0.0001:
         time.sleep(sleeper)
 
     if verbose >= 1:
         logging.warning(link)
 
     return link
+
+
+def extract_channel_thumbnail(
+    channel_url: str,
+    pattern={},
+    sleeper=0.1,
+    verbose=1,
+):
+    """extract the channel thumbnail from the channel url"""
+
+    # # response
+    # try:
+    #     response = requests.get(channel_url)
+    # except Exception as e:
+    #     logging.error(f"requests - {e} - {channel_url} - {links}")
+    #     return ""
+
+    # # soup and links
+    # try:
+    #     soup = BeautifulSoup(response.text, "html.parser")
+    #     links = soup.find_all("link", pattern)
+    # except Exception as e:
+    #     logging.error(f"BeautifulSoup - {e} - {channel_url}")
+    #     return ""
+
+    raise NotImplementedError("extract_channel_thumbnail")

@@ -73,13 +73,25 @@ class Video(Base):
     )
     stars: Mapped[float] = mapped_column(
         Float(),
-        default=0,
+        default=-1.0,
+        nullable=False,
+        unique=False,
+    )
+    duration: Mapped[int] = mapped_column(
+        Integer(),
+        default=-1,
+        nullable=False,
+        unique=False,
+    )
+    votes: Mapped[int] = mapped_column(
+        Integer(),
+        default=-1,
         nullable=False,
         unique=False,
     )
     views: Mapped[int] = mapped_column(
         Integer(),
-        default=0,
+        default=-1,
         nullable=False,
         unique=False,
     )
