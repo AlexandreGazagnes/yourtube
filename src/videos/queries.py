@@ -4,28 +4,37 @@ from src.videos.models import Video
 from src.helpers.helpers import make_time_delta
 from src.db import Session, engine
 
+from src.channels.models import Channel
+from src.userschannels.models import UserChannel
+from sqlalchemy.sql import text
+
 
 def _query_all_videos(
     limit: int = 10_000,
     last_days: int = 10_000,
-    short_videos: bool = False,
-    categ_1: list = ["F1"],
-    language: list = ["en"],
+    duration_min: int = 3 * 60,
+    duration_max: int = 10 * 3600,
+    categ_1: list = None,
+    language: list = None,
+    status: list = None,
+    watched: int = -1,
+    order_by: str = "published",
+    # order: str = "desc",
 ):
     """query all rows from a table"""
-
-    duration = 1 if short_videos else 5 * 60
 
     with Session(engine) as session:
         result = (
             session.query(Video)
-            .order_by(Video.published.desc())
             .filter(Video.published >= make_time_delta(last_days))
-            .filter(Video.duration > duration)
+            .filter(Video.duration > duration_min)
+            .filter(Video.duration < duration_max)
+            .order_by(getattr(Video, order_by).desc())
             .limit(limit)
             .all()
         )
 
+        # .order_by(Video.published.desc()
         json = [row.__dict__ for row in result]
 
         return json
@@ -47,27 +56,124 @@ def _count():
         return result
 
 
-def _query_by_categ_1():
+def _query_by_user(
+    id_user: str,
+    limit: int = 10_000,
+    last_days: int = 10_000,
+    duration_min: int = 3 * 60,
+    duration_max: int = 10 * 3600,
+    categ_1: list = None,
+    language: list = None,
+    status: list = None,
+    watched: int = -1,
+    order_by: str = "published",
+    # order: str = "desc",
+):
+    """ """
+
+    # Example query
+    # query_string = f"""
+    #             select *
+    #             from videos v
+    #             left join userschannels u on u.id_channel = v.id_channel
+    #             where u.id_user = {id_user};
+    #             """
+
+    # sql_query = text(query_string)
+
+    # with Session(engine) as session:
+    #     result = session.execute(sql_query)
+
+    with Session(engine) as session:
+        result = (
+            session.query(Video, UserChannel)
+            .leftjoin(UserChannel, Video.id_channel == UserChannel.id_channel)
+            .filter(UserChannel.id_user == id_user)
+            .filter(Video.published >= make_time_delta(last_days))
+            .filter(Video.duration > duration_min)
+            .filter(Video.duration < duration_max)
+            .order_by(getattr(Video, order_by).desc())
+            .limit(limit)
+            .all()
+        )
+
+        json = [row.__dict__ for row in result]
+
+        return json
+    return []
+
+
+def _query_by_categ_1(
+    categ_1: list,
+    limit: int = 10_000,
+    last_days: int = 10_000,
+    short_videos: bool = False,
+    language: list = None,
+    status: list = None,
+    watched: int = -1,
+):
     pass
 
 
-def _query_by_categ_2():
+def _query_by_categ_2(
+    categ_2: list,
+    limit: int = 10_000,
+    last_days: int = 10_000,
+    short_videos: bool = False,
+    language: list = None,
+    status: list = None,
+    watched: int = -1,
+):
     pass
 
 
-def _query_by_language():
+def _query_by_language(
+    language: list,
+    limit: int = 10_000,
+    last_days: int = 10_000,
+    categ_1: list = None,
+    short_videos: bool = False,
+    status: list = None,
+    watched: int = -1,
+):
     pass
 
 
-def _query_by_status():
+def _query_by_status(
+    status: list,
+    limit: int = 10_000,
+    last_days: int = 10_000,
+    short_videos: bool = False,
+    categ_1: list = None,
+    language: list = None,
+    watched: int = -1,
+):
     pass
 
 
-def _query_by_watched():
+def _query_by_watched(
+    watched: int,
+    id_user: str,
+    limit: int = 10_000,
+    last_days: int = 10_000,
+    short_videos: bool = False,
+    categ_1: list = None,
+    language: list = None,
+    status: list = None,
+):
     pass
 
 
-def _query_by_channel():
+def _query_by_channel(
+    id_channel: str,
+    limit: int = 10_000,
+    last_days: int = 10_000,
+    short_videos: bool = False,
+    categ_1: list = None,
+    language: list = None,
+    status: list = None,
+    watched: int = -1,
+):
     pass
 
 
@@ -81,6 +187,7 @@ class VideoQuery:
     by_channel = _query_by_channel
     all_id_videos = _querry_all_id_videos
     count = _count
+    by_user = _query_by_user
 
 
 # if __name__ == "__main__":
