@@ -39,6 +39,8 @@ def main():
         HomeFunctions.update()
     elif sys.argv[2] == "fix":
         HomeFunctions.fix()
+    elif sys.argv[2] == "export":
+        Db.export(engine=engine)
 
 
 if __name__ == "__main__":
