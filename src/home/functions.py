@@ -44,6 +44,8 @@ def _update(
     new=True,
     old=True,
     random_=True,
+    enhance_new=True,
+    enhance_old=False,
     engine=engine,
 ):
     """Update the database with new videos and old videos"""
@@ -74,6 +76,8 @@ def _update(
         new=new,
         old=old,
         random_=random_,
+        enhance_new=enhance_new,
+        enhance_old=enhance_old,
     )
 
     payload = HomeHelpers.reshape_payload(payload, T0)

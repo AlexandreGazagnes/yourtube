@@ -93,6 +93,8 @@ def _add_update_db(
     payload: dict,
     new=True,
     old=True,
+    enhance_new=True,
+    enhance_old=False,
     random_=True,
 ) -> dict:
     """add/update videos to db"""
@@ -106,11 +108,14 @@ def _add_update_db(
         if (
             id_video not in old_videos_ids
         ) and new:  # add the video to the db if needed
-            try:
-                video = enhance_video(video)  # enhance
-            except Exception as e:
-                logging.error(f"{e} - enhance video -> {video}")
+            # enhance video
+            if enhance_new:
+                try:
+                    video = enhance_video(video)  # enhance
+                except Exception as e:
+                    logging.error(f"{e} - enhance video -> {video}")
 
+            # do add
             try:
                 with Session(engine) as session:
                     session.add(Video(**video))
@@ -124,10 +129,20 @@ def _add_update_db(
             # if old is False, do not update
             if not old:
                 continue
+
             # randomize the update if needed
             if not random_:
                 if not random.randint(0, 3):  # do not update each time
                     continue
+
+            # enhance video
+            if enhance_old:  # enhance video
+                try:
+                    video = enhance_video(video)
+                except Exception as e:
+                    logging.error(f"{e} - enhance video -> {video}")
+
+            # do update
             try:
                 with Session(engine) as session:
                     video["updated_at"] = make_now()
