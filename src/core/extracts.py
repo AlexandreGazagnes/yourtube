@@ -39,11 +39,18 @@ def extract_rss_from(
 ):
     """extract the rss link from the channel url"""
 
+    if not "youtube" in channel_url:
+        channel_url = f"https://www.youtube.com/{channel_url}"
+
     # response
     try:
         response = requests.get(channel_url)
     except Exception as e:
-        logging.error(f"requests - {e} - {channel_url} - {links}")
+        logging.error(f"requests - {e} - {channel_url}")
+        return ""
+
+    if not response.ok:
+        logging.error(f"requests - {response.status_code} - {channel_url}")
         return ""
 
     # soup and links
@@ -54,13 +61,17 @@ def extract_rss_from(
         logging.error(f"BeautifulSoup - {e} - {channel_url}")
         return ""
 
-    # if not links, try alternative url
     if not links:
-        links = _alternative_rss_url(
-            url=channel_url,
-            pattern=pattern,
-            verbose=verbose,
-        )
+        try:
+            # if not links, try alternative url
+            links = _alternative_rss_url(
+                url=channel_url,
+                pattern=pattern,
+                verbose=verbose,
+            )
+        except Exception as e:
+            logging.error(f"alternative_rss_url - {e} - {channel_url}")
+            return ""
 
     # else return empty string
     if not links:
