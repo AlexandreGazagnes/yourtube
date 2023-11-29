@@ -30,6 +30,12 @@ class UserChannel(Base):
         unique=False,
         # FK
     )
+    relative_interest: Mapped[float] = mapped_column(
+        Float(),
+        default=2.5,
+        unique=False,
+        nullable=False,
+    )
 
     def __repr__(self) -> str:
         return f"UsersChannels(id_userschannels={self.id_userschannels}, id_user={self.id_user}, id_channel={self.id_channel})"
