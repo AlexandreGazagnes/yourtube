@@ -61,6 +61,17 @@ def extract_rss(id_channel):
     return entries_cleaned
 
 
+def extract_rss_and_flatten(channel_list_ids):
+    """ """
+
+    feeds = [extract_rss(i) for i in channel_list_ids]
+
+    new_videos = []
+    _ = [new_videos.extend(i) for i in feeds]
+
+    return new_videos
+
+
 def build_rss(df: pd.DataFrame):
     """build a dataframe from a list of channel ids"""
 
