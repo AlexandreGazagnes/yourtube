@@ -23,7 +23,7 @@ videos = APIRouter(
 @videos.get("")
 async def get_all_videos(
     limit: int = 100,
-    last_days: int = 2,
+    last_days: int = 4,
 ):
     """Get all videos"""
 

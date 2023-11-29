@@ -21,12 +21,12 @@ def clean_video_dict(video_dict, id_channel=""):
     ]
 
     video_dict = {i: j for i, j in video_dict.items() if i in keys}
+    video_dict["id_video"] = video_dict["yt_videoid"]
 
     media_starrating = video_dict.get("media_starrating", {})
-    video_dict["stars"] = int(media_starrating.get("count", 0)) * float(
-        media_starrating.get("average", 0)
-    )
-    video_dict["stars"] = int(video_dict["stars"])
+    video_dict["votes"] = int(media_starrating.get("count", -1))
+    video_dict["stars"] = float(media_starrating.get("average", -1.0))
+    # video_dict["stars"] = int(video_dict["stars"])
     video_dict["views"] = int(video_dict.get("media_statistics", {}).get("views", 0))
 
     video_dict = {
@@ -37,8 +37,18 @@ def clean_video_dict(video_dict, id_channel=""):
 
     video_dict["id_channel"] = id_channel
     video_dict["title"] = video_dict["title"][:100]
+    video_dict["exact_url"] = (
+        "https://www.youtube.com/watch?v=" + video_dict["yt_videoid"]
+    )
 
-    return video_dict
+    return {
+        k: v
+        for k, v in video_dict.items()
+        if k
+        not in [
+            "yt_videoid",
+        ]
+    }
 
 
 def clean_entries(entries, id_channel=""):
