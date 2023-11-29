@@ -1,41 +1,41 @@
-"id_categ_1","id_categ_2"
-?,Misc.
-Agriculture,Misc.
-Alcool,Culture
-Bricole,Misc.
-Cars,Sport
-Chess,Games
-Cinema,Culture
-Code,Tech
-Cuivres,Music
-Data,Tech
-Droit,Culture
-Economy,Business
-F1,Sport
-Finance,Business
-Fly,Misc.
-Gaming,Games
-Guitar,Music
-Hack,Tech
-History,Culture
-Humour,Entertain.
-IA,Tech
-Maths,Science
-Medical,Sport
-Misc,Misc.
-Misc.,Misc.
-Muscle,Sport
-Music,Music
-NewsFR,News
-Philo,Culture
-Piano,Music
-Poker,Games
-Python,Tech
-Sceptic,Science
-School,Misc.
-Science,Science
-Space,Science
-Sport,Sport
-Stats,Science
-Tech,Tech
-Watch,Culture
+id_categ_1,id_categ_2,created_at,updated_at
+?,Misc.,2023-11-29 14:49:15,2023-11-29 14:49:15
+Agriculture,Misc.,2023-11-29 14:49:15,2023-11-29 14:49:15
+Alcool,Culture,2023-11-29 14:49:15,2023-11-29 14:49:15
+Bricole,Misc.,2023-11-29 14:49:15,2023-11-29 14:49:15
+Cars,Sport,2023-11-29 14:49:15,2023-11-29 14:49:15
+Chess,Games,2023-11-29 14:49:15,2023-11-29 14:49:15
+Cinema,Culture,2023-11-29 14:49:15,2023-11-29 14:49:15
+Code,Tech,2023-11-29 14:49:15,2023-11-29 14:49:15
+Cuivres,Music,2023-11-29 14:49:15,2023-11-29 14:49:15
+Data,Tech,2023-11-29 14:49:15,2023-11-29 14:49:15
+Droit,Culture,2023-11-29 14:49:15,2023-11-29 14:49:15
+Economy,Business,2023-11-29 14:49:15,2023-11-29 14:49:15
+F1,Sport,2023-11-29 14:49:15,2023-11-29 14:49:15
+Finance,Business,2023-11-29 14:49:15,2023-11-29 14:49:15
+Fly,Misc.,2023-11-29 14:49:15,2023-11-29 14:49:15
+Gaming,Games,2023-11-29 14:49:15,2023-11-29 14:49:15
+Guitar,Music,2023-11-29 14:49:15,2023-11-29 14:49:15
+Hack,Tech,2023-11-29 14:49:15,2023-11-29 14:49:15
+History,Culture,2023-11-29 14:49:15,2023-11-29 14:49:15
+Humour,Entertain.,2023-11-29 14:49:15,2023-11-29 14:49:15
+IA,Tech,2023-11-29 14:49:15,2023-11-29 14:49:15
+Maths,Science,2023-11-29 14:49:15,2023-11-29 14:49:15
+Medical,Sport,2023-11-29 14:49:15,2023-11-29 14:49:15
+Misc,Misc.,2023-11-29 14:49:15,2023-11-29 14:49:15
+Misc.,Misc.,2023-11-29 14:49:15,2023-11-29 14:49:15
+Muscle,Sport,2023-11-29 14:49:15,2023-11-29 14:49:15
+Music,Music,2023-11-29 14:49:15,2023-11-29 14:49:15
+NewsFR,News,2023-11-29 14:49:15,2023-11-29 14:49:15
+Philo,Culture,2023-11-29 14:49:15,2023-11-29 14:49:15
+Piano,Music,2023-11-29 14:49:15,2023-11-29 14:49:15
+Poker,Games,2023-11-29 14:49:15,2023-11-29 14:49:15
+Python,Tech,2023-11-29 14:49:15,2023-11-29 14:49:15
+Sceptic,Science,2023-11-29 14:49:15,2023-11-29 14:49:15
+School,Misc.,2023-11-29 14:49:15,2023-11-29 14:49:15
+Science,Science,2023-11-29 14:49:15,2023-11-29 14:49:15
+Space,Science,2023-11-29 14:49:15,2023-11-29 14:49:15
+Sport,Sport,2023-11-29 14:49:15,2023-11-29 14:49:15
+Stats,Science,2023-11-29 14:49:15,2023-11-29 14:49:15
+Tech,Tech,2023-11-29 14:49:15,2023-11-29 14:49:15
+Watch,Culture,2023-11-29 14:49:15,2023-11-29 14:49:15

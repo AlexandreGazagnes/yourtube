@@ -1,4 +1,4 @@
-import logging, os
+import logging, os, csv
 
 from typing import List, Optional
 
@@ -17,11 +17,12 @@ from src.categ_1.models import Categ1
 from src.categ_2.models import Categ2
 from src.channels.models import Channel
 from src.languages.models import Language
-from src.videos.models import Video
 from src.status.models import Status
 from src.users.models import User
 from src.userschannels.models import UserChannel
+from src.videos.models import Video
 
+# from src.helpers.queries import Query
 
 # class Base(DeclarativeBase):
 #     pass
@@ -73,63 +74,40 @@ def _drop_all(engine=engine):
 def _boot(
     engine=engine,
     N_SPLITS_VIDEOS: int = 20,
+    path="./data/tables/",
 ):
     """ """
 
+    pair_dict = [
+        ("categ_1.csv", Categ1),
+        ("categ_2.csv", Categ2),
+        ("channels.csv", Channel),
+        ("languages.csv", Language),
+        ("status.csv", Status),
+        ("users.csv", User),
+        ("userschannels.csv", UserChannel),
+        ("videos.csv", Video),
+    ]
+
     logging.warning("Booting database")
-    logging.warning("categ_1_df")
 
-    categ_1_df = pd.read_csv("./data/tables/categ_1.csv")
-    with Session(engine) as session:
-        try:
-            for _, row in categ_1_df.iterrows():
-                session.add(Categ1(**row.to_dict()))
-                session.commit()
-        except Exception as e:
-            print(e)
+    for fn, Obj in pair_dict:
+        # pass videos
+        if "videos" in fn:
+            continue
 
-    logging.warning("categ_2")
-    categ_2_df = pd.read_csv("./data/tables/categ_2.csv")
-    with Session(engine) as session:
-        for _, row in categ_2_df.iterrows():
-            session.add(Categ2(**row.to_dict()))
-            session.commit()
+        logging.warning(f"{fn}")
 
-    logging.warning("channels")
-    channels_df = pd.read_csv("./data/tables/channels.csv")
-    with Session(engine) as session:
-        for _, row in channels_df.iterrows():
-            session.add(Channel(**row.to_dict()))
-            session.commit()
+        df = pd.read_csv(os.path.join(path, fn))
+        with Session(engine) as session:
+            try:
+                for _, row in df.iterrows():
+                    session.add(Obj(**row.to_dict()))
+                    session.commit()
+            except Exception as e:
+                logging.error(f"{e} : {fn} - {row.to_dict()}")
 
-    logging.warning("language")
-    language_df = pd.read_csv("./data/tables/language.csv")
-    with Session(engine) as session:
-        for _, row in language_df.iterrows():
-            session.add(Language(**row.to_dict()))
-            session.commit()
-
-    logging.warning("status")
-    status_df = pd.read_csv("./data/tables/status.csv")
-    with Session(engine) as session:
-        for _, row in status_df.iterrows():
-            session.add(Status(**row.to_dict()))
-            session.commit()
-
-    logging.warning("users")
-    users_df = pd.read_csv("./data/tables/users.csv")
-    with Session(engine) as session:
-        for _, row in users_df.iterrows():
-            session.add(User(**row.to_dict()))
-            session.commit()
-
-    logging.warning("userschannels")
-    userschannels_df = pd.read_csv("./data/tables/userschannels.csv")
-    with Session(engine) as session:
-        for _, row in userschannels_df.iterrows():
-            session.add(UserChannel(**row.to_dict()))
-            session.commit()
-
+    # special case for videos
     logging.warning("videos")
     videos_df = pd.read_csv("./data/tables/videos.csv")
     # logging.warning(f"{videos_df.head(1).to_dict()}")
@@ -154,6 +132,40 @@ def _reboot(engine=engine):
     _boot(engine=engine)
 
 
+def _export(engine=engine, path="./data/tables/"):
+    """ """
+
+    logging.warning("Exporting database")
+
+    pair_dict = [
+        ("categ_1.csv", Categ1),
+        ("categ_2.csv", Categ2),
+        ("channels.csv", Channel),
+        ("languages.csv", Language),
+        ("status.csv", Status),
+        ("users.csv", User),
+        ("userschannels.csv", UserChannel),
+        ("videos.csv", Video),
+    ]
+
+    for fn, Obj in pair_dict:
+        logging.warning(f"{fn}")
+
+        with Session(engine) as session:
+            results = session.query(Obj).all()
+
+        # logging.warning(results[0])
+        results = [i.__dict__ for i in results]
+        # logging.warning(results[0])
+        results_df = pd.DataFrame(results)
+        # logging.warning(results_df.head(1).to_dict())
+        cols = [i for i in results_df.columns if i in Obj.__table__.columns.keys()]
+        results_df = results_df.loc[:, cols]
+        results_df = results_df.drop_duplicates()
+        results_df = results_df.loc[:, Obj.__table__.columns.keys()]
+        results_df.to_csv(os.path.join(path, fn), index=False)
+
+
 class Db:
     """Db class to manage the database"""
 
@@ -170,3 +182,4 @@ class Db:
     drop_all = _drop_all
     boot = _boot
     reboot = _reboot
+    export = _export

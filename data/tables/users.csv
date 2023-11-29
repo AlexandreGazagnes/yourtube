@@ -1,3 +1,3 @@
-"id_user","firstname","lastname","email","password","token","birthdate","is_active","is_admin","created_at"
-1,alexandre,gazagnes,a.gazagnes@email.com,azerty,fghjkeroicduhg,"2023-01-01",1,1,"2023-11-24 18:53:04"
-3,antoine,gazagnes,antoine.gazagnes@email.com,azerty11,azerty11,"2016-10-21",1,0,"2023-11-26 20:14:02"
+id_user,firstname,lastname,email,password,token,birthdate,is_active,is_admin,created_at,updated_at
+1,alexandre,gazagnes,a.gazagnes@email.com,azerty,fghjkeroicduhg,2023-01-01,1,1,2023-11-24 18:53:04,2023-11-29 14:49:15
+3,antoine,gazagnes,antoine.gazagnes@email.com,azerty11,azerty11,2016-10-21,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15

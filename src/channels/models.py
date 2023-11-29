@@ -24,7 +24,7 @@ class Channel(Base):
         unique=False,
         nullable=False,
     )
-    interest: Mapped[float] = mapped_column(
+    absolute_interest: Mapped[float] = mapped_column(
         Float(),
         default=2.5,
         unique=False,
