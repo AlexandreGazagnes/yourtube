@@ -161,6 +161,8 @@ def _export(engine=engine, path="./data/tables/"):
         # logging.warning(results_df.head(1).to_dict())
         cols = [i for i in results_df.columns if i in Obj.__table__.columns.keys()]
         results_df = results_df.loc[:, cols]
+        results_df = results_df.drop_duplicates()
+        results_df = results_df.loc[:, Obj.__table__.columns.keys()]
         results_df.to_csv(os.path.join(path, fn), index=False)
 
 
