@@ -135,11 +135,14 @@ def _boot(
     # logging.warning(f"{videos_df.head(1).to_dict()}")
     splited_videos_df = np.array_split(videos_df, N_SPLITS_VIDEOS)
     for i, sub_videos_df in enumerate(splited_videos_df):
-        logging.warning(f"videos - {i+1}/{N_SPLITS_VIDEOS}")
         with Session(engine) as session:
             for _, row in sub_videos_df.iterrows():
                 session.add(Video(**row.to_dict()))
                 session.commit()
+
+        logging.warning(
+            f"videos - {i+1}/{N_SPLITS_VIDEOS} done - {len(sub_videos_df)} rows"
+        )
 
 
 def _reboot(engine=engine):
