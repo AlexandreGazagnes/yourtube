@@ -1,5 +1,4 @@
-import os
-import logging
+import os, logging
 
 from dotenv import load_dotenv, dotenv_values
 
@@ -61,3 +60,6 @@ def get_params(MODE: str = "dev") -> dict:
         raise ValueError(f"No params defined : {params}")
 
     return params
+
+
+params = get_params(os.getenv("MODE", "dev"))
