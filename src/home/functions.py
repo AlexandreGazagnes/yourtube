@@ -40,8 +40,13 @@ from src.core.thumbnails import enhance_video
 # logging.basicConfig(level=logging.INFO)
 
 
-def _update():
-    """ """
+def _update(
+    new=True,
+    old=True,
+    random_=True,
+):
+    """Update the database with new videos and old videos"""
+
     T0 = time.time()
 
     # channel list ids and old videos
@@ -65,6 +70,9 @@ def _update():
         new_videos=new_videos,
         old_videos_ids=old_videos_ids,
         payload=payload,
+        new=new,
+        old=old,
+        random_=random_,
     )
 
     payload = HomeHelpers.reshape_payload(payload, T0)
@@ -72,7 +80,7 @@ def _update():
 
 
 def _fix_old_videos():
-    """ """
+    """Fix data inconsistant default values for old videos"""
 
     broken_videos = HomeHelpers.get_broken_videos()
     broken_videos = HomeFunctions.clean_videos(broken_videos)
