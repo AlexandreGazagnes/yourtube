@@ -18,12 +18,18 @@ class Video(Base):
         unique=True,
     )
     title: Mapped[str] = mapped_column(
+        String(150),
+        nullable=False,
+        unique=False,
+    )
+    exact_url: Mapped[str] = mapped_column(
         String(100),
+        default="https://",
         nullable=False,
         unique=False,
     )
     author: Mapped[str] = mapped_column(
-        String(50),
+        String(70),
         nullable=False,
         unique=False,
     )
@@ -34,7 +40,7 @@ class Video(Base):
         unique=False,
     )
     keywords: Mapped[str] = mapped_column(
-        String(100),
+        String(120),
         default="None",
         nullable=False,
         unique=False,

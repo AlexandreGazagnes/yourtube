@@ -27,7 +27,6 @@ def create_app():
     app.include_router(channels)
     app.include_router(home)
     app.include_router(languages)
-
     app.include_router(status)
     # app.include_router(users)
     # app.include_router(userschannels)
