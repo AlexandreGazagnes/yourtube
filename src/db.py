@@ -17,11 +17,12 @@ from src.categ_1.models import Categ1
 from src.categ_2.models import Categ2
 from src.channels.models import Channel
 from src.languages.models import Language
-from src.videos.models import Video
 from src.status.models import Status
 from src.users.models import User
 from src.userschannels.models import UserChannel
+from src.videos.models import Video
 
+from src.helpers.queries import Query
 
 # class Base(DeclarativeBase):
 #     pass
@@ -134,6 +135,8 @@ def _reboot(engine=engine):
 def _export(engine=engine, path="./data/tables/"):
     """ """
 
+    logging.warning("Exporting database")
+
     pair_dict = [
         ("categ_1.csv", Categ1),
         ("categ_2.csv", Categ2),
@@ -144,6 +147,13 @@ def _export(engine=engine, path="./data/tables/"):
         ("userschannels.csv", UserChannel),
         ("videos.csv", Video),
     ]
+
+    for fn, Obj in pair_dict:
+        logging.warning(f"{fn}")
+
+        results = Query.all(Object=Obj, engine=engine, limit=100_000_000)
+        results_df = pd.DataFrame(results)
+        results_df.to_csv(os.path.join(path, fn), index=False)
 
 
 class Db:
