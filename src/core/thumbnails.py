@@ -50,10 +50,12 @@ def _clean_api_response(json: dict) -> dict:
         category = json["category"]
         keywords = ",".join(json["keywords"][:5])
 
+        duration = json["lengthSeconds"] if json["lengthSeconds"] else 360
         return {
             "thumbnail_video_url": thumbnail_url,
             "category": category,
             "keywords": keywords[:100],
+            "duration": duration,
         }
     except Exception as e:
         logging.error(f"{e} : {json} - no good format for the api response")
