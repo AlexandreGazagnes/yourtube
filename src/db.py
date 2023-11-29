@@ -70,7 +70,10 @@ def _drop_all(engine=engine):
     Base.metadata.drop_all(engine)
 
 
-def _boot(engine=engine):
+def _boot(
+    engine=engine,
+    N_SPLITS_VIDEOS: int = 20,
+):
     """ """
 
     logging.warning("Booting database")
@@ -129,17 +132,20 @@ def _boot(engine=engine):
 
     logging.warning("videos")
     videos_df = pd.read_csv("./data/tables/videos.csv")
-    logging.warning(f"{videos_df.head(1).to_dict()}")
-    # TODO Split boot in N parts
-    with Session(engine) as session:
-        for _, row in videos_df.iterrows():
-            session.add(Video(**row.to_dict()))
-            session.commit()
+    # logging.warning(f"{videos_df.head(1).to_dict()}")
+    splited_videos_df = np.array_split(videos_df, N_SPLITS_VIDEOS)
+    for i, sub_videos_df in enumerate(splited_videos_df):
+        logging.warning(f"videos - {i+1}/{N_SPLITS_VIDEOS}")
+        with Session(engine) as session:
+            for _, row in sub_videos_df.iterrows():
+                session.add(Video(**row.to_dict()))
+                session.commit()
 
 
 def _reboot(engine=engine):
-    """ """
+    """Reboot database"""
 
+    logging.warning("Rebooting database")
     _drop_all(engine=engine)
     _create_all(engine=engine)
     _boot(engine=engine)
