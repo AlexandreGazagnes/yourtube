@@ -34,7 +34,7 @@ def _clean_api_response(json: dict) -> dict:
     keywords = ",".join(json["keywords"][:5])
 
     return {
-        "thumbnail_url": thumbnail_url,
+        "thumbnail_video_url": thumbnail_url,
         "category": category,
         "keywords": keywords,
     }
