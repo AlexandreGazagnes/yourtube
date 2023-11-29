@@ -132,7 +132,7 @@ def _reboot(engine=engine):
     _boot(engine=engine)
 
 
-def _export(engine=engine, path="./data/"):  # tables/
+def _export(engine=engine, path="./data/tables/"):
     """ """
 
     logging.warning("Exporting database")
@@ -154,7 +154,13 @@ def _export(engine=engine, path="./data/"):  # tables/
         with Session(engine) as session:
             results = session.query(Obj).all()
 
+        # logging.warning(results[0])
+        results = [i.__dict__ for i in results]
+        # logging.warning(results[0])
         results_df = pd.DataFrame(results)
+        # logging.warning(results_df.head(1).to_dict())
+        cols = [i for i in results_df.columns if i in Obj.__table__.columns.keys()]
+        results_df = results_df.loc[:, cols]
         results_df.to_csv(os.path.join(path, fn), index=False)
 
 
