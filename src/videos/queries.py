@@ -8,14 +8,18 @@ from src.db import Session, engine
 def _query_all_videos(
     limit: int = 10_000,
     last_days: int = 10_000,
+    short_videos: bool = False,
 ):
     """query all rows from a table"""
+
+    duration = 1 if short_videos else 5 * 60
 
     with Session(engine) as session:
         result = (
             session.query(Video)
             .order_by(Video.published.desc())
             .filter(Video.published >= make_time_delta(last_days))
+            .filter(Video.duration > duration)
             .limit(limit)
             .all()
         )
