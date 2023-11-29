@@ -37,7 +37,6 @@ async def get_all_videos(
     payload = VideoQuery.all(
         limit=limit,
         last_days=last_days,
-        limit=limit,
         last_days=last_days,
         duration_min=duration_min,
         duration_max=duration_max,
