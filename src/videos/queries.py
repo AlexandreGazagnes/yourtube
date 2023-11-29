@@ -1,3 +1,5 @@
+import logging
+
 # from src.videos.models.db import Session, engine
 from src.videos.models import Video
 
@@ -36,6 +38,9 @@ def _query_all_videos(
 
         # .order_by(Video.published.desc()
         json = [row.__dict__ for row in result]
+        json = [
+            {k: v for k, v in dd.items() if k != "_sa_instance_state"} for dd in json
+        ]
 
         return json
     return []
@@ -87,7 +92,7 @@ def _query_by_user(
     with Session(engine) as session:
         result = (
             session.query(Video, UserChannel)
-            .leftjoin(UserChannel, Video.id_channel == UserChannel.id_channel)
+            .join(UserChannel, Video.id_channel == UserChannel.id_channel)
             .filter(UserChannel.id_user == id_user)
             .filter(Video.published >= make_time_delta(last_days))
             .filter(Video.duration > duration_min)
@@ -97,7 +102,14 @@ def _query_by_user(
             .all()
         )
 
-        json = [row.__dict__ for row in result]
+        logging.warning(result[0])
+
+        json = [row[0].__dict__ for row in result]
+        json = [
+            {k: v for k, v in dd.items() if k != "_sa_instance_state"} for dd in json
+        ]
+
+        logging.warning(json[0])
 
         return json
     return []
@@ -188,12 +200,3 @@ class VideoQuery:
     all_id_videos = _querry_all_id_videos
     count = _count
     by_user = _query_by_user
-
-
-# if __name__ == "__main__":
-#     print(VideoQuery.all())
-#     print(len(VideoQuery.all()))
-
-#     #
-
-#     _query_all_videos(limit=10, last_days=1)
