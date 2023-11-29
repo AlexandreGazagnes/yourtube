@@ -36,7 +36,13 @@ def main():
     elif sys.argv[2] == "reboot":
         Db.reboot(engine=engine)
     elif sys.argv[2] == "update":
-        HomeFunctions.update()
+        HomeFunctions.update(new=True, old=True, random_=True)
+    elif sys.argv[2] == "update_new":
+        HomeFunctions.update(new=True, old=False, random_=True)
+    elif sys.argv[2] == "update_old":
+        HomeFunctions.update(new=False, old=True, random_=False)
+    elif sys.argv[2] == "update_all":
+        HomeFunctions.update(new=True, old=True, random_=False)
     elif sys.argv[2] == "fix":
         HomeFunctions.fix()
     elif sys.argv[2] == "export":
