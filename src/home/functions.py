@@ -44,6 +44,7 @@ def _update(
     new=True,
     old=True,
     random_=True,
+    engine=engine,
 ):
     """Update the database with new videos and old videos"""
 
@@ -79,7 +80,7 @@ def _update(
     return payload
 
 
-def _fix_old_videos():
+def _fix_old_videos(engine=engine):
     """Fix data inconsistant default values for old videos"""
 
     broken_videos = HomeHelpers.get_broken_videos()
