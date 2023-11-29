@@ -53,7 +53,7 @@ def _clean_api_response(json: dict) -> dict:
         return {
             "thumbnail_video_url": thumbnail_url,
             "category": category,
-            "keywords": keywords,
+            "keywords": keywords[:100],
         }
     except Exception as e:
         logging.error(f"{e} : {json} - no good format for the api response")

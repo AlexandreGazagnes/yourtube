@@ -36,6 +36,7 @@ def clean_video_dict(video_dict, id_channel=""):
     }
 
     video_dict["id_channel"] = id_channel
+    video_dict["title"] = video_dict["title"][:100]
 
     return video_dict
 

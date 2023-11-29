@@ -3,6 +3,7 @@ import sys, os
 
 from src.db import Db
 from src.params import get_params, params
+from src.home.functions import HomeFunctions
 
 app = create_app()
 
@@ -34,6 +35,10 @@ def main():
         Db.boot(engine=engine)
     elif sys.argv[2] == "reboot":
         Db.reboot(engine=engine)
+    elif sys.argv[2] == "update":
+        HomeFunctions.update()
+    elif sys.argv[2] == "fix":
+        HomeFunctions.fix()
 
 
 if __name__ == "__main__":
