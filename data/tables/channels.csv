@@ -1,4 +1,4 @@
-id_channel,name,interest,created_at,updated_at,thumbnail_channel_url,keywords,id_language,id_categ_1
+id_channel,name,absolute_interest,created_at,updated_at,thumbnail_channel_url,keywords,id_language,id_categ_1
 fake_9aa8ccf6bfe8,Vilebrequin,2.5,2023-11-21 16:33:00,2023-11-29 11:06:23,https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A,NaN,Fr,Cars
 test_2492068e,test_9844604d,2.5,2023-11-23 13:44:26,2023-11-29 11:06:23,https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A,NaN,En,Misc.
 test_a_la_main,test_65b5fbcf,2.5,2023-11-23 14:45:23,2023-11-29 11:06:23,https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A,NaN,En,Misc.
