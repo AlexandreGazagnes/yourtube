@@ -79,7 +79,7 @@ class Video(Base):
     )
     duration: Mapped[int] = mapped_column(
         Integer(),
-        default=-1,
+        default=360,
         nullable=False,
         unique=False,
     )
