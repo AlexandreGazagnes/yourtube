@@ -8,6 +8,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship,
 from dotenv import load_dotenv
 
 import pandas as pd
+import numpy as np
 
 from src.params import get_params, params
 
@@ -56,17 +57,27 @@ session = _get_session(params=params)
 def _create_all(engine=engine):
     """Create all tables in the engine"""
 
+    logging.warning("Creating all tables in the engine")
+
     Base.metadata.create_all(engine)
 
 
 def _drop_all(engine=engine):
     """Drop all tables in the engine"""
 
+    logging.warning("Dropping all tables in the engine")
+
     Base.metadata.drop_all(engine)
 
 
-def _boot(engine=engine):
+def _boot(
+    engine=engine,
+    N_SPLITS_VIDEOS: int = 20,
+):
     """ """
+
+    logging.warning("Booting database")
+    logging.warning("categ_1_df")
 
     categ_1_df = pd.read_csv("./data/tables/categ_1.csv")
     with Session(engine) as session:
@@ -77,52 +88,67 @@ def _boot(engine=engine):
         except Exception as e:
             print(e)
 
+    logging.warning("categ_2")
     categ_2_df = pd.read_csv("./data/tables/categ_2.csv")
     with Session(engine) as session:
         for _, row in categ_2_df.iterrows():
             session.add(Categ2(**row.to_dict()))
             session.commit()
 
+    logging.warning("channels")
     channels_df = pd.read_csv("./data/tables/channels.csv")
     with Session(engine) as session:
         for _, row in channels_df.iterrows():
             session.add(Channel(**row.to_dict()))
             session.commit()
 
+    logging.warning("language")
     language_df = pd.read_csv("./data/tables/language.csv")
     with Session(engine) as session:
         for _, row in language_df.iterrows():
             session.add(Language(**row.to_dict()))
             session.commit()
 
+    logging.warning("status")
     status_df = pd.read_csv("./data/tables/status.csv")
     with Session(engine) as session:
         for _, row in status_df.iterrows():
             session.add(Status(**row.to_dict()))
             session.commit()
 
+    logging.warning("users")
     users_df = pd.read_csv("./data/tables/users.csv")
     with Session(engine) as session:
         for _, row in users_df.iterrows():
             session.add(User(**row.to_dict()))
             session.commit()
 
+    logging.warning("userschannels")
     userschannels_df = pd.read_csv("./data/tables/userschannels.csv")
     with Session(engine) as session:
         for _, row in userschannels_df.iterrows():
             session.add(UserChannel(**row.to_dict()))
             session.commit()
 
+    logging.warning("videos")
     videos_df = pd.read_csv("./data/tables/videos.csv")
-    with Session(engine) as session:
-        for _, row in videos_df.iterrows():
-            session.add(Video(**row.to_dict()))
-            session.commit()
+    # logging.warning(f"{videos_df.head(1).to_dict()}")
+    splited_videos_df = np.array_split(videos_df, N_SPLITS_VIDEOS)
+    for i, sub_videos_df in enumerate(splited_videos_df):
+        with Session(engine) as session:
+            for _, row in sub_videos_df.iterrows():
+                session.add(Video(**row.to_dict()))
+                session.commit()
+
+        logging.warning(
+            f"videos - {i+1}/{N_SPLITS_VIDEOS} done - {len(sub_videos_df)} rows"
+        )
 
 
 def _reboot(engine=engine):
-    """ """
+    """Reboot database"""
 
+    logging.warning("Rebooting database")
     _drop_all(engine=engine)
     _create_all(engine=engine)
     _boot(engine=engine)

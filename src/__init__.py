@@ -3,6 +3,18 @@ from fastapi import FastAPI
 # from src.routers import Router
 import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    encoding="utf-8",
+    format="%(asctime)s - %(pathname)s- %(funcName)s - %(lineno)d - %(levelname)s - %(message)s",
+    datefmt="'%Y-%m-%d %H:%M:%S.",
+)
+# FORMAT="%(asctime)s %(clientip)-15s %(user)-8s %(message)s",
+# handlers=[logging.StreamHandler()],,
+# formatter = logging.Formatter(
+#     "[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s",
+#     "%m-%d %H:%M:%S",
+# )
 from src.categ_1.routers import categ_1
 from src.categ_2.routers import categ_2
 from src.channels.routers import channels
