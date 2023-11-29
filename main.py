@@ -24,29 +24,41 @@ def main():
         params = get_params("dev")
 
     engine = Db.engine(params=params)
-    session = Db.session(params=params)
+    # session = Db.session(params=params)
 
-    # argv2 : function
-    if sys.argv[2] == "create":
-        Db.create_all(engine=engine)
-    elif sys.argv[2] == "drop":
-        Db.drop_all(engine=engine)
-    elif sys.argv[2] == "boot":
-        Db.boot(engine=engine)
-    elif sys.argv[2] == "reboot":
-        Db.reboot(engine=engine)
-    elif sys.argv[2] == "update":
-        HomeFunctions.update(new=True, old=True, random_=True)
-    elif sys.argv[2] == "update_new":
-        HomeFunctions.update(new=True, old=False, random_=True)
-    elif sys.argv[2] == "update_old":
-        HomeFunctions.update(new=False, old=True, random_=False)
-    elif sys.argv[2] == "update_all":
-        HomeFunctions.update(new=True, old=True, random_=False)
-    elif sys.argv[2] == "fix":
-        HomeFunctions.fix()
-    elif sys.argv[2] == "export":
-        Db.export(engine=engine)
+    functions_mapping = {
+        "create": (Db.create_all, {"engine": engine}),
+        "drop": (Db.drop_all, {"engine": engine}),
+        "boot": (Db.boot, {"engine": engine}),
+        "reboot": (Db.reboot, {"engine": engine}),
+        "fix": (HomeFunctions.fix, {"engine": engine}),
+        "export": (Db.export, {"engine": engine}),
+        "update": (
+            HomeFunctions.update,
+            {"engine": engine, "new": True, "old": True, "random_": True},
+        ),
+        "update_new": (
+            HomeFunctions.update,
+            {"engine": engine, "new": True, "old": False, "random_": True},
+        ),
+        "update_old": (
+            HomeFunctions.update,
+            {"engine": engine, "new": False, "old": True, "random_": False},
+        ),
+        "update_all": (
+            HomeFunctions.update,
+            {"engine": engine, "new": True, "old": True, "random_": False},
+        ),
+    }
+
+    for arg_n in sys.argv[2:]:
+        if arg_n in functions_mapping.keys():
+            print(arg_n)
+            func, kwargs = functions_mapping[arg_n]
+            func(**kwargs)
+        else:
+            print("Error: unknown argument: ", arg_n)
+            sys.exit()
 
 
 if __name__ == "__main__":
