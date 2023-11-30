@@ -21,6 +21,7 @@ from src.channels.routers import channels
 from src.home.routers import home
 from src.languages.routers import languages
 from src.status.routers import status
+from src.users.routers import users
 
 # from src.users.routers import users
 # from src.userschannels.routers import userschannels
@@ -40,7 +41,7 @@ def create_app():
     app.include_router(home)
     app.include_router(languages)
     app.include_router(status)
-    # app.include_router(users)
+    app.include_router(users)
     # app.include_router(userschannels)
     app.include_router(videos)
 
