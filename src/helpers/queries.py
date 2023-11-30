@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from src.db import Session, engine
 
 # from src.queries. import VideoQuery
@@ -16,5 +17,20 @@ def query_all(Table, engine=engine, limit: int = 300):
     return []
 
 
+def _perform_raw_query(query_string: str):
+    """ """
+    sql_query = text(query_string)
+
+    with Session(engine) as session:
+        result = session.execute(sql_query)
+
+    keys = result.keys()
+
+    result = [dict(zip(keys, row)) for row in result]
+
+    return result
+
+
 class Query:
     all = query_all
+    perform_raw_query = _perform_raw_query
