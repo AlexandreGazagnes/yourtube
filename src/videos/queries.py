@@ -25,25 +25,64 @@ def _query_all_videos(
 ):
     """query all rows from a table"""
 
+    query_string = f"""
+                select v.title,
+                  v.exact_url,
+                  v.category,
+                  v.thumbnail_video_url,
+                  v.published,
+                  v.duration,
+                  v.views,
+                  v.id_status,
+                  v.id_video,
+                  v.author,
+                  v.keywords,
+                  v.stars,
+                  v.votes,
+                  v.watched,
+                  c.thumbnail_channel_url,
+                  cc.categ_1,
+                  cc.categ_2
+                from videos v
+                left join channels c on c.id_channel = v.id_channel
+                left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
+                where v.published >= '{make_time_delta(last_days)}'
+                and v.duration > {duration_min}
+                and v.duration < {duration_max}
+                order by v.{order_by} desc
+                limit {limit};
+                """
+
+    sql_query = text(query_string)
+
     with Session(engine) as session:
-        result = (
-            session.query(Video)
-            .filter(Video.published >= make_time_delta(last_days))
-            .filter(Video.duration > duration_min)
-            .filter(Video.duration < duration_max)
-            .order_by(getattr(Video, order_by).desc())
-            .limit(limit)
-            .all()
-        )
+        result = session.execute(sql_query)
 
-        # .order_by(Video.published.desc()
-        json = [row.__dict__ for row in result]
-        json = [
-            {k: v for k, v in dd.items() if k != "_sa_instance_state"} for dd in json
-        ]
+    # with Session(engine) as session:
+    #     result = (
+    #         session.query(Video)
+    #         .filter(Video.published >= make_time_delta(last_days))
+    #         .filter(Video.duration > duration_min)
+    #         .filter(Video.duration < duration_max)
+    #         .order_by(getattr(Video, order_by).desc())
+    #         .limit(limit)
+    #         .all()
+    #     )
 
-        return json
-    return []
+    #     # .order_by(Video.published.desc()
+    #     json = [row.__dict__ for row in result]
+    #     json = [
+    #         {k: v for k, v in dd.items() if k != "_sa_instance_state"} for dd in json
+    #     ]
+
+    #     return json
+    # return []
+    keys = result.keys()
+
+    result = [dict(zip(keys, row)) for row in result]
+
+    # logging.warning(result)
+    return result
 
 
 def _querry_all_id_videos(limit: int = 10_000, last_days: int = 10_000):
@@ -76,43 +115,61 @@ def _query_by_user(
 ):
     """ """
 
-    # Example query
-    # query_string = f"""
-    #             select *
-    #             from videos v
-    #             left join userschannels u on u.id_channel = v.id_channel
-    #             where u.id_user = {id_user};
-    #             """
+    query_string = f"""
+                select v.title,
+                  v.exact_url,
+                  v.category,
+                  v.thumbnail_video_url,
+                  v.published,
+                  v.duration,
+                  v.views,
+                  v.id_status,
+                  v.id_video,
+                  v.author,
+                  v.keywords,
+                  v.stars,
+                  v.votes,
+                  v.watched,
+                  u.id_user,
+                  c.thumbnail_channel_url,
+                  cc.id_categ_1,
+                  cc.id_categ_2 
+                from videos v
+                left join userschannels u on u.id_channel = v.id_channel
+                left join channels c on c.id_channel = v.id_channel
+                left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
+                where u.id_user = {id_user}
+                and v.published >= '{make_time_delta(last_days)}'
+                and v.duration > {duration_min}
+                and v.duration < {duration_max}
+                order by v.{order_by} desc
+                limit {limit};
+                """
 
-    # sql_query = text(query_string)
-
-    # with Session(engine) as session:
-    #     result = session.execute(sql_query)
+    sql_query = text(query_string)
 
     with Session(engine) as session:
-        result = (
-            session.query(Video, UserChannel)
-            .join(UserChannel, Video.id_channel == UserChannel.id_channel)
-            .filter(UserChannel.id_user == id_user)
-            .filter(Video.published >= make_time_delta(last_days))
-            .filter(Video.duration > duration_min)
-            .filter(Video.duration < duration_max)
-            .order_by(getattr(Video, order_by).desc())
-            .limit(limit)
-            .all()
-        )
+        result = session.execute(sql_query)
 
-        logging.warning(result[0])
+        # with Session(engine) as session:
+        #     result = (
+        #         session.query(Video)
+        #         .join(UserChannel, v.Video.id_channel == UserChannel.id_channel)
+        #         .filter(UserChannel.id_user == id_user)
+        #         .filter(Video.published >= make_time_delta(last_days))
+        #         .filter(Video.duration > duration_min)
+        #         .filter(Video.duration < duration_max)
+        #         .order_by(getattr(Video, order_by).desc())
+        #         .limit(limit)
+        #         .all()
+        #     )
 
-        json = [row[0].__dict__ for row in result]
-        json = [
-            {k: v for k, v in dd.items() if k != "_sa_instance_state"} for dd in json
-        ]
+    keys = result.keys()
 
-        logging.warning(json[0])
+    result = [dict(zip(keys, row)) for row in result]
 
-        return json
-    return []
+    # logging.warning(result)
+    return result
 
 
 def _query_by_categ_1(
