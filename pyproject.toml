@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yourtube"
-version = "0.3.6"
+version = "0.3.7"
 description = "like youtube but better"
 authors = ["AlexGazagnes"]
 license = "GNU GPLv3"
