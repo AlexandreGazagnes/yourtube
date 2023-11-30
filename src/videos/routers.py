@@ -8,10 +8,7 @@ from src.videos.validators import VideoValidator
 from src.helpers.routers import jsonify
 from src.db import Session, engine
 
-
 # from src.validators import ChannelBase, default_channel
-
-import logging
 
 
 videos = APIRouter(
@@ -22,6 +19,7 @@ videos = APIRouter(
 
 @videos.get("")
 async def get_all_videos(
+    query: str | None = None,
     limit: int = 200,
     last_days: int = 4,
     duration_min: int = 3 * 60,
@@ -34,7 +32,13 @@ async def get_all_videos(
 ):
     """Get all videos"""
 
+    # if query overide params
+    if query:
+        last_days = 10_000
+        limit = 10_000
+
     payload = VideoQuery.all(
+        query=query,
         limit=limit,
         last_days=last_days,
         duration_min=duration_min,
@@ -61,6 +65,7 @@ async def update_a_video(id_video: str, video: VideoValidator.base):
 @videos.get("/by_user/{id_user}")
 async def get_videos_by_user(
     id_user: int,
+    query: str | None = None,
     limit: int = 200,
     last_days: int = 4,
     duration_min: int = 3 * 60,
@@ -73,8 +78,13 @@ async def get_videos_by_user(
 ):
     """Get all videos by user"""
 
+    if query:
+        last_days = 10_000
+        limit = 10_000
+
     payload = VideoQuery.by_user(
         id_user=id_user,
+        query=query,
         limit=limit,
         last_days=last_days,
         duration_min=duration_min,

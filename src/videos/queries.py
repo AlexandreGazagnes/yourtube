@@ -12,6 +12,7 @@ from sqlalchemy.sql import text
 
 
 def _query_all_videos(
+    query: str | None = None,
     limit: int = 10_000,
     last_days: int = 10_000,
     duration_min: int = 3 * 60,
@@ -58,28 +59,12 @@ def _query_all_videos(
     with Session(engine) as session:
         result = session.execute(sql_query)
 
-    # with Session(engine) as session:
-    #     result = (
-    #         session.query(Video)
-    #         .filter(Video.published >= make_time_delta(last_days))
-    #         .filter(Video.duration > duration_min)
-    #         .filter(Video.duration < duration_max)
-    #         .order_by(getattr(Video, order_by).desc())
-    #         .limit(limit)
-    #         .all()
-    #     )
-
-    #     # .order_by(Video.published.desc()
-    #     json = [row.__dict__ for row in result]
-    #     json = [
-    #         {k: v for k, v in dd.items() if k != "_sa_instance_state"} for dd in json
-    #     ]
-
-    #     return json
-    # return []
     keys = result.keys()
 
     result = [dict(zip(keys, row)) for row in result]
+
+    # filter by query
+    results = [i for i in result if query.strip().lower() in i["title"].lower()]
 
     # logging.warning(result)
     return result
@@ -102,6 +87,7 @@ def _count():
 
 def _query_by_user(
     id_user: str,
+    query: str | None = None,
     limit: int = 10_000,
     last_days: int = 10_000,
     duration_min: int = 3 * 60,
@@ -151,22 +137,11 @@ def _query_by_user(
     with Session(engine) as session:
         result = session.execute(sql_query)
 
-        # with Session(engine) as session:
-        #     result = (
-        #         session.query(Video)
-        #         .join(UserChannel, v.Video.id_channel == UserChannel.id_channel)
-        #         .filter(UserChannel.id_user == id_user)
-        #         .filter(Video.published >= make_time_delta(last_days))
-        #         .filter(Video.duration > duration_min)
-        #         .filter(Video.duration < duration_max)
-        #         .order_by(getattr(Video, order_by).desc())
-        #         .limit(limit)
-        #         .all()
-        #     )
-
     keys = result.keys()
-
     result = [dict(zip(keys, row)) for row in result]
+
+    # filter by query
+    results = [i for i in result if query.strip().lower() in i["title"].lower()]
 
     # logging.warning(result)
     return result
