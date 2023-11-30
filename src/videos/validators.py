@@ -3,29 +3,33 @@ from src.helpers.helpers import make_now, make_token
 
 
 class _VideoBase(BaseModel):
-    id_video: str = ""
-    title: str
-    author: str
-    name: str
-    published: str
-    stars: float
-    views: int
-    id_channel: str
-    watched: int = 0
-    id_status: str = "none"
+    query: str | None = None
+    limit: int = 10_000
+    last_days: int = 10_000
+    duration_min: int = 3 * 60
+    duration_max: int = 10 * 3600
+    id_user: int | None = None
+    id_categ_1: list | None = None
+    id_categ_2: list | None = None
+    id_language: list | None = None
+    id_status: list | None = None
+    watched: int = -1
+    order_by: str = "published"
 
 
 _default_video = _VideoBase(
-    id_video=make_token(4),
-    title=make_token(4),
-    author=make_token(4),
-    name=make_token(4),
-    published=make_now(),
-    stars=0.0,
-    views=0,
-    id_channel="",
-    watched=0,
-    id_status="none",
+    query=None,
+    limit=10_000,
+    last_days=10_000,
+    duration_min=3 * 60,
+    duration_max=10 * 3600,
+    id_user=None,
+    id_categ_1=None,
+    id_categ_2=None,
+    id_language=None,
+    id_status=[],
+    watched=-1,
+    order_by="published",
 )
 
 

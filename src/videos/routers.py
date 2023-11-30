@@ -8,6 +8,8 @@ from src.videos.validators import VideoValidator
 from src.helpers.routers import jsonify
 from src.db import Session, engine
 
+from src.videos.validators import VideoValidator
+
 # from src.validators import ChannelBase, default_channel
 
 
@@ -20,15 +22,17 @@ videos = APIRouter(
 @videos.get("")
 async def get_all_videos(
     query: str | None = None,
-    limit: int = 200,
-    last_days: int = 4,
+    limit: int = 10_000,
+    last_days: int = 10_000,
     duration_min: int = 3 * 60,
     duration_max: int = 10 * 3600,
-    # categ_1: list = None,
-    # language: list = None,
-    # status: list = None,
-    # watched: int = -1,
+    # id_user: int | None = None,
+    id_language: str | None = None,
+    watched: int = -1,
     order_by: str = "published",
+    # id_categ_1: list | None = None,
+    # id_categ_2: list | None = None,
+    # id_status: list | None = None,
 ):
     """Get all videos"""
 
@@ -36,6 +40,11 @@ async def get_all_videos(
     if query:
         last_days = 10_000
         limit = 10_000
+        id_categ_1 = None
+        id_categ_2 = None
+        id_language = None
+        id_status = None
+        watched = -1
 
     payload = VideoQuery.all(
         query=query,
@@ -43,7 +52,13 @@ async def get_all_videos(
         last_days=last_days,
         duration_min=duration_min,
         duration_max=duration_max,
+        # id_categ_1=id_categ_1,
+        # id_categ_2=id_categ_2,
+        id_language=id_language,
+        # id_status=id_status,
+        watched=watched,
         order_by=order_by,
+        # id_user=id_user,
     )
     return jsonify(payload)
 
@@ -66,21 +81,28 @@ async def update_a_video(id_video: str, video: VideoValidator.base):
 async def get_videos_by_user(
     id_user: int,
     query: str | None = None,
-    limit: int = 200,
-    last_days: int = 4,
+    limit: int = 10_000,
+    last_days: int = 10_000,
     duration_min: int = 3 * 60,
     duration_max: int = 10 * 3600,
-    # categ_1: list = None,
-    # language: list = None,
-    # status: list = None,
-    # watched: int = -1,
+    id_language: str | None = None,
+    watched: int = -1,
     order_by: str = "published",
+    # id_categ_1: list | None = None,
+    # id_categ_2: list | None = None,
+    # id_status: list | None = None,
 ):
-    """Get all videos by user"""
+    """Get all videos"""
 
+    # if query overide params
     if query:
         last_days = 10_000
         limit = 10_000
+        id_categ_1 = None
+        id_categ_2 = None
+        id_language = None
+        id_status = None
+        watched = -1
 
     payload = VideoQuery.by_user(
         id_user=id_user,
@@ -89,9 +111,13 @@ async def get_videos_by_user(
         last_days=last_days,
         duration_min=duration_min,
         duration_max=duration_max,
+        # id_categ_1=id_categ_1,
+        # id_categ_2=id_categ_2,
+        id_language=id_language,
+        # id_status=id_status,
+        watched=watched,
         order_by=order_by,
     )
-
     return jsonify(payload)
 
 
