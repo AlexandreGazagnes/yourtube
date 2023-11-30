@@ -119,11 +119,11 @@ def extract_channel_thumbnail(
 
         if not response.ok:
             logging.error(f"requests - {response.status_code} - {channel_url}")
-            return {}
+            return ""
 
     except Exception as e:
         logging.error(f"requests - {e} - {channel_url}")
-        return {}
+        return ""
 
     # soup
     try:
@@ -136,9 +136,9 @@ def extract_channel_thumbnail(
 
     except Exception as e:
         logging.error(f"BeautifulSoup - {e} - {channel_url}")
-        return {}
+        return ""
 
-    return {}
+    return ""
 
 
 def extract_video_detail(
