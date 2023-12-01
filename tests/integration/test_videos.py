@@ -40,6 +40,9 @@ class TestVideos:
         assert response.status_code == 200
         # assert len(response.json()) > 0
 
+        payload = response.json()
+        assert len(payload)
+
         logging.warning(response.json())
 
     @pytest.mark.parametrize(
