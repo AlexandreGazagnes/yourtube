@@ -16,7 +16,7 @@ from src.users.queries import UserQuery
 # logging.basicConfig(level=logging.INFO)
 
 users = APIRouter(
-    prefix="users",
+    prefix="/users",
     tags=["users"],
 )
 
