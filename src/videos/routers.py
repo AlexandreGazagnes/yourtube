@@ -77,7 +77,7 @@ async def update_a_video(id_video: str, video: VideoValidator.base):
     raise HTTPException(status_code=501, detail="Not implemented")
 
 
-@videos.get("/by_user/{id_user}")
+@videos.get("/by_user")
 async def get_videos_by_user(
     id_user: int,
     query: str | None = None,
