@@ -29,9 +29,9 @@ async def users_counts():
     return jsonify(payload, message="done")
 
 
-@users.get("/{id_user}/preferences", status_code=200)
+@users.get("/preferences", status_code=200)
 async def users_preferences(
-    id_user: str,
+    id_user: int | None = 3,
 ):
     """get user preferences from db and return as json"""
 
