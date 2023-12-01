@@ -33,9 +33,9 @@ class TestVideos:
     @pytest.mark.parametrize(
         "id_user,params",
         [
-            (3, {}),
-            (3, {"query": "psg"}),
-            (3, {"id_language": "En"}),
+            ({"id_user": 3}),
+            ({"id_query": 3, "query": "psg"}),
+            ({"id_query": 3, "id_language": "En"}),
         ],
     )
     def test_get_videos_by_user(
