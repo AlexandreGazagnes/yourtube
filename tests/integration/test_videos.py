@@ -9,13 +9,16 @@ import pytest
 client = TestClient(app)
 
 
+prefix = "/videos"
+
+
 class TestVideos:
     """Test the videos routes"""
 
     # def get_all_videos(self):
     #     """Test the get videos route"""
 
-    #     # response = client.get("/videos")
+    #     # response = client.get(f"{prefix}")
     #     # assert response.status_code == 200
     #     # assert len(response.json()) > 0
 
@@ -24,14 +27,23 @@ class TestVideos:
     def videos_counts(self):
         """Test the get videos route"""
 
-        response = client.get("/videos/counts")
+        response = client.get(f"{prefix}/counts")
         # # assert response.status_code == 200
         # # assert len(response.json()) > 0
 
         # logging.warning(response.json())
 
+    def test_videos(self):
+        """Test the get videos route all"""
+
+        response = client.get(f"{prefix}")
+        assert response.status_code == 200
+        # assert len(response.json()) > 0
+
+        logging.warning(response.json())
+
     @pytest.mark.parametrize(
-        "id_user,params",
+        "params",
         [
             ({"id_user": 3}),
             ({"id_query": 3, "query": "psg"}),
@@ -40,13 +52,12 @@ class TestVideos:
     )
     def test_get_videos_by_user(
         self,
-        id_user: int,
         params: dict | None,
     ) -> dict:
-        """Test the get videos route"""
+        """Test the get videos route by user"""
 
-        response = client.get(f"/videos/by_user/{id_user}", params=params)
-        # assert response.status_code == 200
+        response = client.get(f"{prefix}/by_user", params=params)
+        assert response.status_code == 200
         # assert len(response.json()) > 0
 
         logging.warning(response.json())

@@ -8,14 +8,14 @@ import pytest
 
 client = TestClient(app)
 
+prefix = "/categ_1"
 
-class TestHome:
-    """Test the home routes"""
 
-    def test_ping(self):
+class TestCateg1:
+    def test_get_categ1(self):
         """Test the ping route"""
 
-        response = client.get("/ping")
+        response = client.get(prefix)
         assert response.status_code == 200
         # assert response.json() == {"message": "Hello World"}
 
