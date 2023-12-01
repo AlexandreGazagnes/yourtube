@@ -21,4 +21,4 @@ jobs:
 
     - name: Call webhook for deployment
       run: echo "Deploying to Render..."
-      # run: wget -qO- 'https://api.render.com/deploy/srv-cli8tet8td7s73btpr70?key=ayFmYq0A1A0'
+      run: wget -qO- 'https://api.render.com/deploy/srv-cli8tet8td7s73btpr70?key=ayFmYq0A1A0'

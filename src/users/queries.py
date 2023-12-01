@@ -29,7 +29,8 @@ def _query_preferences(
                 v.category,
                 u.id_user,
                 cc.id_categ_1,
-                cc.id_categ_2 
+                cc.id_categ_2, 
+                c.id_language
 
     from videos v
     left join userschannels u on u.id_channel = v.id_channel
