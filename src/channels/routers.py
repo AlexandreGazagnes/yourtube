@@ -16,35 +16,7 @@ channels = APIRouter(
 )
 
 
-@channels.post("", status_code=201)
-async def add_channel(
-    channel: ChannelValidator.base = ChannelValidator.default,
-):
-    """Add a channel"""
-
-    if response := ChannelHelper.default(channel):
-        raise response
-
-    if response := ChannelHelper.no_channel_id(channel):
-        raise response
-
-    if response := ChannelHelper.already_in_db(channel):
-        raise response
-
-    if response := ChannelHelper.create_channel(channel):
-        raise response
-
-    return jsonify(channel, message="Channel added")
-
-
-@channels.put("/{id_channel}", status_code=201)
-async def update_channel(id_channel: str, channel: ChannelValidator.base):
-    """Update a channel"""
-
-    raise HTTPException(status_code=501, detail="Not implemented")
-
-
-@channels.get("/", status_code=200)
+@channels.get("", status_code=200)
 async def get_all_channels():
     """Get all channels"""
 
@@ -52,9 +24,40 @@ async def get_all_channels():
     return jsonify(payload=payload, message="done")
 
 
-@channels.get("/by_user/{id_user}", status_code=200)
-async def get_all_channels(id_user: int):
-    """Get all channels by user"""
+# @channels.post("", status_code=201)
+# async def add_channel(
+#     channel: ChannelValidator.base = ChannelValidator.default,
+# ):
+#     """Add a channel"""
 
-    payload = query_all(Channel)
-    return jsonify(payload=payload, message="done")
+#     if response := ChannelHelper.default(channel):
+#         raise response
+
+#     if response := ChannelHelper.no_channel_id(channel):
+#         raise response
+
+#     if response := ChannelHelper.already_in_db(channel):
+#         raise response
+
+#     if response := ChannelHelper.create_channel(channel):
+#         raise response
+
+#     return jsonify(channel, message="Channel added")
+
+
+# @channels.put("/{id_channel}", status_code=201)
+# async def update_channel(id_channel: str, channel: ChannelValidator.base):
+#     """Update a channel"""
+
+#     raise HTTPException(status_code=501, detail="Not implemented")
+
+
+# @channels.get("/by_user", status_code=200)
+# async def get_all_channels(id_user: int):
+#     """Get all channels by user"""
+
+#     # not implemented
+
+#     payload = query_all(Channel)
+#     return jsonify(payload=payload, message="done")
+#     raise HTTPException(status_code=501, detail="Not implemented")
