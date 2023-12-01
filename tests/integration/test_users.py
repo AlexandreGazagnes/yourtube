@@ -24,7 +24,7 @@ class TestUsers:
     def test_users_preferences(self, id_user=3):
         """Test the get users route"""
 
-        response = client.get(f"/users/{id_user}/preferences")
+        response = client.get(f"/users/preferences", params={"id_user": id_user})
         # assert response.status_code == 200
         # assert len(response.json()) > 0
 
