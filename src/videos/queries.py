@@ -15,6 +15,8 @@ from src.languages.models import Language
 from src.videos.validators import VideoValidator
 from src.helpers.queries import Query
 
+from src.categ_1.models import Categ1
+
 
 fields = "v.title, v.exact_url, v.category, v.thumbnail_video_url, v.published, \
     v.duration, v.views, v.id_status, v.id_video, v.author, v.keywords, v.stars, \
@@ -24,8 +26,9 @@ fields = "v.title, v.exact_url, v.category, v.thumbnail_video_url, v.published, 
 
 def _extra_filter_query(
     result: list,
-    query: str | None,
-    id_language: str | None,
+    query: str | None = None,
+    id_language: str | None = None,
+    id_categ_1: str | None = None,
 ):
     """ """
 
@@ -47,6 +50,20 @@ def _extra_filter_query(
             )
 
         result = [i for i in result if i["id_language"] == id_language]
+
+    # filter by id_categ_1
+    if id_categ_1:
+        with Session(engine) as session:
+            language_list = session.query(Categ1.id_categ_1).all()
+            language_list = [i[0] for i in language_list]
+
+        if id_categ_1 not in language_list:
+            raise HTTPException(
+                status_code=500,
+                detail=f"language {id_categ_1} not found, should be in {language_list}",
+            )
+
+        result = [i for i in result if i["id_categ_1"] == id_categ_1]
 
     return result
 
@@ -126,6 +143,12 @@ def _query_by_user(
 ):
     """ """
 
+    if not id_user:
+        logging.error(f"bad argument for  id_user  {id_user}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"bad argument for  id_user  {id_user}",
+        )
     query_string = f"""
                 select {fields} , u.id_user
                 from videos v

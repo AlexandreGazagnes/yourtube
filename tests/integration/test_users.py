@@ -25,7 +25,10 @@ class TestUsers:
         """Test the get users route"""
 
         response = client.get(f"/users/preferences", params={"id_user": id_user})
-        # assert response.status_code == 200
+        assert response.status_code == 200
         # assert len(response.json()) > 0
 
+        json = response.json()
+        assert len(json.keys())
+        assert len(json["payload"].keys())
         logging.warning(response.json())

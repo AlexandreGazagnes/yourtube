@@ -19,6 +19,40 @@ videos = APIRouter(
 )
 
 
+video = APIRouter(
+    prefix="/video",
+    tags=["video"],
+)
+
+
+@video.get("/{id_video}", status_code=200)
+async def get_a_video(id_video: str):
+    """Get a video"""
+
+    raise HTTPException(status_code=501, detail="Not implemented")
+
+
+@video.post("/{id_video}", status_code=201)
+async def update_a_video_watched(id_video: str):
+    """Update a video watched"""
+
+    raise HTTPException(status_code=501, detail="Not implemented")
+
+
+@video.put("/{id_video}", status_code=201)
+async def update_a_video(id_video: str, video: VideoValidator.base):
+    """Update a video"""
+
+    raise HTTPException(status_code=501, detail="Not implemented")
+
+
+@video.delete("/{id_video}", status_code=201)
+async def delete_a_video(id_video: str):
+    """Delete a video"""
+
+    raise HTTPException(status_code=501, detail="Not implemented")
+
+
 @videos.get("")
 async def get_all_videos(
     query: str | None = None,
@@ -63,23 +97,9 @@ async def get_all_videos(
     return jsonify(payload)
 
 
-@videos.get("/{id_video}", status_code=200)
-async def get_a_video(id_video: str):
-    """Get a video"""
-
-    raise HTTPException(status_code=501, detail="Not implemented")
-
-
-@videos.put("/{id_video}", status_code=201)
-async def update_a_video(id_video: str, video: VideoValidator.base):
-    """Update a video"""
-
-    raise HTTPException(status_code=501, detail="Not implemented")
-
-
-@videos.get("/by_user")
+@videos.get("/by_user", status_code=200)
 async def get_videos_by_user(
-    id_user: int | None,
+    id_user: int | None = None,
     query: str | None = None,
     limit: int = 10_000,
     last_days: int = 10_000,

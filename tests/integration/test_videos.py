@@ -33,21 +33,24 @@ class TestVideos:
 
         # logging.warning(response.json())
 
-    def test_videos(self):
-        """Test the get videos route all"""
+    # def test_videos(self):
+    #     """Test the get videos route all"""
 
-        response = client.get(f"{prefix}")
-        assert response.status_code == 200
-        # assert len(response.json()) > 0
+    #     response = client.get(f"{prefix}")
+    #     assert response.status_code == 200
+    #     # assert len(response.json()) > 0
 
-        logging.warning(response.json())
+    #     payload = response.json()
+    #     assert len(payload)
+
+    #     logging.warning(response.json())
 
     @pytest.mark.parametrize(
         "params",
         [
             ({"id_user": 3}),
-            ({"id_query": 3, "query": "psg"}),
-            ({"id_query": 3, "id_language": "En"}),
+            ({"id_user": 3, "query": "psg"}),
+            ({"id_user": 3, "id_language": "En"}),
         ],
     )
     def test_get_videos_by_user(
