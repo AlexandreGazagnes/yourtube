@@ -16,6 +16,12 @@ channels = APIRouter(
 )
 
 
+channel = APIRouter(
+    prefix="/channel",
+    tags=["channel"],
+)
+
+
 @channels.get("", status_code=200)
 async def get_all_channels():
     """Get all channels"""
@@ -24,7 +30,7 @@ async def get_all_channels():
     return jsonify(payload=payload, message="done")
 
 
-# @channels.post("", status_code=201)
+# @channel.post("", status_code=201)
 # async def add_channel(
 #     channel: ChannelValidator.base = ChannelValidator.default,
 # ):
@@ -45,7 +51,7 @@ async def get_all_channels():
 #     return jsonify(channel, message="Channel added")
 
 
-# @channels.put("/{id_channel}", status_code=201)
+# @channel.put("/{id_channel}", status_code=201)
 # async def update_channel(id_channel: str, channel: ChannelValidator.base):
 #     """Update a channel"""
 
