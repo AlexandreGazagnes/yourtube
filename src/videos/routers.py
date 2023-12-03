@@ -64,7 +64,7 @@ async def get_all_videos(
     id_language: str | None = None,
     watched: int = -1,
     order_by: str = "published",
-    id_categ_1: list | None = None,
+    id_categ_1: str | None = None,
     # id_categ_2: list | None = None,
     # id_status: list | None = None,
 ):
@@ -88,9 +88,9 @@ async def get_all_videos(
         last_days=last_days,
         duration_min=duration_min,
         duration_max=duration_max,
+        id_language=id_language,
         id_categ_1=id_categ_1,
         # id_categ_2=id_categ_2,
-        id_language=id_language,
         # id_status=id_status,
         watched=watched,
         order_by=order_by,
@@ -110,7 +110,7 @@ async def get_videos_by_user(
     id_language: str | None = None,
     watched: int = -1,
     order_by: str = "published",
-    id_categ_1: list | None = None,
+    id_categ_1: str | None = None,
     # id_categ_2: list | None = None,
     # id_status: list | None = None,
 ):

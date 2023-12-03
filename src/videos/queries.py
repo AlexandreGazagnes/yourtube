@@ -33,12 +33,12 @@ def _extra_filter_query(
     """ """
 
     # filter by query
-    if query:
+    if query and isinstance(query, str):
         result = [i for i in result if query.strip().lower() in i["title"].lower()]
         return result
 
     # filter by language
-    if id_language:
+    if id_language and isinstance(id_language, str):
         with Session(engine) as session:
             language_list = session.query(Language.id_language).all()
             language_list = [i[0] for i in language_list]
@@ -52,7 +52,7 @@ def _extra_filter_query(
         result = [i for i in result if i["id_language"] == id_language]
 
     # filter by id_categ_1
-    if id_categ_1:
+    if id_categ_1 and isinstance(id_categ_1, str):
         with Session(engine) as session:
             categ1_list = session.query(Categ1.id_categ_1).all()
             categ1_list = [i[0] for i in categ1_list]
@@ -97,10 +97,10 @@ def _query_all_videos(
     duration_min: int = 3 * 60,
     duration_max: int = 10 * 3600,
     id_language: str = None,
+    id_categ_1: str | None = None,
     watched: int = -1,
     order_by: str = "published",
     id_user: int = None,
-    id_categ_1: list = None,
     id_categ_2: list = None,
     id_status: list = None,
     # order: str = "desc",
@@ -134,9 +134,9 @@ def _query_by_user(
     duration_min: int = 3 * 60,
     duration_max: int = 10 * 3600,
     id_language: str = None,
+    id_categ_1: str | None = None,
     watched: int = -1,
     order_by: str = "published",
-    id_categ_1: list = None,
     id_categ_2: list = None,
     id_status: list = None,
     # order: str = "desc",
