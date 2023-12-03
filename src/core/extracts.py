@@ -172,14 +172,22 @@ def extract_video_detail(
         return {}
 
     # duration
-    pattern = '"lengthSeconds": "'.replace(" ", "")
-    duration = response.text.split(pattern)[1][:100]
-    duration = int(duration.split('"')[0].strip())
+    try:
+        pattern = '"lengthSeconds": "'.replace(" ", "")
+        duration = response.text.split(pattern)[1][:100]
+        duration = int(duration.split('"')[0].strip())
+    except Exception as e:
+        logging.error(f"duration - {e} - {video_url}")
+        return {}
 
     # video_thumbnail_url
-    pattern = '"thumbnail": { "thumbnails": [{ "url": '.replace(" ", "")
-    video_thumbnail_url = response.text.split(pattern)[1][:300]
-    video_thumbnail_url = video_thumbnail_url[1:].split('"')[0]
+    try:
+        pattern = '"thumbnail": { "thumbnails": [{ "url": '.replace(" ", "")
+        video_thumbnail_url = response.text.split(pattern)[1][:300]
+        video_thumbnail_url = video_thumbnail_url[1:].split('"')[0]
+    except Exception as e:
+        logging.error(f"video_thumbnail_url - {e} - {video_url}")
+        return {}
 
     # # channel Thumbnail
     # pattern = '"channelThumbnail": { "thumbnails": [{ "url": '.replace(" ", "")
