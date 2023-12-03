@@ -10,7 +10,10 @@ from src.base.models import Base
 
 
 class UserChannel(Base):
+    """ """
+
     __tablename__ = "userschannels"
+
     id_userschannels: Mapped[int] = mapped_column(
         Integer(),
         primary_key=True,
@@ -30,7 +33,7 @@ class UserChannel(Base):
         unique=False,
         # FK
     )
-    relative_interest: Mapped[float] = mapped_column(
+    interest: Mapped[float] = mapped_column(
         Float(),
         default=2.5,
         unique=False,
