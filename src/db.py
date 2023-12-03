@@ -20,6 +20,7 @@ from src.languages.models import Language
 from src.status.models import Status
 from src.users.models import User
 from src.userschannels.models import UserChannel
+from src.usersvideos.models import UserVideo
 from src.videos.models import Video
 
 
@@ -90,6 +91,7 @@ def _boot(
         ("status.csv", Status),
         ("users.csv", User),
         ("userschannels.csv", UserChannel),
+        ("usersvideos.csv", UserVideo),
         ("videos.csv", Video),
     ]
 
