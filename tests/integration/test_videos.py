@@ -51,6 +51,7 @@ class TestVideos:
             ({"id_user": 3}),
             ({"id_user": 3, "query": "psg"}),
             ({"id_user": 3, "id_language": "En"}),
+            ({"id_user": 1, "id_categ_1": "Misc."}),
         ],
     )
     def test_get_videos_by_user(
