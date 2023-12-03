@@ -31,11 +31,7 @@ class Video(Base):
     #     nullable=False,
     #     unique=False,
     # )
-    author: Mapped[str] = mapped_column(
-        String(70),
-        nullable=False,
-        unique=False,
-    )
+
     category: Mapped[str] = mapped_column(
         String(50),
         default="Misc.",
