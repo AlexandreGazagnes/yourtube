@@ -159,6 +159,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+.venv
+.venv/*
 
 ./env/.env.stage
 ./env/.env.prod
@@ -166,5 +168,10 @@ cython_debug/
 ./env/.env.local
 ./env/.env.test
 ./env/.env.main
+
 .env
+
 .env.main
+
+data/*.csv
+data/*/*.csv
