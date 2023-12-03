@@ -73,7 +73,7 @@ def _drop_all(engine=engine):
 
 def _boot(
     engine=engine,
-    N_SPLITS_VIDEOS: int = 20,
+    N_SPLITS_VIDEOS: int = 30,
     path="./data/tables/",
 ):
     """ """
