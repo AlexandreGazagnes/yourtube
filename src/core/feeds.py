@@ -37,9 +37,6 @@ def clean_video_dict(video_dict, id_channel=""):
 
     video_dict["id_channel"] = id_channel
     video_dict["title"] = video_dict["title"][:100]
-    video_dict["exact_url"] = (
-        "https://www.youtube.com/watch?v=" + video_dict["yt_videoid"]
-    )
 
     return {
         k: v

@@ -10,7 +10,10 @@ from src.base.models import Base
 
 
 class Video(Base):
+    """ """
+
     __tablename__ = "videos"
+
     id_video: Mapped[str] = mapped_column(
         String(40),
         primary_key=True,
@@ -22,17 +25,7 @@ class Video(Base):
         nullable=False,
         unique=False,
     )
-    exact_url: Mapped[str] = mapped_column(
-        String(100),
-        default="https://",
-        nullable=False,
-        unique=False,
-    )
-    author: Mapped[str] = mapped_column(
-        String(70),
-        nullable=False,
-        unique=False,
-    )
+
     category: Mapped[str] = mapped_column(
         String(50),
         default="Misc.",
@@ -95,19 +88,7 @@ class Video(Base):
         nullable=False,
         unique=False,
     )
-    watched: Mapped[int] = mapped_column(
-        Integer(),
-        default=0,
-        nullable=False,
-        unique=False,
-    )
-    id_status: Mapped[str] = mapped_column(
-        String(12),
-        default="none",
-        nullable=False,
-        unique=False,
-        # FK
-    )
+
     id_channel: Mapped[str] = mapped_column(
         String(40),
         nullable=False,

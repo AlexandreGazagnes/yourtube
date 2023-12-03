@@ -13,6 +13,7 @@ class Channel(Base):
     """Channels model"""
 
     __tablename__ = "channels"
+
     id_channel: Mapped[str] = mapped_column(
         String(40),
         primary_key=True,
@@ -20,11 +21,17 @@ class Channel(Base):
         unique=True,
     )
     name: Mapped[str] = mapped_column(
-        String(50),
+        String(70),
         unique=False,
         nullable=False,
     )
-    absolute_interest: Mapped[float] = mapped_column(
+
+    author: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+        unique=False,
+    )
+    interest: Mapped[float] = mapped_column(
         Float(),
         default=2.5,
         unique=False,
