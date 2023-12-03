@@ -5,6 +5,9 @@ from src.db import Db
 from src.params import get_params, params
 from src.home.functions import HomeFunctions
 
+
+from src.videos.functions import fix_videos
+
 app = create_app()
 
 
@@ -33,7 +36,8 @@ def main():
         "drop": (Db.drop_all, {"engine": engine}),
         "boot": (Db.boot, {"engine": engine}),
         "reboot": (Db.reboot, {"engine": engine}),
-        "fix": (HomeFunctions.fix, {"engine": engine}),
+        # "fix": (HomeFunctions.fix, {"engine": engine}),
+        "fix_videos": (fix_videos, {"engine": engine}),
         "export": (Db.export, {"engine": engine}),
         "update": (
             HomeFunctions.update,
