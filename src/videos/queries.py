@@ -54,13 +54,13 @@ def _extra_filter_query(
     # filter by id_categ_1
     if id_categ_1:
         with Session(engine) as session:
-            language_list = session.query(Categ1.id_categ_1).all()
-            language_list = [i[0] for i in language_list]
+            categ1_list = session.query(Categ1.id_categ_1).all()
+            categ1_list = [i[0] for i in categ1_list]
 
-        if id_categ_1 not in language_list:
+        if id_categ_1 not in categ1_list:
             raise HTTPException(
                 status_code=500,
-                detail=f"language {id_categ_1} not found, should be in {language_list}",
+                detail=f"categ1 {id_categ_1} not found, should be in {categ1_list}",
             )
 
         result = [i for i in result if i["id_categ_1"] == id_categ_1]
@@ -120,7 +120,7 @@ def _query_all_videos(
                 """
 
     result = Query.perform_raw_query(query_string)
-    result = _extra_filter_query(result, query, id_language)
+    result = _extra_filter_query(result, query, id_language, id_categ_1)
 
     # logging.warning(result)
     return result
@@ -164,7 +164,7 @@ def _query_by_user(
                 """
 
     result = Query.perform_raw_query(query_string)
-    result = _extra_filter_query(result, query, id_language)
+    result = _extra_filter_query(result, query, id_language, id_categ_1)
 
     # logging.warning(result)
     return result

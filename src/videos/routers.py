@@ -64,16 +64,18 @@ async def get_all_videos(
     id_language: str | None = None,
     watched: int = -1,
     order_by: str = "published",
-    # id_categ_1: list | None = None,
+    id_categ_1: list | None = None,
     # id_categ_2: list | None = None,
     # id_status: list | None = None,
 ):
     """Get all videos"""
 
     # if query overide params
+    if query or id_categ_1:
+        last_days = 1_000
+        limit = 1_000
+
     if query:
-        last_days = 10_000
-        limit = 10_000
         id_categ_1 = None
         id_categ_2 = None
         id_language = None
@@ -86,7 +88,7 @@ async def get_all_videos(
         last_days=last_days,
         duration_min=duration_min,
         duration_max=duration_max,
-        # id_categ_1=id_categ_1,
+        id_categ_1=id_categ_1,
         # id_categ_2=id_categ_2,
         id_language=id_language,
         # id_status=id_status,
@@ -108,16 +110,18 @@ async def get_videos_by_user(
     id_language: str | None = None,
     watched: int = -1,
     order_by: str = "published",
-    # id_categ_1: list | None = None,
+    id_categ_1: list | None = None,
     # id_categ_2: list | None = None,
     # id_status: list | None = None,
 ):
     """Get all videos"""
 
     # if query overide params
+    if query or id_categ_1:
+        last_days = 1_000
+        limit = 1_000
+
     if query:
-        last_days = 10_000
-        limit = 10_000
         id_categ_1 = None
         id_categ_2 = None
         id_language = None
@@ -131,7 +135,7 @@ async def get_videos_by_user(
         last_days=last_days,
         duration_min=duration_min,
         duration_max=duration_max,
-        # id_categ_1=id_categ_1,
+        id_categ_1=id_categ_1,
         # id_categ_2=id_categ_2,
         id_language=id_language,
         # id_status=id_status,
