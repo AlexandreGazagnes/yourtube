@@ -25,12 +25,6 @@ class Video(Base):
         nullable=False,
         unique=False,
     )
-    # exact_url: Mapped[str] = mapped_column(
-    #     String(100),
-    #     default="https://",
-    #     nullable=False,
-    #     unique=False,
-    # )
 
     category: Mapped[str] = mapped_column(
         String(50),

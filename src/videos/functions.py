@@ -15,7 +15,6 @@ from src.params import get_params, params
 
 DEFAULT_THUMBNAIL_VIDEO_URL = "https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A"
 DEFAULT_DURATION = 360
-DEFAULT_EXACT_URL = "https://"
 
 
 def fix_videos(stop=100, engine=None):
@@ -36,10 +35,8 @@ def fix_videos(stop=100, engine=None):
     logging.warning(f"video_list {len(video_list)}\n\n")
     # filteer videos with 360 durration OR base image
 
-    filter_ = (
-        lambda x: (x["duration"] in [DEFAULT_DURATION, -1])
-        or (x["thumbnail_video_url"] == DEFAULT_THUMBNAIL_VIDEO_URL)
-        or x["exact_url"] == DEFAULT_EXACT_URL
+    filter_ = lambda x: (x["duration"] in [DEFAULT_DURATION, -1]) or (
+        x["thumbnail_video_url"] == DEFAULT_THUMBNAIL_VIDEO_URL
     )
 
     video_list = [i for i in video_list if filter_(i)]
@@ -52,21 +49,14 @@ def fix_videos(stop=100, engine=None):
             logging.warning(f"stop at {i}\n\n")
             break
 
-        if video["exact_url"] == DEFAULT_EXACT_URL:
-            video["exact_url"] = f"https://www.youtube.com/watch?v={video['id_video']}"
-
         if (
             video["thumbnail_video_url"] == DEFAULT_THUMBNAIL_VIDEO_URL
             or video["duration"] == DEFAULT_DURATION
         ):
-            # video["thumbnail_video_url"] = extract_video_detail(video["exact_url"])[
-            #     "thumbnail_video_url"
-            # ]
-
             logging.warning(f"video {video}\n\n")
             logging.warning("go to  fix it \n\n")
 
-            new_video_dict = extract_video_detail(video["exact_url"])
+            new_video_dict = extract_video_detail(video["id_video"])
 
             logging.warning(f"new_video_dict {new_video_dict}\n\n")
 

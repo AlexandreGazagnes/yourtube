@@ -1,4 +1,4 @@
-id_userschannels,id_user,id_channel,relative_interest
+id_userschannels,id_user,id_channel,interest
 1,1,fake_9aa8ccf6bfe8,2.5
 2,1,test_2492068e,2.5
 3,1,test_a_la_main,2.5

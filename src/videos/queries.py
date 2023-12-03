@@ -37,35 +37,38 @@ def _extra_filter_query(
 
     # filter by query
     if query and isinstance(query, str):
+        # filter tiltle by query
         result = [i for i in result if query.strip().lower() in i["title"].lower()]
         return result
 
     # filter by language
     if id_language and isinstance(id_language, str):
+        # get all language keys
         with Session(engine) as session:
             language_list = session.query(Language.id_language).all()
             language_list = [i[0] for i in language_list]
-
+        # if not good raise error
         if id_language not in language_list:
             raise HTTPException(
                 status_code=500,
                 detail=f"language {id_language} not found, should be in {language_list}",
             )
-
+        # do filter
         result = [i for i in result if i["id_language"] == id_language]
 
     # filter by id_categ_1
     if id_categ_1 and isinstance(id_categ_1, str):
+        # get all categ1 keys
         with Session(engine) as session:
             categ1_list = session.query(Categ1.id_categ_1).all()
             categ1_list = [i[0] for i in categ1_list]
-
+        # if not good raise error
         if id_categ_1 not in categ1_list:
             raise HTTPException(
                 status_code=500,
                 detail=f"categ1 {id_categ_1} not found, should be in {categ1_list}",
             )
-
+        # do filter
         result = [i for i in result if i["id_categ_1"] == id_categ_1]
 
     return result
