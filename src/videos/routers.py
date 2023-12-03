@@ -56,8 +56,8 @@ async def delete_a_video(id_video: str):
 @videos.get("")
 async def get_all_videos(
     query: str | None = None,
-    limit: int = 10_000,
-    last_days: int = 10_000,
+    limit: int = 200,
+    last_days: int = 7,
     duration_min: int = 3 * 60,
     duration_max: int = 10 * 3600,
     # id_user: int | None = None,
@@ -70,7 +70,7 @@ async def get_all_videos(
 ):
     """Get all videos"""
 
-    # if query overide params
+    # if query or id_categ_1 overide params
     if query or id_categ_1:
         last_days = 1_000
         limit = 1_000
@@ -103,8 +103,8 @@ async def get_all_videos(
 async def get_videos_by_user(
     id_user: int | None = None,
     query: str | None = None,
-    limit: int = 10_000,
-    last_days: int = 10_000,
+    limit: int = 200,
+    last_days: int = 7,
     duration_min: int = 3 * 60,
     duration_max: int = 10 * 3600,
     id_language: str | None = None,
