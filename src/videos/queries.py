@@ -23,7 +23,7 @@ from src.db import Session, engine
 
 fields = "v.title, v.exact_url, v.category, v.thumbnail_video_url, v.published, \
     v.duration, v.views, v.id_status, v.id_video, v.author, v.keywords, v.stars, \
-    v.votes, v.watched, c.thumbnail_channel_url, c.id_language, \
+    v.votes, v.watched, c.thumbnail_channel_url, c.name, c.author, c.id_language, \
         cc.id_categ_1, cc.id_categ_2 "
 
 
