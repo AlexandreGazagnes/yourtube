@@ -20,11 +20,20 @@ from src.helpers.helpers import make_time_delta
 
 from src.db import Session, engine
 
+from src.helpers.helpers import stringify_duration
+
 
 fields = "v.title, v.category, v.thumbnail_video_url, v.published, \
     v.duration, v.views, v.id_video, v.keywords, v.stars, \
     v.votes, c.thumbnail_channel_url, c.name, c.author, c.id_language, \
         cc.id_categ_1, cc.id_categ_2 "
+
+
+def _clean_duration(video_dict: list):
+    """clean duration from seconds to string"""
+
+    video_dict["duration"] = stringify_duration(video_dict["duration"])
+    return video_dict
 
 
 def _extra_filter_query(
@@ -39,6 +48,8 @@ def _extra_filter_query(
     if query and isinstance(query, str):
         # filter tiltle by query
         result = [i for i in result if query.strip().lower() in i["title"].lower()]
+        result = [_clean_duration(i) for i in result]
+
         return result
 
     # filter by language
@@ -70,6 +81,9 @@ def _extra_filter_query(
             )
         # do filter
         result = [i for i in result if i["id_categ_1"] == id_categ_1]
+
+        # clean duration
+    result = [_clean_duration(i) for i in result]
 
     return result
 
