@@ -33,3 +33,26 @@ def fake_token(n=6):
     # token = token if not test else "test_" + token
 
     return "fake_" + token
+
+
+def stringify_duration(duration: int):
+    duration = int(duration)
+    mins = int(duration // 60)
+    secs = int(duration % 60)
+
+    if mins < 60:
+        return f"{mins}:{secs}"
+
+    hours = int(mins // 60)
+    mins = int(mins % 60)
+
+    return f"{hours}:{mins}:{secs}"
+
+
+def sringify_publihed_at(date: str):
+    """return a stringified date"""
+
+    # date = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+    # return date.strftime("%d %B %Y")
+
+    pass
