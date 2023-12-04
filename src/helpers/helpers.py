@@ -36,6 +36,8 @@ def fake_token(n=6):
 
 
 def stringify_duration(duration: int):
+    """return a stringified duration"""
+
     duration = int(duration)
     mins = int(duration // 60)
     secs = int(duration % 60)
