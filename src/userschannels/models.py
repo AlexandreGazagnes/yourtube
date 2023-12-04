@@ -40,5 +40,18 @@ class UserChannel(Base):
         nullable=False,
     )
 
+    created_at: Mapped[str] = mapped_column(
+        DateTime(),
+        default=make_now(),
+        nullable=False,
+        unique=False,
+    )
+    updated_at: Mapped[str] = mapped_column(
+        DateTime(),
+        default=make_now(),
+        nullable=False,
+        unique=False,
+    )
+
     def __repr__(self) -> str:
         return f"UsersChannels(id_userschannels={self.id_userschannels}, id_user={self.id_user}, id_channel={self.id_channel})"
