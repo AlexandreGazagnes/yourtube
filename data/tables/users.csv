@@ -1,3 +1,9 @@
-id_user,firstname,lastname,email,password,token,birthdate,is_active,is_admin,created_at,updated_at
-1,alexandre,gazagnes,a.gazagnes@email.com,azerty,fghjkeroicduhg,2023-01-01,1,1,2023-11-24 18:53:04,2023-11-29 14:49:15
-3,antoine,gazagnes,antoine.gazagnes@email.com,azerty11,azerty11,2016-10-21,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15
+id_user,firstname,lastname,email,password,token,sex,birthdate,is_active,is_admin,created_at,updated_at
+1,alexandre,campan,a.campan@email.com,azerty,fghjkeroicduhg,h,2023-01-01,1,1,2023-11-24 18:53:04,2023-11-29 14:49:15
+3,antoine,campan,antoine.campan@email.com,azerty11,azerty11,h,2016-10-21,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15
+4,adrien,bertrand,a.bertrand@gmail.com,hello,xdezdzdzd,h,2010-10-01,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15
+5,etienne,bertrand,e.bertrand@mail.com,helli,dezdvefv,h,2010-10-01,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15
+6,leonie,bertrand,leonie.bertrand@me.com,hellu,poirjehfvv,f,2010-10-01,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15
+7,nora,lambert dupres,nora.lambert-dupres-dela-chaudronnerie@hello.py,hello,deiozfhbdsc,f,2010-10-01,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15
+8,jawad,lambert dupres,jawad.lambert-dupres-dela-chaudronnerie@me.com,hello,foereuizhjed,h,2010-10-01,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15
+9,agnes,bertrand,agnes.bertrand@gmail.com,hello,aaaaa,f,2010-10-01,1,0,2023-11-26 20:14:02,2023-11-29 14:49:15
