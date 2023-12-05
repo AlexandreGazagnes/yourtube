@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 
 def extract_video_detail(
     video_url: str | None,
-    sleeper=0.1,
-    verbose=1,
+    sleeper: float = 0.1,
+    verbose: int = 1,
 ):
     """extract the video detail from the video url"""
 
@@ -57,9 +57,9 @@ def extract_video_detail(
         )
 
     # # channel Thumbnail
-    # pattern = '"channelThumbnail": { "thumbnails": [{ "url": '.replace(" ", "")
-    # channel_thumbnail_url = response.text.split(pattern)[1][:300]
-    # channel_thumbnail_url = channel_thumbnail_url[1:].split('"')[0]
+    #   pattern = '"channelThumbnail": { "thumbnails": [{ "url": '.replace(" ", "")
+    #   channel_thumbnail_url = response.text.split(pattern)[1][:300]
+    #   channel_thumbnail_url = channel_thumbnail_url[1:].split('"')[0]
 
     # keywords
     keywords = ""

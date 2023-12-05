@@ -135,6 +135,7 @@ def build_rss(
     df.rename(columns={"yt_videoid": "id_video"}, inplace=True)
 
     if extract_video_detail:
+        logging.warning(f"extracting video details for {len(df)} videos")
         details = df.parallel_apply(extract_video_detail, axis=1)
         df = pd.concat([df, details], axis=1, ignore_index=True)
 
