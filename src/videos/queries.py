@@ -7,11 +7,10 @@ from sqlalchemy.sql import text
 
 from src.channels.models import Channel
 from src.userschannels.models import UserChannel
-
 from src.languages.models import Language
+
 from src.videos.validators import VideoValidator
 from src.helpers.queries import Query
-
 from src.categ_1.models import Categ1
 
 # from src.videos.models.db import Session, engine
@@ -19,7 +18,6 @@ from src.videos.models import Video
 from src.helpers.helpers import make_time_delta
 
 from src.db import Session, engine
-
 from src.helpers.helpers import stringify_duration
 
 
