@@ -6,8 +6,8 @@ from src.db import Channel, Video, session, engine, Session
 from src.helpers.routers import jsonify, validate_token  # token_required
 from src.helpers.queries import query_all
 
-from src.home.helpers import HomeHelpers
-from src.home.functions import HomeFunctions
+# from src.home.helpers import HomeHelpers
+# from src.home.functions import HomeFunctions
 from src.videos.queries import VideoQuery
 
 # from src.queries import query_all, jsonify
