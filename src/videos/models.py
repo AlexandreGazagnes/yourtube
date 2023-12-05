@@ -96,5 +96,13 @@ class Video(Base):
         # FK
     )
 
+    id_categ_1: Mapped[str] = mapped_column(
+        String(12),
+        default="Misc.",
+        unique=False,
+        nullable=False,
+        # FK
+    )
+
     def __repr__(self) -> str:
         return f"Videos(id_video={self.id_video}, title={self.title}, author={self.author}, published={self.published}, stars={self.stars}, views={self.views}, id_channel={self.id_channel})"
