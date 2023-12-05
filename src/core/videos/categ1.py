@@ -1,65 +1,59 @@
 from src.core.videos.queries import query_one
-
+from collections import OrderedDict
 import logging
 
 
-winamax_dict = {
-    "poker": "Poker",
-    "d'un pro": "Poker",
-    "ufc": "Bagarre",
-    "tennis": "Sport",
-    "uber eats": "Foot",
-    "foot": "Foot",
-    "ligue 2": "Foot",
-    "ligue 1": "Foot",
-    "f1": "F1",
-    "psg": "Foot",
-    "premier ligue": "Foot",
-    "saudi pro league": "Foot",
-    "ligua europa": "Foot",
-    "ligue des champions": "Foot",
-    "formule 2": "F1",
-    "formule 1": "F1",
-    "bkt": "Foot",
-}
+winamax_dict = OrderedDict(
+    {
+        "poker": "Poker",
+        "d'un pro": "Poker",
+        "ufc": "Bagarre",
+        "tennis": "Sport",
+        "uber eats": "Foot",
+        "foot": "Foot",
+        "ligue 2": "Foot",
+        "ligue 1": "Foot",
+        "f1": "F1",
+        "psg": "Foot",
+        "premier ligue": "Foot",
+        "saudi pro league": "Foot",
+        "ligua europa": "Foot",
+        "ligue des champions": "Foot",
+        "formule 2": "F1",
+        "formule 1": "F1",
+        "bkt": "Foot",
+        "manchester city": "Foot",
+        "tottenham": "Foot",
+        "liverpool": "Foot",
+        "barca": "Foot",
+        "barcelone": "Foot",
+        "real madrid": "Foot",
+        "inter milan": "Foot",
+        "real": "Foot",
+        "barca": "Foot",
+        "ac milan": "Foot",
+        "arsenal": "Foot",
+        "al-Hilal": "Foot",
+        "al-Nassr": "Foot",
+        "man city": "Foot",
+        "athlético": "Foot",
+        "athletico": "Foot",
+        "euro 2024": "Foot",
+        "but": "Foot",
+    }
+)
 
-canalplus_dict = {
-    # "poker": "Poker",
-    "ufc": "Bagarre",
-    "tennis": "Sport",
-    "uber eats": "Foot",
-    "foot": "Foot",
-    "ligue 2": "Foot",
-    "ligue 1": "Foot",
-    "f1": "F1",
-    "psg": "Foot",
-    "premier ligue": "Foot",
-    "saudi pro league": "Foot",
-    "ligua europa": "Foot",
-    "ligue des champions": "Foot",
-    "formule 2": "F1",
-    "formule 1": "F1",
-    "bkt": "Foot",
-}
+canalplus_dict = winamax_dict
 
+rmc_sport_dict = winamax_dict
 
-rmc_sport_dict = {
-    "poker": "Poker",
-    "ufc": "Bagarre",
-    "tennis": "Sport",
-    "uber eats": "Foot",
-    "foot": "Foot",
-    "ligue 2": "Foot",
-    "ligue 1": "Foot",
-    "f1": "F1",
-    "psg": "Foot",
-    "premier ligue": "Foot",
-    "saudi pro league": "Foot",
-    "ligua europa": "Foot",
-    "ligue des champions": "Foot",
-    "formule 2": "F1",
-    "formule 1": "F1",
-    "bkt": "Foot",
+pairs = {
+    "winamax": winamax_dict,
+    "canalplus": canalplus_dict,
+    "canal +": canalplus_dict,
+    "canal+": canalplus_dict,
+    "rmc sport": rmc_sport_dict,
+    "rmcsport": rmc_sport_dict,
 }
 
 
@@ -73,8 +67,30 @@ def _impute(title: str, value_dict: dict) -> str:
     return "Sport"
 
 
-def add_categ1(video_dict: dict) -> dict:
+def _find_cate1(video_dict, data, pairs):
     """ """
+
+    id_categ_1 = ""
+
+    # find the relevand channel
+    for key, value_dict in pairs.items():
+        # if key map the name of the channel
+        if key in data["name"].lower() or key in data["author"].lower():
+            # impute categ 1 with specific dictionnary
+            id_categ_1 = _impute(video_dict["title"], value_dict)
+            # video_dict["id_categ_1"] = id_categ_1
+            # return video_dict
+
+    video_dict["id_categ_1"] = id_categ_1 if id_categ_1 else data.get("id_categ_1", "?")
+
+    return video_dict
+
+
+def manage_categ1(video_dict: dict) -> dict:
+    """ """
+
+    if not isinstance(video_dict, dict):
+        raise AttributeError(f"error attribute video_dict is not a dict : {video_dict}")
 
     # check if id_video and id_channel are present
     if (not video_dict.get("id_video", None)) or (
@@ -91,21 +107,6 @@ def add_categ1(video_dict: dict) -> dict:
         video_dict["id_categ_1"] = "?"
         return video_dict
 
-    pairs = {
-        "winamax": winamax_dict,
-        "canalplus": canalplus_dict,
-        "rmc sport": rmc_sport_dict,
-    }
+    new_video_dict = _find_cate1(video_dict, data, pairs)
 
-    # find the relevand channel
-    for key, value_dict in pairs.items():
-        # if key map the name of the channel
-        if key in data["name"].lower() or key in data["author"].lower():
-            # impute categ 1 with specific dictionnary
-            id_categ_1 = _impute(video_dict["title"], value_dict)
-            video_dict["id_categ_1"] = id_categ_1
-            return video_dict
-
-    # if no match
-    video_dict["id_categ_1"] = data.get("id_categ_1", "?")
-    return video_dict
+    return new_video_dict
