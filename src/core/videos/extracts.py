@@ -42,7 +42,7 @@ def extract_video_detail(
         _duration = int(_duration.split('"')[0].strip())
         duration = _duration
     except Exception as e:
-        logging.error(f"duration - {e} - {video_url} - duration set to -{_duration}")
+        logging.error(f"duration - {e} - {video_url} - duration set to -{duration}")
 
     # video_thumbnail_url
     video_thumbnail_url = ""
@@ -54,7 +54,7 @@ def extract_video_detail(
         video_thumbnail_url = _video_thumbnail_url
     except Exception as e:
         logging.error(
-            f"video_thumbnail_url - {e} - {video_url} - video_thumbnail_url set to -{_video_thumbnail_url}"
+            f"video_thumbnail_url - {e} - {video_url} - video_thumbnail_url set to -{video_thumbnail_url}"
         )
 
     # # channel Thumbnail
@@ -68,7 +68,7 @@ def extract_video_detail(
         _keywords = soup.find("meta", {"name": "keywords"}).get("content")[:100]
         keywords = _keywords
     except Exception as e:
-        logging.error(f"keywords - {e} - {video_url} - keywords set to -{_keywords}")
+        logging.error(f"keywords - {e} - {video_url} - keywords set to -{keywords}")
 
     # category
     category = ""
@@ -78,7 +78,7 @@ def extract_video_detail(
         _category = _category.split('"')[0].strip()
         category = _category
     except Exception as e:
-        logging.error(f"category - {e} - {video_url} - category set to -{_category}")
+        logging.error(f"category - {e} - {video_url} - category set to -{category}")
 
     data = {
         "thumbnail_video_url": video_thumbnail_url,
