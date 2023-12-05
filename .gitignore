@@ -175,3 +175,5 @@ cython_debug/
 
 data/*.csv
 data/*/*.csv
+
+nohub.out
