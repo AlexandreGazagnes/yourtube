@@ -148,41 +148,14 @@ def build_rss(
         else:
             details = df.id_video.apply(extract_video_detail)
 
-        # logging.info(f"details : {details}")
+        # DF
         details = pd.DataFrame(details.values.tolist())
-        # logging.info(f"details : {details}")
-        # details.to_csv("details.csv", index=False)
-        # input()
-
-        # logging.info(f"details : {isinstance(details, pd.DataFrame)}")
-        # logging.info(f"details : {details.shape}")
-        # logging.info(f"details : {details.columns}")
-
-        # logging.info(f"df : {isinstance(df, pd.DataFrame)}")
-        # logging.info(f"df : {df.shape}")
-        # logging.info(f"df : {df.columns}")
-
-        # raise ArithmeticError("stop here")
         df = pd.concat([df, details], axis=1)
-
-        # logging.info(f"df : {isinstance(df, pd.DataFrame)}")
-        # logging.info(f"df : {df.shape}")
-        # logging.info(f"df : {df.columns}")
-
-        # # df.to_csv("tmp.csv", index=False)
-        # input("pause")
-
-        # raise ArithmeticError("stop here")
 
     # update categ1
     if categ_1:
         list_new_dict = [manage_categ1(v.to_dict()) for k, v in df.iterrows()]
         df = pd.DataFrame(list_new_dict)
-
-        # logging.info(f"df : {isinstance(df, pd.DataFrame)}")
-        # logging.info(f"df : {df.shape}")
-        # logging.info(f"df : {df.columns}")
-        df.to_csv("tmp.csv", index=False)
 
     logging.info(f"rss feed built : {df}")
 
