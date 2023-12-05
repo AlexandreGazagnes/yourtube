@@ -177,3 +177,6 @@ data/*.csv
 data/*/*.csv
 
 nohub.out
+
+
+tmp.csv
