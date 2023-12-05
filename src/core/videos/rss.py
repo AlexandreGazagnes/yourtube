@@ -7,6 +7,7 @@ pandarallel.initialize()
 import pandas as pd
 import feedparser
 from src.core.paths import RSS
+from src.core.videos.categ1 import manage_categ1
 from src.core.videos.extracts import extract_video_detail
 
 
@@ -109,8 +110,10 @@ def _extract_rss(id_channel):
 
 def build_rss(
     df: pd.DataFrame,
-    extract_video_detail: bool = False,
+    video_detail: bool = False,
+    categ_1: bool = False,
     verbose: int = 1,
+    parrallel=True,
 ) -> pd.DataFrame:
     """build a dataframe from a list of channel ids"""
 
@@ -119,7 +122,10 @@ def build_rss(
     df.id_channel.fillna("", inplace=True)
 
     # list of list of feeds
-    clean_entries = df.id_channel.parallel_apply(_extract_rss)
+    if parrallel:
+        clean_entries = df.id_channel.parallel_apply(_extract_rss)
+    else:
+        clean_entries = df.id_channel.apply(_extract_rss)
 
     # flatten the list of list of feeds
     li = []
@@ -134,10 +140,49 @@ def build_rss(
     # rename yt_videoid to id_video
     df.rename(columns={"yt_videoid": "id_video"}, inplace=True)
 
-    if extract_video_detail:
+    # extract video details
+    if video_detail:
         logging.warning(f"extracting video details for {len(df)} videos")
-        details = df.parallel_apply(extract_video_detail, axis=1)
-        df = pd.concat([df, details], axis=1, ignore_index=True)
+        if parrallel:
+            details = df.id_video.parallel_apply(extract_video_detail)
+        else:
+            details = df.id_video.apply(extract_video_detail)
+
+        # logging.info(f"details : {details}")
+        details = pd.DataFrame(details.values.tolist())
+        # logging.info(f"details : {details}")
+        # details.to_csv("details.csv", index=False)
+        # input()
+
+        # logging.info(f"details : {isinstance(details, pd.DataFrame)}")
+        # logging.info(f"details : {details.shape}")
+        # logging.info(f"details : {details.columns}")
+
+        # logging.info(f"df : {isinstance(df, pd.DataFrame)}")
+        # logging.info(f"df : {df.shape}")
+        # logging.info(f"df : {df.columns}")
+
+        # raise ArithmeticError("stop here")
+        df = pd.concat([df, details], axis=1)
+
+        # logging.info(f"df : {isinstance(df, pd.DataFrame)}")
+        # logging.info(f"df : {df.shape}")
+        # logging.info(f"df : {df.columns}")
+
+        # # df.to_csv("tmp.csv", index=False)
+        # input("pause")
+
+        # raise ArithmeticError("stop here")
+
+    # update categ1
+    if categ_1:
+        list_new_dict = [manage_categ1(v.to_dict()) for k, v in df.iterrows()]
+        df = pd.DataFrame(list_new_dict)
+
+        # logging.info(f"df : {isinstance(df, pd.DataFrame)}")
+        # logging.info(f"df : {df.shape}")
+        # logging.info(f"df : {df.columns}")
+        df.to_csv("tmp.csv", index=False)
 
     logging.info(f"rss feed built : {df}")
 
