@@ -58,3 +58,49 @@ def sringify_publihed_at(date: str):
     # return date.strftime("%d %B %Y")
 
     pass
+
+
+def translate_front_publised_at(text: str) -> int:
+    """return a translated date"""
+
+    # date = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+    # return date.strftime("%d %B %Y")
+
+    if not text:
+        return None
+    if text.strip() == "-":
+        return None
+
+    if "day" in text:
+        return 1
+    if "week" in text:
+        return 7
+    if "month" in text:
+        return 30
+    if "year" in text:
+        return 365
+    return 36_500
+
+
+def translate_front_duration(text: str) -> int:
+    """ """
+
+    if not text:
+        return None
+
+    if text.strip() == "-":
+        return None
+
+    nb, unit = text.split(" ")
+    nb = int(nb)
+
+    factor = 0
+
+    if "min" in unit:
+        factor = 60
+    if "hour" in unit:
+        factor = 3600
+
+    seconds = nb * factor
+
+    return seconds
