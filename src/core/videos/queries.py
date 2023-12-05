@@ -10,6 +10,11 @@ from src.params import get_params, params
 def query_one(id_video: str, id_channel: str, engine=None) -> dict:
     """Query one video by id_video"""
 
+    if not isinstance(id_video, (str, int)):
+        raise AttributeError(
+            f"error type id_video, expected (str, int), recieved {id_video}"
+        )
+
     # engine
     if not engine:
         engine = Db.engine(get_params("dev"))
