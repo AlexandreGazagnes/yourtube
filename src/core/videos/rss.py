@@ -7,7 +7,7 @@ pandarallel.initialize()
 import pandas as pd
 import feedparser
 from src.core.paths import RSS
-from src.core.videos.scrap_details import extract_video_detail
+from src.core.videos.extracts import extract_video_detail
 
 
 def _clean_video_dict(video_dict, id_channel=""):

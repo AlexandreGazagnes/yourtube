@@ -1,58 +1,34 @@
-import logging, time, random
-
-
+# import logging, time, random
 import os, sys, logging, time, random
+from random import shuffle
+
 from src.db import Session, engine
+
+from src.params import get_params, params
+
+from src.helpers.queries import query_all
+from src.helpers.helpers import make_now
 
 from src.videos.models import Video
 from src.videos.queries import VideoQuery
 
 from src.channels.models import Channel
-from src.core.videos.DEPRECATED_rapid_api import enhance_video
-from src.helpers.queries import query_all
-
 from src.channels.queries import ChannelQuery
-from src.core.feeds import extract_rss, extract_rss_and_flatten
-from src.core.videos.DEPRECATED_rapid_api import enhance_video
-from src.helpers.helpers import make_now
-
-from src.videos.queries import VideoQuery
-from random import shuffle
-from src.helpers.helpers import make_now
-
-# from fastapi import FastAPI, HTTPException, APIRouter, Depends
 
 
-# from src.db import Channel, Video, session, engine, Session
-
-# from src.helpers.routers import jsonify, validate_token  # token_required
-from src.home.helpers import HomeHelpers
-from src.core.videos.DEPRECATED_rapid_api import enhance_video
-
-# from src.queries import query_all, jsonify
-# from src.validators import ChannelBase, default_channel
-# import pandas as pd
-
-# from src.videos.models import Video
-# from src.videos.queries import VideoQuery
-# from src.helpers.queries import query_all
-
-# logging.basicConfig(level=logging.INFO)
-
-import os, logging
-
-
-from src.videos.models import Video
-from src.videos.queries import VideoQuery
 from src.core.channels.extracts import extract_video_detail
 
+# from src.core.videos.DEPRECATED_rapid_api import enhance_video
 
-from src.helpers.helpers import make_now
+# from src.core.feeds import extract_rss, extract_rss_and_flatten
+# from src.core.videos.DEPRECATED_rapid_api import enhance_video
 
-from src.db import Session, engine
+# from src.helpers.helpers import make_now
+
+# from src.core.videos.DEPRECATED_rapid_api import enhance_video
+
 
 # from src.db import Db
-from src.params import get_params, params
 
 DEFAULT_THUMBNAIL_VIDEO_URL = "https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A"
 DEFAULT_DURATION = 360

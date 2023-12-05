@@ -5,12 +5,13 @@ from src.videos.models import Video
 from src.videos.queries import VideoQuery
 
 from src.channels.models import Channel
-from src.core.thumbnails import enhance_video
+from src.core.videos.DEPRECATED_rapid_api import enhance_video
 from src.helpers.queries import query_all
 
 from src.channels.queries import ChannelQuery
-from src.core.feeds import extract_rss, extract_rss_and_flatten
-from src.core.thumbnails import enhance_video
+
+# from src.core.feeds import extract_rss, extract_rss_and_flatten
+from src.core.videos.DEPRECATED_rapid_api import enhance_video
 from src.helpers.helpers import make_now
 
 

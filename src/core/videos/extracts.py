@@ -10,13 +10,14 @@ def extract_video_detail(
     sleeper: float = 0.1,
     verbose: int = 1,
 ):
-    """extract the video detail from the video url"""
+    """extract the video detail from the video url by scraping the page"""
 
     # update video url if neeeded
     if not "youtube" in video_url:
         video_url = f"https://www.youtube.com/watch?v={video_url}"
 
     # response
+    # to do use _manage_response
     try:
         response = requests.get(video_url)
         if not response.ok:
