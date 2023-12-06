@@ -26,7 +26,7 @@ def _extract_video_detail(
     )
 
     # response
-    # to do use _manage_response
+    # TODO use _manage_response
     try:
         response = requests.get(video_url)
         if not response.ok:
@@ -44,6 +44,7 @@ def _extract_video_detail(
         return {}
 
     # duration
+    # TODO understand why the pattern is not working sometimes
     duration, duration_1, duration_2 = "", "", ""
     try:
         pattern = '"lengthSeconds": "'.replace(" ", "")
@@ -68,15 +69,11 @@ def _extract_video_detail(
             f"video_thumbnail_url - {e} - {video_url} - video_thumbnail_url set to -{video_thumbnail_url}"
         )
 
-    # # channel Thumbnail
-    #   pattern = '"channelThumbnail": { "thumbnails": [{ "url": '.replace(" ", "")
-    #   channel_thumbnail_url = response.text.split(pattern)[1][:300]
-    #   channel_thumbnail_url = channel_thumbnail_url[1:].split('"')[0]
-
     # keywords
     keywords = ""
     try:
         _keywords = soup.find("meta", {"name": "keywords"}).get("content")[:100]
+        # TODO add split and strip method for cleaner keywords
         keywords = _keywords
     except Exception as e:
         logging.error(f"keywords - {e} - {video_url} - keywords set to -{keywords}")
@@ -106,20 +103,22 @@ def _extract_video_detail(
 
 
 def _update_video_detail(video_dict: dict) -> dict:
-    """ """
+    """based on a video dict update the video detail and retrurn new better video dict"""
 
     logging.info(f"candidate to _update_video_detail {video_dict}")
 
+    # if not a dict
     if not isinstance(video_dict, dict):
         logging.error(f"error attribute video_dict is not a dict : {video_dict}")
-        # raise AttributeError(f"error attribute video_dict is not a dict : {video_dict}")
+        return video_dict
 
     # video_url
     id_video = video_dict.get("id_video", None)
 
+    # if not id_video
     if not id_video:
         logging.error(f"error attribute id_video is not a str : {id_video}")
-        # raise AttributeError(f"error attribute id_video is not a str : {id_video}")
+        return video_dict
 
     # extract video detail
     video_detail = _extract_video_detail(id_video)
@@ -133,4 +132,9 @@ def _update_video_detail(video_dict: dict) -> dict:
 
 
 class CoreVideoExtracts:
+    """class CoreVideoExtracts
+    public methods:
+        - update_video_detail
+    """
+
     update_video_detail = _update_video_detail

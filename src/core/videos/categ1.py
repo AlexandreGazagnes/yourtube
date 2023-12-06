@@ -4,12 +4,13 @@ regarding the channel name/categ1 or overdire with keywords
 from the title of video
 """
 
-from src.core.videos.queries import CoreVideoQueries as CVQ
-from collections import OrderedDict
 import logging
+from collections import OrderedDict
+
+from src.core.videos.queries import CoreVideoQueries as CVQ
 
 
-winamax_dict = OrderedDict(
+base_dict = OrderedDict(
     {
         "poker": "Poker",
         "d'un pro": "Poker",
@@ -49,9 +50,11 @@ winamax_dict = OrderedDict(
     }
 )
 
-canalplus_dict = winamax_dict
+winamax_dict = base_dict
 
-rmc_sport_dict = winamax_dict
+canalplus_dict = base_dict
+
+rmc_sport_dict = base_dict
 
 pairs = {
     "winamax": winamax_dict,
@@ -63,7 +66,7 @@ pairs = {
 }
 
 
-def _impute(title: str, value_dict: dict) -> str:
+def _impute(title: str, value_dict: dict = base_dict) -> str:
     """find categ from title and value_dict"""
 
     for key, value in value_dict.items():
@@ -73,10 +76,12 @@ def _impute(title: str, value_dict: dict) -> str:
     return "Sport"
 
 
-def _find_categ1(video_dict, data, pairs):
-    """ """
-
-    ##################" ATTENTION POUR QUE CA MARCHE IL FAUT QUE CA SOIT DEJA EN BDD !!!!!!!!!!!!!!!!!!!"
+def _find_categ1(
+    video_dict: dict,
+    data: dict,
+    pairs: dict = pairs,
+) -> dict:
+    """given a video dict datat and pairs return a new video dict with id_categ_1"""
 
     id_categ_1 = ""
 
@@ -86,9 +91,8 @@ def _find_categ1(video_dict, data, pairs):
         if key in data["name"].lower() or key in data["author"].lower():
             # impute categ 1 with specific dictionnary
             id_categ_1 = _impute(video_dict["title"], value_dict)
-            # video_dict["id_categ_1"] = id_categ_1
-            # return video_dict
 
+    # TODO replace data by the string of id_categ_1
     video_dict["id_categ_1"] = id_categ_1 if id_categ_1 else data.get("id_categ_1", "?")
 
     return video_dict
@@ -97,6 +101,7 @@ def _find_categ1(video_dict, data, pairs):
 def _manage_categ1(video_dict: dict) -> dict:
     """ """
 
+    # check if video_dict is a dict
     if not isinstance(video_dict, dict):
         raise AttributeError(f"error attribute video_dict is not a dict : {video_dict}")
 
@@ -108,15 +113,22 @@ def _manage_categ1(video_dict: dict) -> dict:
 
     # extra data
     data = CVQ.query_one(video_dict["id_channel"])
+    # check if data is a dict or none return id_categ_1 = "?"
     if not data:
         logging.error(f"no data from CVQ.query_one for video_dict: {video_dict}")
         video_dict["id_categ_1"] = "?"
         return video_dict
 
+    # perform search
     new_video_dict = _find_categ1(video_dict, data, pairs)
 
     return new_video_dict
 
 
 class CoreVideoCateg1:
+    """class CoreVideoCateg1
+    public methods :
+        - manage_categ1
+    """
+
     manage_categ1 = _manage_categ1
