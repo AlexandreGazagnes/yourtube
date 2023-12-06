@@ -15,20 +15,8 @@ from src.videos.queries import VideoQuery
 from src.channels.models import Channel
 from src.channels.queries import ChannelQuery
 
-
 from src.core.channels.extracts import extract_video_detail
 
-# from src.core.videos.DEPRECATED_rapid_api import enhance_video
-
-# from src.core.feeds import extract_rss, extract_rss_and_flatten
-# from src.core.videos.DEPRECATED_rapid_api import enhance_video
-
-# from src.helpers.helpers import make_now
-
-# from src.core.videos.DEPRECATED_rapid_api import enhance_video
-
-
-# from src.db import Db
 
 DEFAULT_THUMBNAIL_VIDEO_URL = "https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A"
 DEFAULT_DURATION = 360

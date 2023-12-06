@@ -70,6 +70,8 @@ def _impute(title: str, value_dict: dict) -> str:
 def _find_cate1(video_dict, data, pairs):
     """ """
 
+    ##################" ATTENTION POUR QUE CA MARCHE IL FAUT QUE CA SOIT DEJA EN BDD !!!!!!!!!!!!!!!!!!!"
+
     id_categ_1 = ""
 
     # find the relevand channel

@@ -6,15 +6,19 @@ from bs4 import BeautifulSoup
 
 
 def extract_video_detail(
-    video_url: str | None,
+    video_url_or_id: str,
     sleeper: float = 0.1,
     verbose: int = 1,
-):
+) -> dict:
     """extract the video detail from the video url by scraping the page"""
 
     # update video url if neeeded
-    if not "youtube" in video_url:
-        video_url = f"https://www.youtube.com/watch?v={video_url}"
+    prefix = "https://www.youtube.com/watch?v="
+    video_url = (
+        video_url_or_id
+        if "youtube" in video_url_or_id
+        else f"{prefix}{video_url_or_id}"
+    )
 
     # response
     # to do use _manage_response
@@ -90,3 +94,28 @@ def extract_video_detail(
     data = {k: v for k, v in data.items() if v}
 
     return data
+
+
+def update_video_detail(video_dict: dict) -> dict:
+    """ """
+
+    logging.info(f"candidate to update_video_detail {video_dict}")
+
+    if not isinstance(video_dict, dict):
+        logging.error(f"error attribute video_dict is not a dict : {video_dict}")
+        # raise AttributeError(f"error attribute video_dict is not a dict : {video_dict}")
+
+    # video_url
+    id_video = video_dict.get("id_video", None)
+
+    if not id_video:
+        logging.error(f"error attribute id_video is not a str : {id_video}")
+        # raise AttributeError(f"error attribute id_video is not a str : {id_video}")
+
+    # extract video detail
+    video_detail = extract_video_detail(id_video)
+
+    # update video dict
+    video_dict.update(video_detail)
+
+    return video_dict

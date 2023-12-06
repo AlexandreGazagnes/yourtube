@@ -8,12 +8,13 @@ import pandas as pd
 import feedparser
 from src.core.paths import RSS
 from src.core.videos.categ1 import manage_categ1
-from src.core.videos.extracts import extract_video_detail
+from src.core.videos.extracts import extract_video_detail, update_video_detail
 
 
 def _clean_video_dict(video_dict, id_channel=""):
     """clean a video dict from a rss feed"""
 
+    # accepted_keys
     accepted_keys = [
         # "link",
         "yt_videoid",
@@ -28,6 +29,7 @@ def _clean_video_dict(video_dict, id_channel=""):
         # "media_community",
     ]
 
+    # update dict
     video_dict = {i: j for i, j in video_dict.items() if i in accepted_keys}
 
     # id_video
@@ -55,11 +57,8 @@ def _clean_video_dict(video_dict, id_channel=""):
     # clean title
     video_dict["title"] = video_dict["title"][:100]
 
-    # TODO:
-    # add thumbnail video url
-    # add category
-    # add keywords
-    # add duration
+    # "published"
+    video_dict["published"] = pd.to_datetime(video_dict["published"])
 
     return {
         k: v
@@ -71,15 +70,7 @@ def _clean_video_dict(video_dict, id_channel=""):
     }
 
 
-# def clean_entries(entries, id_channel=""):
-#     """clean a list of entries from a rss feed"""
-
-#     entries = [_clean_video_dict(i, id_channel) for i in entries]
-
-#     return entries
-
-
-def _extract_rss(id_channel):
+def _scrap_one_rss(id_channel: str):
     """extract the rss feed from a channel id"""
 
     if not id_channel:
@@ -97,56 +88,90 @@ def _extract_rss(id_channel):
     return entries_cleaned
 
 
-# def _extract_rss_and_flatten(channel_list_ids):
-#     """ """
-
-#     feeds = [_extract_rss(i) for i in channel_list_ids]
-
-#     new_videos = []
-#     _ = [new_videos.extend(i) for i in feeds]
-
-#     return new_videos
-
-
-def build_rss(
-    df: pd.DataFrame,
-    video_detail: bool = False,
-    categ_1: bool = False,
+def _scrap_rss_list(
+    channel_list: list[str],
+    parallel: bool = True,
     verbose: int = 1,
-    parrallel=True,
-) -> pd.DataFrame:
-    """build a dataframe from a list of channel ids"""
+) -> list[dict]:
+    """ """
 
-    # fill blanks if needed
+    channel_list = pd.Series(channel_list).fillna("")
 
-    df.id_channel.fillna("", inplace=True)
-
-    # list of list of feeds
-    if parrallel:
-        clean_entries = df.id_channel.parallel_apply(_extract_rss)
+    if parallel:
+        clean_entries = channel_list.parallel_apply(_scrap_one_rss)
     else:
-        clean_entries = df.id_channel.apply(_extract_rss)
+        clean_entries = channel_list.apply(_scrap_one_rss)
 
     # flatten the list of list of feeds
     li = []
     _ = [li.extend(i) for i in clean_entries]
 
-    # build the dataframe
-    df = pd.DataFrame(li)
+    return li
 
-    # published to datetime
-    df["published"] = pd.to_datetime(df.published)
 
-    # rename yt_videoid to id_video
-    df.rename(columns={"yt_videoid": "id_video"}, inplace=True)
+def _update_rss_list(
+    rss_list: list[dict],
+    video_detail=False,
+    categ_1=False,
+    parallel=True,
+    verbose: int = 1,
+) -> list[dict]:
+    """ " """
+
+    if not rss_list:
+        logging.error(f"rss_list is empty : {rss_list}")
+        return []
+
+    rss_list = pd.Series(rss_list).fillna({})
+
+    # logging.info(f"type rss_list : {type(rss_list)}")
+    # logging.info(f"rss_list : {rss_list}")
+    # input("stop here")
+
+    if video_detail:
+        if parallel:
+            updated_rss_list = rss_list.parallel_apply(update_video_detail)
+        else:
+            updated_rss_list = rss_list.apply(update_video_detail)
+
+    # logging.info(f"type updated_rss_list : {type(updated_rss_list)}")
+
+    if categ_1:
+        if video_detail:
+            rss_list = updated_rss_list.copy()
+
+        if parallel:
+            updated_rss_list = rss_list.parallel_apply(manage_categ1)
+        else:
+            updated_rss_list = rss_list.apply(manage_categ1)
+
+    # logging.critical(f"type updated_rss_list : {type(updated_rss_list)}")
+
+    # raise ArithmeticError("stop here")
+
+    return updated_rss_list.values.tolist()
+
+
+def build_rss_df(
+    channel_list: list,
+    video_detail: bool = False,
+    categ_1: bool = False,
+    verbose: int = 1,
+    parallel=True,
+) -> pd.DataFrame:
+    """build a dataframe from a list of channel ids"""
+
+    # fill blanks if needed
+
+    rss_list = _scrap_rss_list(channel_list)
 
     # extract video details
     if video_detail:
         logging.warning(f"extracting video details for {len(df)} videos")
-        if parrallel:
-            details = df.id_video.parallel_apply(extract_video_detail)
+        if parallel:
+            details = df.id_video.parallel_apply(update_video_detail)
         else:
-            details = df.id_video.apply(extract_video_detail)
+            details = df.id_video.apply(update_video_detail)
 
         # DF
         details = pd.DataFrame(details.values.tolist())

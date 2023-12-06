@@ -31,21 +31,19 @@ def _load_channels_ids():
     return channel_list_ids, time_load_channels
 
 
-def _load_old_videos_ids():
+def _load_old_videos_ids() -> tuple:
     """ """
 
     t0 = time.time()
-
     logging.warning("load videos")
 
     old_videos_ids = VideoQuery.all_id_videos()
-
     time_load_videos = round(time.time() - t0, 4)
 
     return old_videos_ids, time_load_videos
 
 
-def _load_feeds(channel_list_ids):
+def _load_feeds(channel_list_ids: list):
     """ """
 
     t0 = time.time()
