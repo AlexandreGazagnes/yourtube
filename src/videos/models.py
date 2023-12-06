@@ -102,7 +102,7 @@ class Video(Base):
 
     id_categ_1: Mapped[str] = mapped_column(
         String(12),
-        default="Misc.",
+        default="?",
         unique=False,
         nullable=False,
         # FK

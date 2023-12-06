@@ -102,7 +102,7 @@ def _boot(
 
     for fn, Obj in pair_dict:
         # pass videos
-        if "videos" in fn:
+        if "videos.csv" == fn:
             continue
 
         logging.warning(f"{fn}")
