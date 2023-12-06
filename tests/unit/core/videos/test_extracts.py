@@ -1,9 +1,9 @@
 import logging
-
 from random import shuffle
 
-from src.core.videos.extracts import _extract_video_detail
 from src.videos.queries import VideoQuery
+
+from src.core.videos.extracts import _extract_video_detail
 
 
 class TestExtract:

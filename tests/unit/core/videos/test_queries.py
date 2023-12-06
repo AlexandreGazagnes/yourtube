@@ -2,11 +2,12 @@ import logging
 
 import pytest
 
-from src.core.videos.queries import _query_one
-from src.db import Session, engine
-
 from src.params import get_params, params
+
+from src.db import Session, engine
 from src.db import Db
+
+from src.core.videos.queries import _query_one
 
 # verbose = True
 
