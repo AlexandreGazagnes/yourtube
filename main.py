@@ -3,10 +3,13 @@ import sys, os
 
 from src.db import Db
 from src.params import get_params, params
-from src.home.functions import HomeFunctions
+
+# from src.home.functions import HomeFunctions
 
 
-from src.videos.functions import fix_videos
+# from src.videos.functions import fix_videos
+
+from src.core.videos.functions import CoreVideoFuncions
 
 app = create_app()
 
@@ -37,22 +40,22 @@ def main():
         "boot": (Db.boot, {"engine": engine}),
         "reboot": (Db.reboot, {"engine": engine}),
         # "fix": (HomeFunctions.fix, {"engine": engine}),
-        "fix_videos": (fix_videos, {"engine": engine}),
+        "fix_videos": (CoreVideoFuncions.fix_old_videos, {"engine": engine}),
         "export": (Db.export, {"engine": engine}),
         "update": (
-            HomeFunctions.update,
+            CoreVideoFuncions.update,
             {"engine": engine, "new": True, "old": True, "random_": True},
         ),
         "update_new": (
-            HomeFunctions.update,
+            CoreVideoFuncions.update,
             {"engine": engine, "new": True, "old": False, "random_": True},
         ),
         "update_old": (
-            HomeFunctions.update,
+            CoreVideoFuncions.update,
             {"engine": engine, "new": False, "old": True, "random_": False},
         ),
         "update_all": (
-            HomeFunctions.update,
+            CoreVideoFuncions.update,
             {"engine": engine, "new": True, "old": True, "random_": False},
         ),
     }

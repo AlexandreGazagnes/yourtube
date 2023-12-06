@@ -1,3 +1,11 @@
+"""
+Helper module 
+submodule of core/videos/functions with helpers (sub functions)
+laod channels, videos, clean videos, add/update videos to db
+scrap feeds, update feeds, reshape payload etc etc
+"""
+
+
 import os, sys, logging, time, random
 from src.db import Session, engine
 
@@ -5,60 +13,23 @@ from src.videos.models import Video
 from src.videos.queries import VideoQuery
 
 from src.channels.models import Channel
-from src.core.thumbnails import enhance_video
+
+# from src.core.videos.DEPRECATED_rapid_api import enhance_video
 from src.helpers.queries import query_all
 
 from src.channels.queries import ChannelQuery
-from src.core.feeds import extract_rss, extract_rss_and_flatten
-from src.core.thumbnails import enhance_video
+
+# from src.core.feeds import extract_rss, extract_rss_and_flatten
+# from src.core.videos.DEPRECATED_rapid_api import enhance_video
 from src.helpers.helpers import make_now
+from src.core.videos.rss import CoreVideoRss
+
+# from src.core.videos.queries import CoreVideoQueries
+
+from src.videos.models import DEFAULT_DURATION, DEFAULT_THUMBNAIL_VIDEO_URL
 
 
-def _load_channels_ids():
-    """ """
-
-    t0 = time.time()
-
-    logging.warning("load channels")
-
-    channel_list_ids = ChannelQuery.all_id_channel()
-    channel_list_ids = [i for i in channel_list_ids if not i.lower().startswith("fake")]
-    channel_list_ids = [i for i in channel_list_ids if not i.lower().startswith("test")]
-
-    time_load_channels = round(time.time() - t0, 4)
-
-    return channel_list_ids, time_load_channels
-
-
-def _load_old_videos_ids():
-    """ """
-
-    t0 = time.time()
-
-    logging.warning("load videos")
-
-    old_videos_ids = VideoQuery.all_id_videos()
-
-    time_load_videos = round(time.time() - t0, 4)
-
-    return old_videos_ids, time_load_videos
-
-
-def _load_feeds(channel_list_ids):
-    """ """
-
-    t0 = time.time()
-
-    logging.warning("get feeds")
-
-    new_videos = extract_rss_and_flatten(channel_list_ids)
-
-    time_get_feeds = round(time.time() - t0, 4)
-
-    return new_videos, time_get_feeds
-
-
-def _clean_videos(video_list):
+def _clean_video_list(video_list: list[dict]) -> list[dict]:
     """ """
 
     for i, video in enumerate(video_list):
@@ -77,7 +48,71 @@ def _clean_videos(video_list):
     return video_list
 
 
-def _make_payload():
+def _scrap_feeds(
+    channel_list_ids: list[str],
+    scrap: bool = True,
+    detail: bool = True,
+    clean: bool = True,
+    parallel: bool = True,
+) -> tuple[list[dict], float]:
+    """scrap feeds form list of channel id and add detail and clean"""
+
+    t0 = time.time()
+
+    logging.warning("get feeds")
+    if scrap:
+        new_videos = CoreVideoRss.scrap_list(channel_list_ids, parallel=parallel)
+
+    if detail:
+        new_videos = CoreVideoRss.update_list(
+            new_videos, detail=True, parallel=parallel
+        )
+
+    if clean:
+        new_videos = _clean_video_list(new_videos)
+
+    time_get_feeds = round(time.time() - t0, 4)
+
+    return new_videos, time_get_feeds
+
+
+def _update_feeds(
+    feeds_list: list[dict],
+    video_detail: bool = True,
+    categ_1: bool = True,
+    clean: bool = True,
+    parallel: bool = True,
+) -> tuple[list[dict], float]:
+    """from feed list add detail and categ and clean"""
+
+    t0 = time.time()
+
+    logging.warning("get feeds")
+
+    if video_detail:
+        feeds_list = CoreVideoRss.update_list(
+            feeds_list,
+            detail=True,
+            parallel=parallel,
+        )
+
+    if categ_1:
+        feeds_list = CoreVideoRss.update_list(
+            feeds_list,
+            categ_1=True,
+            detail=False,
+            parallel=parallel,
+        )
+
+    if clean:
+        feeds_list = _clean_video_list(feeds_list)
+
+    time_get_feeds = round(time.time() - t0, 4)
+
+    return feeds_list, time_get_feeds
+
+
+def _make_payload() -> dict:
     payload = {
         "added": 0,
         "updated": 0,
@@ -93,9 +128,10 @@ def _add_update_db(
     payload: dict,
     new=True,
     old=True,
-    enhance_new=True,
+    # enhance_new=True,
     enhance_old=False,
     random_=True,
+    engine=engine,
 ) -> dict:
     """add/update videos to db"""
 
@@ -109,13 +145,7 @@ def _add_update_db(
             id_video not in old_videos_ids
         ) and new:  # add the video to the db if needed
             # enhance video
-            if enhance_new:
-                try:
-                    video = enhance_video(video)  # enhance
-                except Exception as e:
-                    logging.error(f"{e} - enhance video -> {video}")
 
-            # do add
             try:
                 with Session(engine) as session:
                     session.add(Video(**video))
@@ -138,7 +168,7 @@ def _add_update_db(
             # enhance video
             if enhance_old:  # enhance video
                 try:
-                    video = enhance_video(video)
+                    video = CoreVideoRss.update_one(video, detail=True, categ_1=True)
                 except Exception as e:
                     logging.error(f"{e} - enhance video -> {video}")
 
@@ -158,7 +188,7 @@ def _add_update_db(
     return payload
 
 
-def _reshape_payload(payload, T0):
+def _reshape_payload(payload: dict, T0: float) -> dict:
     """reshape payload"""
 
     payload = {
@@ -186,26 +216,38 @@ def _reshape_payload(payload, T0):
     return payload
 
 
-def _get_broken_videos(shuffle_=True):
-    """ """
+def _get_broken_videos(
+    shuffle_=True,
+    clean: bool = True,
+) -> list[dict]:
+    """return list of videos if broke (ie respond criterions such as category, duration etc)"""
 
-    broken_videos = VideoQuery.all()
-    broken_videos = [i for i in broken_videos if i["category"] == "Unknown"]
+    broken_videos = VideoQuery.all(clean_duration_=False)
+
+    f = (
+        lambda i: (i["category"] == "Unknown")
+        or (i["id_categ_1"] == "?")
+        or (i["duration"] == DEFAULT_DURATION)
+        or (i["thumbnail_video_url"] == DEFAULT_THUMBNAIL_VIDEO_URL)
+    )
+    broken_videos = [i for i in broken_videos if f(i)]
 
     if shuffle_:
         random.shuffle(broken_videos)
 
+    if clean:
+        broken_videos = _clean_video_list(broken_videos)
+
     return broken_videos
 
 
-class HomeHelpers:
-    """Home Helpers"""
+class CoreVideoHelpers:
+    """Helper class for core videos functions"""
 
-    load_channels_ids = _load_channels_ids
-    load_feeds = _load_feeds
-    clean_videos = _clean_videos
-    load_old_videos_ids = _load_old_videos_ids
+    # _clean_video_list = _clean_video_list
+    scrap_feeds = _scrap_feeds
+    update_feeds = _update_feeds
     make_payload = _make_payload
-    add_update_db = _add_update_db
     reshape_payload = _reshape_payload
+    add_update_db = _add_update_db
     get_broken_videos = _get_broken_videos

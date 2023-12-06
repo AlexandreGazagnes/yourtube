@@ -6,9 +6,10 @@ import logging
 logging.basicConfig(
     level=logging.INFO,
     encoding="utf-8",
-    format="%(asctime)s - %(pathname)s- %(funcName)s - %(lineno)d - %(levelname)s - %(message)s",
+    format="%(asctime)s - %(levelname)s - %(pathname)s- %(funcName)s - %(lineno)d :\n %(message)s\n",
     datefmt="'%Y-%m-%d %H:%M:%S.",
 )
+
 # FORMAT="%(asctime)s %(clientip)-15s %(user)-8s %(message)s",
 # handlers=[logging.StreamHandler()],,
 # formatter = logging.Formatter(

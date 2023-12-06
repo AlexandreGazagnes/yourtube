@@ -11,5 +11,5 @@ import requests
 import feedparser
 
 from src.core.feeds import *
-from src.core.extracts import *
+from src.core.channels.extracts import *
 from src.core.paths import *
