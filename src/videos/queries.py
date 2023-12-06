@@ -22,8 +22,8 @@ from src.helpers.helpers import stringify_duration
 
 
 fields = "v.title, v.category, v.thumbnail_video_url, v.published, \
-    v.duration, v.views, v.id_video, v.keywords, v.stars, \
-    v.votes, c.thumbnail_channel_url, c.name, c.author, c.id_language, \
+    v.duration, v.views, v.id_video, v.keywords, v.stars, v.id_channel,\
+    v.votes, c.thumbnail_channel_url, c.name, c.author, c.id_language,  \
         cc.id_categ_1, cc.id_categ_2 "
 
 
@@ -80,9 +80,6 @@ def _extra_filter_query(
         # do filter
         result = [i for i in result if i["id_categ_1"] == id_categ_1]
 
-        # clean duration
-    result = [_clean_duration(i) for i in result]
-
     return result
 
 
@@ -121,6 +118,7 @@ def _query_all_videos(
     id_user: int = None,
     id_categ_2: list = None,
     id_status: list = None,
+    clean_duration_: bool = True,
     # order: str = "desc",
 ):
     """query all rows from a table"""
@@ -139,6 +137,10 @@ def _query_all_videos(
 
     result = Query.perform_raw_query(query_string)
     result = _extra_filter_query(result, query, id_language, id_categ_1)
+
+    # clean duration
+    if clean_duration_:
+        result = [_clean_duration(i) for i in result]
 
     # logging.warning(result)
     return result
