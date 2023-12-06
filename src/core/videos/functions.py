@@ -1,3 +1,10 @@
+"""
+main functions for core videos module 
+main point of entry for videos module
+=> update or fix old videos
+
+"""
+
 # import logging, time, random
 import os, sys, logging, time, random
 from random import shuffle

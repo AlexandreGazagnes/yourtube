@@ -1,3 +1,8 @@
+"""
+Queries module 
+query the db for videos regarding core/video module ONLY
+"""
+
 import logging
 
 from sqlalchemy.sql import text

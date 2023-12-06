@@ -1,3 +1,11 @@
+"""
+Helper module 
+submodule of core/videos/functions with helpers (sub functions)
+laod channels, videos, clean videos, add/update videos to db
+scrap feeds, update feeds, reshape payload etc etc
+"""
+
+
 import os, sys, logging, time, random
 from src.db import Session, engine
 

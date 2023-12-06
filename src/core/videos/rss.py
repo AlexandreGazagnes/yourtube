@@ -1,3 +1,8 @@
+"""
+RSS Module
+about scraping rss feeds from a channel id or list of channel ids
+cleaning the feeds or adding data from details of categ1
+"""
 import logging
 
 from pandarallel import pandarallel
@@ -173,36 +178,36 @@ def _update_rss_list(
     return updated_rss_list.values.tolist()
 
 
-def build_rss_df(
-    channel_list: list,
-    video_detail: bool = False,
-    categ_1: bool = False,
-    verbose: int = 1,
-    parallel=True,
-) -> pd.DataFrame:
-    """build a dataframe from a list of channel ids"""
+# def build_rss_df(
+#     channel_list: list,
+#     video_detail: bool = False,
+#     categ_1: bool = False,
+#     verbose: int = 1,
+#     parallel=True,
+# ) -> pd.DataFrame:
+#     """build a dataframe from a list of channel ids"""
 
-    # fill blanks if needed
+#     # fill blanks if needed
 
-    rss_list = _scrap_rss_list(channel_list)
+#     rss_list = _scrap_rss_list(channel_list)
 
-    # extract video details
-    if video_detail:
-        logging.warning(f"extracting video details for {len(df)} videos")
-        if parallel:
-            details = df.id_video.parallel_apply(update_video_detail)
-        else:
-            details = df.id_video.apply(update_video_detail)
+#     # extract video details
+#     if video_detail:
+#         logging.warning(f"extracting video details for {len(df)} videos")
+#         if parallel:
+#             details = df.id_video.parallel_apply(update_video_detail)
+#         else:
+#             details = df.id_video.apply(update_video_detail)
 
-        # DF
-        details = pd.DataFrame(details.values.tolist())
-        df = pd.concat([df, details], axis=1)
+#         # DF
+#         details = pd.DataFrame(details.values.tolist())
+#         df = pd.concat([df, details], axis=1)
 
-    # update categ1
-    if categ_1:
-        list_new_dict = [manage_categ1(v.to_dict()) for k, v in df.iterrows()]
-        df = pd.DataFrame(list_new_dict)
+#     # update categ1
+#     if categ_1:
+#         list_new_dict = [manage_categ1(v.to_dict()) for k, v in df.iterrows()]
+#         df = pd.DataFrame(list_new_dict)
 
-    logging.info(f"rss feed built : {df}")
+#     logging.info(f"rss feed built : {df}")
 
-    return df
+#     return df

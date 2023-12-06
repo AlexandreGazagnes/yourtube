@@ -1,3 +1,8 @@
+"""
+Scraping module 
+get a video url page and request soup add detail to the video dict
+"""
+
 import logging
 
 import requests
@@ -5,7 +10,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def extract_video_detail(
+def _extract_video_detail(
     video_url_or_id: str,
     sleeper: float = 0.1,
     verbose: int = 1,
@@ -113,7 +118,7 @@ def update_video_detail(video_dict: dict) -> dict:
         # raise AttributeError(f"error attribute id_video is not a str : {id_video}")
 
     # extract video detail
-    video_detail = extract_video_detail(id_video)
+    video_detail = _extract_video_detail(id_video)
 
     # update video dict
     video_dict.update(video_detail)

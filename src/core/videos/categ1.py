@@ -1,3 +1,9 @@
+"""
+module about adding good categ1 to video_dict 
+regarding the channel name/categ1 or overdire with keywords 
+from the title of video
+"""
+
 from src.core.videos.queries import query_one
 from collections import OrderedDict
 import logging
