@@ -3,16 +3,19 @@ Queries module
 query the db for videos regarding core/video module ONLY
 """
 
-import logging
+import logging, os, time
 
 from sqlalchemy.sql import text
 
 from src.db import Session, engine
 from src.db import Db
+
 from src.params import get_params, params
+from src.channels.queries import ChannelQuery
+from src.videos.queries import VideoQuery
 
 
-def query_one(id_channel: str, engine=None) -> dict:
+def _query_one(id_channel: str, engine=None) -> dict:
     """Query one video by id_video"""
 
     if not isinstance(id_channel, (str, int)):
@@ -53,3 +56,37 @@ def query_one(id_channel: str, engine=None) -> dict:
         return {}
 
     return result[0]
+
+
+def _channels_ids() -> tuple[list[str], float]:
+    """ """
+
+    t0 = time.time()
+
+    logging.warning("load channels")
+
+    channel_list_ids = ChannelQuery.all_id_channel()
+    channel_list_ids = [i for i in channel_list_ids if not i.lower().startswith("fake")]
+    channel_list_ids = [i for i in channel_list_ids if not i.lower().startswith("test")]
+
+    time_load_channels = round(time.time() - t0, 4)
+
+    return channel_list_ids, time_load_channels
+
+
+def _old_videos_ids() -> tuple[list[str], float]:
+    """ """
+
+    t0 = time.time()
+    logging.warning("load videos")
+
+    old_videos_ids = VideoQuery.all_id_videos()
+    time_load_videos = round(time.time() - t0, 4)
+
+    return old_videos_ids, time_load_videos
+
+
+class CoreVideoQueries:
+    query_one = _query_one
+    channels_ids = _channels_ids
+    old_videos_ids = _old_videos_ids

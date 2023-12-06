@@ -7,41 +7,34 @@ main point of entry for videos module
 
 # import logging, time, random
 import os, sys, logging, time, random
-from random import shuffle
+
+# from random import shuffle
 
 from src.db import Session, engine
 
-from src.params import get_params, params
+# from src.params import get_params, params
 
-from src.helpers.queries import query_all
+# from src.helpers.queries import query_all
 from src.helpers.helpers import make_now
 
 from src.videos.models import Video
-from src.videos.queries import VideoQuery
 
-from src.channels.models import Channel
-from src.channels.queries import ChannelQuery
+# from src.videos.queries import VideoQuery
 
-from src.core.channels.extracts import extract_video_detail
-from src.core.videos.rss import _scrap_rss_list, _update_rss_list, _update_one_rss
-from src.core.videos.helpers import (
-    load_channels_ids,
-    # load_feeds,
-    load_old_videos_ids,
-    make_payload,
-    # clean_videos,
-    add_update_db,
-    reshape_payload,
-    get_broken_videos,
-    scrap_feeds,
-)
+# from src.channels.models import Channel
+# from src.channels.queries import ChannelQuery
+
+# from src.core.channels.extracts import extract_video_detail
+from src.core.videos.rss import Rss
+from src.core.videos.helpers import CoreVideoHelpers as CVH
+from src.core.videos.queries import CoreVideoQueries as CVQ
 
 
 def update(
     new: bool = True,
     old: bool = True,
     random_: bool = True,
-    enhance_new=True,
+    # enhance_new=True,
     enhance_old=False,
     engine=engine,
 ) -> dict:
@@ -50,11 +43,11 @@ def update(
     T0 = time.time()
 
     # channel list ids and old videos
-    channel_list_ids, time_load_channels = load_channels_ids()
-    old_videos_ids, time_load_videos = load_old_videos_ids()
+    channel_list_ids, time_load_channels = CVQ.channels_ids()
+    old_videos_ids, time_load_videos = CVQ.old_videos_ids()
 
     # feeds new videos
-    new_videos, time_get_feeds = scrap_feeds(
+    new_videos, time_get_feeds = CVH.scrap_feeds(
         channel_list_ids,
         scrap=True,
         detail=True,
@@ -63,7 +56,7 @@ def update(
     )
 
     # payload
-    payload = make_payload()
+    payload = CVH.make_payload()
     payload["old_videos_count"] = len(old_videos_ids)
     payload["new_videos_count"] = len(new_videos)
     payload["time_load_channels"] = time_load_channels
@@ -71,7 +64,7 @@ def update(
     payload["time_get_feeds"] = time_get_feeds
 
     # add update
-    payload = add_update_db(
+    payload = CVH.add_update_db(
         new_videos=new_videos,
         old_videos_ids=old_videos_ids,
         payload=payload,
@@ -80,17 +73,21 @@ def update(
         random_=random_,
         # enhance_new=enhance_new,
         enhance_old=enhance_old,
+        engine=engine,
     )
 
-    payload = reshape_payload(payload, T0)
+    payload = CVH.reshape_payload(payload, T0)
     return payload
 
 
-def fix_old_videos(stop: int = 100, engine=engine) -> dict:
+def fix_old_videos(
+    stop: int = 100,
+    engine=engine,
+) -> dict:
     """Fix data inconsistant default values for old videos"""
 
     # get broken videos
-    broken_videos = get_broken_videos()
+    broken_videos = CVH.get_broken_videos()
 
     for i, video in enumerate(broken_videos):
         # stop
@@ -99,7 +96,7 @@ def fix_old_videos(stop: int = 100, engine=engine) -> dict:
 
         # enhance video
         try:
-            video = _update_one_rss(video, detail=True, categ_1=True)
+            video = Rss.update_one(video, detail=True, categ_1=True)
         except Exception as e:
             logging.error(f"enhance video - {e} - {video}")
             continue

@@ -101,10 +101,10 @@ def _extract_video_detail(
     return data
 
 
-def update_video_detail(video_dict: dict) -> dict:
+def _update_video_detail(video_dict: dict) -> dict:
     """ """
 
-    logging.info(f"candidate to update_video_detail {video_dict}")
+    logging.info(f"candidate to _update_video_detail {video_dict}")
 
     if not isinstance(video_dict, dict):
         logging.error(f"error attribute video_dict is not a dict : {video_dict}")
@@ -124,3 +124,7 @@ def update_video_detail(video_dict: dict) -> dict:
     video_dict.update(video_detail)
 
     return video_dict
+
+
+class Extracts:
+    update_video_detail = _update_video_detail

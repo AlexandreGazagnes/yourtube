@@ -94,7 +94,7 @@ def _find_cate1(video_dict, data, pairs):
     return video_dict
 
 
-def manage_categ1(video_dict: dict) -> dict:
+def _manage_categ1(video_dict: dict) -> dict:
     """ """
 
     if not isinstance(video_dict, dict):
@@ -118,3 +118,7 @@ def manage_categ1(video_dict: dict) -> dict:
     new_video_dict = _find_cate1(video_dict, data, pairs)
 
     return new_video_dict
+
+
+class Categ1:
+    manage_categ1 = _manage_categ1
