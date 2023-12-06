@@ -11,37 +11,49 @@ from pandarallel import pandarallel
 class TestRSS:
     """ """
 
-    def test_scrap_one_raw(self):
+    def test_scrap_one_raw(self, verbose: bool = True, csv: bool = True):
         """ """
 
         id_channel = "UCFqV9b9ji8yIMw3GyNlueuA"
         results = _scrap_one(id_channel, clean=False)
 
-        logging.info(results)
+        if verbose:
+            logging.info(results)
 
         assert isinstance(results, list)
         assert results
         assert isinstance(results[0], dict)
 
-        df = pd.DataFrame(results)
-        df = df.astype(str)
-        df.to_csv("./tmp/test_scrap_one_raw.csv", index=False)
+        if csv:
+            df = pd.DataFrame(results)
+            df = df.astype(str)
+            df.to_csv("./tmp/test_scrap_one_raw.csv", index=False)
 
-    def test_scrap_one_clean(self):
+    def test_scrap_one_clean(
+        self,
+        verbose: bool = True,
+        csv: bool = True,
+    ):
         """ """
 
         id_channel = "UCFqV9b9ji8yIMw3GyNlueuA"
         results = _scrap_one(id_channel, clean=True)
 
-        logging.info(results)
+        if verbose:
+            logging.info(results)
 
         assert isinstance(results, list)
         assert results
         assert isinstance(results[0], dict)
 
-        pd.DataFrame(results).to_csv("./tmp/test_scrap_one_clean.csv", index=False)
+        if csv:
+            pd.DataFrame(results).to_csv("./tmp/test_scrap_one_clean.csv", index=False)
 
-    def test_scrap_list(self):
+    def test_scrap_list(
+        self,
+        verbose: bool = True,
+        csv: bool = True,
+    ):
         """ " """
 
         channel_list = [
@@ -54,9 +66,14 @@ class TestRSS:
         assert rss_list
         assert isinstance(rss_list[0], dict)
 
-        pd.DataFrame(rss_list).to_csv("./tmp/test_rss_list.csv", index=False)
+        if csv:
+            pd.DataFrame(rss_list).to_csv("./tmp/test_rss_list.csv", index=False)
 
-    def test_update_list_details(self):
+    def test_update_list_details(
+        self,
+        verbose: bool = True,
+        csv: bool = True,
+    ):
         """ """
 
         channel_list = [
@@ -74,11 +91,16 @@ class TestRSS:
         assert updated_rss_list_details
         assert isinstance(updated_rss_list_details[0], dict)
 
-        pd.DataFrame(updated_rss_list_details).to_csv(
-            "./tmp/updated_rss_list_details.csv", index=False
-        )
+        if csv:
+            pd.DataFrame(updated_rss_list_details).to_csv(
+                "./tmp/updated_rss_list_details.csv", index=False
+            )
 
-    def test_update_list_categ1(self):
+    def test_update_list_categ1(
+        self,
+        verbose: bool = True,
+        csv: bool = True,
+    ):
         """ """
 
         channel_list = [
@@ -96,11 +118,16 @@ class TestRSS:
         assert updated_rss_list_categ1
         assert isinstance(updated_rss_list_categ1[0], dict)
 
-        pd.DataFrame(updated_rss_list_categ1).to_csv(
-            "./tmp/updated_rss_list_categ1.csv", index=False
-        )
+        if csv:
+            pd.DataFrame(updated_rss_list_categ1).to_csv(
+                "./tmp/updated_rss_list_categ1.csv", index=False
+            )
 
-    def test_update_list_both(self):
+    def test_update_list_both(
+        self,
+        verbose: bool = True,
+        csv: bool = True,
+    ):
         """ """
 
         channel_list = [
@@ -118,6 +145,7 @@ class TestRSS:
         assert updated_rss_list_both
         assert isinstance(updated_rss_list_both[0], dict)
 
-        pd.DataFrame(updated_rss_list_both).to_csv(
-            "./tmp/updated_rss_list_both.csv", index=False
-        )
+        if csv:
+            pd.DataFrame(updated_rss_list_both).to_csv(
+                "./tmp/updated_rss_list_both.csv", index=False
+            )
