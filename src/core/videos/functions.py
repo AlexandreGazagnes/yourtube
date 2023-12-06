@@ -30,14 +30,14 @@ from src.core.videos.helpers import (
 )
 
 
-def _update(
-    new=True,
-    old=True,
-    random_=True,
+def update(
+    new: bool = True,
+    old: bool = True,
+    random_: bool = True,
     enhance_new=True,
     enhance_old=False,
     engine=engine,
-):
+) -> dict:
     """Update the database with new videos and old videos"""
 
     T0 = time.time()
@@ -51,8 +51,9 @@ def _update(
         channel_list_ids,
         scrap=True,
         detail=True,
-        clean = True
-        parallel=True,)
+        clean=True,
+        parallel=True,
+    )
 
     # payload
     payload = make_payload()
@@ -78,9 +79,8 @@ def _update(
     return payload
 
 
-def fix_old_videos(stop=100, engine=engine):
+def fix_old_videos(stop: int = 100, engine=engine) -> dict:
     """Fix data inconsistant default values for old videos"""
-
 
     # get broken videos
     broken_videos = get_broken_videos()

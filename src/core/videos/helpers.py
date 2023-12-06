@@ -114,7 +114,10 @@ def update_feeds(
 
     if categ_1:
         feeds_list = _update_rss_list(
-            feeds_list, categ_1=True, detail=False, parallel=parallel
+            feeds_list,
+            categ_1=True,
+            detail=False,
+            parallel=parallel,
         )
 
     if clean:
@@ -200,7 +203,7 @@ def add_update_db(
     return payload
 
 
-def reshape_payload(payload, T0):
+def reshape_payload(payload: dict, T0: float) -> dict:
     """reshape payload"""
 
     payload = {
@@ -228,7 +231,10 @@ def reshape_payload(payload, T0):
     return payload
 
 
-def get_broken_videos(shuffle_=True, clean: bool = True) -> list[dict]:
+def get_broken_videos(
+    shuffle_=True,
+    clean: bool = True,
+) -> list[dict]:
     """return list of videos if broke (ie respond criterions such as category, duration etc)"""
 
     broken_videos = VideoQuery.all()
