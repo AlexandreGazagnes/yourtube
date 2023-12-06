@@ -222,7 +222,7 @@ def _get_broken_videos(
 ) -> list[dict]:
     """return list of videos if broke (ie respond criterions such as category, duration etc)"""
 
-    broken_videos = VideoQuery.all()
+    broken_videos = VideoQuery.all(clean_duration_=False)
 
     f = (
         lambda i: (i["category"] == "Unknown")

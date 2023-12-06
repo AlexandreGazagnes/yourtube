@@ -70,17 +70,13 @@ def _clean_raw(
     # "published"
     raw_rss_item["published"] = pd.to_datetime(raw_rss_item["published"])
 
-    return {
-        k: v
-        for k, v in raw_rss_item.items()
-        if k
-        not in [
-            "yt_videoid",
-        ]
-    }
+    return {k: v for k, v in raw_rss_item.items() if k not in ["yt_videoid"]}
 
 
-def _scrap_one(id_channel: str) -> list[dict]:
+def _scrap_one(
+    id_channel: str,
+    clean=True,
+) -> list[dict]:
     """extract the rss feed from a channel id"""
 
     if not id_channel:
@@ -89,8 +85,22 @@ def _scrap_one(id_channel: str) -> list[dict]:
     # feeds
     feeds = feedparser.parse(RSS_BASE + id_channel)
 
+    # error feeds
+    if not feeds:  # or not feeds.entries:
+        logging.error(f"no feeds for {id_channel} : feeds {feeds}")
+        return []
+
     # entries
     entries = feeds.entries
+
+    # error entries
+    if not entries:
+        logging.error(f"no entries for {id_channel} : entries {entries}")
+        return []
+
+    # clean
+    if not clean:
+        return entries
 
     entries_cleaned = [_clean_raw(i, id_channel) for i in entries]
     # entries_cleaned = clean_entries(entries, id_channel=id_channel)
@@ -127,8 +137,20 @@ def _update_one(
     verbose: int = 1,
 ):
     if not rss_item:
-        logging.error("rsss item empty")
+        logging.error(f"rss item empty : {rss_item}")
         return {}
+
+    if not isinstance(rss_item, dict):
+        logging.error(f"rss item not a dict : {rss_item}")
+        return {}
+
+    if not rss_item.get("id_video"):
+        logging.error(f"rss item has no id_video : {rss_item}")
+        return rss_item
+
+    if not rss_item.get("id_channel"):
+        logging.error(f"rss item has no id_channel : {rss_item}")
+        return rss_item
 
     if detail:
         rss_item = CoreVideoExtracts.update_video_detail(rss_item)

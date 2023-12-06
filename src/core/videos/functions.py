@@ -37,6 +37,7 @@ def update(
     # enhance_new=True,
     enhance_old=False,
     engine=engine,
+    deep: int = 300,
 ) -> dict:
     """Update the database with new videos and old videos"""
 
@@ -54,6 +55,9 @@ def update(
         clean=True,
         parallel=True,
     )
+
+    # manage deepenes of the update
+    # NO CODE HERE
 
     # payload
     payload = CVH.make_payload()
@@ -81,19 +85,22 @@ def update(
 
 
 def fix_old_videos(
-    stop: int = 100,
+    stop: int = 300,
+    shuffle_: bool = False,
     engine=engine,
 ) -> dict:
     """Fix data inconsistant default values for old videos"""
 
     # get broken videos
     broken_videos = CVH.get_broken_videos()
+    if shuffle_:
+        random.shuffle(broken_videos)
+    broken_videos = broken_videos[:stop]
 
     for i, video in enumerate(broken_videos):
-        # stop
-        if stop == i:
-            break
+        # logg
 
+        logging.info(f"video before fix {video}")
         # enhance video
         try:
             video = CoreVideoRss.update_one(video, detail=True, categ_1=True)
@@ -104,6 +111,8 @@ def fix_old_videos(
         # update video
         id_video = video["id_video"]
         video["updated_at"] = make_now()
+
+        logging.info(f"video after fix {video}")
 
         # add in db
         try:

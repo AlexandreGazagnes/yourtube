@@ -73,7 +73,7 @@ def _impute(title: str, value_dict: dict) -> str:
     return "Sport"
 
 
-def _find_cate1(video_dict, data, pairs):
+def _find_categ1(video_dict, data, pairs):
     """ """
 
     ##################" ATTENTION POUR QUE CA MARCHE IL FAUT QUE CA SOIT DEJA EN BDD !!!!!!!!!!!!!!!!!!!"
@@ -101,21 +101,19 @@ def _manage_categ1(video_dict: dict) -> dict:
         raise AttributeError(f"error attribute video_dict is not a dict : {video_dict}")
 
     # check if id_video and id_channel are present
-    if (not video_dict.get("id_video", None)) or (
-        not video_dict.get("id_channel", None)
-    ):
-        logging.error(f"missing id_video or id_channel in video_dict: {video_dict}")
+    if not video_dict.get("id_channel", None):
+        logging.error(f"missing  id_channel in video_dict: {video_dict}")
         video_dict["id_categ_1"] = "?"
         return video_dict
 
     # extra data
-    data = CVQ.query_one(video_dict["id_video"], video_dict["id_channel"])
+    data = CVQ.query_one(video_dict["id_channel"])
     if not data:
         logging.error(f"no data from CVQ.query_one for video_dict: {video_dict}")
         video_dict["id_categ_1"] = "?"
         return video_dict
 
-    new_video_dict = _find_cate1(video_dict, data, pairs)
+    new_video_dict = _find_categ1(video_dict, data, pairs)
 
     return new_video_dict
 

@@ -44,14 +44,16 @@ def _extract_video_detail(
         return {}
 
     # duration
-    duration = ""
+    duration, duration_1, duration_2 = "", "", ""
     try:
         pattern = '"lengthSeconds": "'.replace(" ", "")
-        _duration = response.text.split(pattern)[1][:100]
-        _duration = int(_duration.split('"')[0].strip())
-        duration = _duration
+        duration_1 = response.text.split(pattern)[1][:100]
+        duration_2 = int(duration_1.split('"')[0].strip())
+        duration = duration_2
     except Exception as e:
-        logging.error(f"duration - {e} - {video_url} - duration set to -{duration}")
+        logging.error(
+            f"duration - {e} - {video_url} - duration 1,2,3 {duration_1} - {duration_2} -> {duration} "
+        )
 
     # video_thumbnail_url
     video_thumbnail_url = ""
@@ -98,6 +100,8 @@ def _extract_video_detail(
 
     data = {k: v for k, v in data.items() if v}
 
+    logging.info(f"video detail extracted {data}")
+
     return data
 
 
@@ -122,6 +126,8 @@ def _update_video_detail(video_dict: dict) -> dict:
 
     # update video dict
     video_dict.update(video_detail)
+
+    logging.info(f"proceed after _update_video_detail {video_dict}")
 
     return video_dict
 
