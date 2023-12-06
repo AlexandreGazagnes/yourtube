@@ -36,13 +36,19 @@ class User(Base):
     password: Mapped[str] = mapped_column(
         String(50),
         nullable=False,
-        unique=True,
+        unique=False,
     )
     token: Mapped[str] = mapped_column(
         String(20),
         default=make_token(),
         nullable=False,
         unique=True,
+    )
+    sex: Mapped[str] = mapped_column(
+        String(1),
+        nullable=False,
+        unique=False,
+        default="-",
     )
     birthdate: Mapped[str] = mapped_column(
         Date(),

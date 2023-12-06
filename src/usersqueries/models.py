@@ -9,12 +9,12 @@ from src.helpers.helpers import make_now, make_token
 from src.base.models import Base
 
 
-class UserChannel(Base):
+class UserQuery(Base):
     """ """
 
-    __tablename__ = "userschannels"
+    __tablename__ = "usersqueries"
 
-    id_userschannels: Mapped[int] = mapped_column(
+    id_usersqueries: Mapped[int] = mapped_column(
         Integer(),
         primary_key=True,
         autoincrement=True,
@@ -27,17 +27,11 @@ class UserChannel(Base):
         unique=False,
         # FK
     )
-    id_channel: Mapped[str] = mapped_column(
-        String(40),
+    query: Mapped[str] = mapped_column(
+        String(100),
         nullable=False,
         unique=False,
         # FK
-    )
-    interest: Mapped[float] = mapped_column(
-        Float(),
-        default=2.5,
-        unique=False,
-        nullable=False,
     )
 
     created_at: Mapped[str] = mapped_column(
@@ -46,12 +40,12 @@ class UserChannel(Base):
         nullable=False,
         unique=False,
     )
-    updated_at: Mapped[str] = mapped_column(
-        DateTime(),
-        default=make_now(),
-        nullable=False,
-        unique=False,
-    )
+    # updated_at: Mapped[str] = mapped_column(
+    #     DateTime(),
+    #     default=make_now(),
+    #     nullable=False,
+    #     unique=False,
+    # )
 
     def __repr__(self) -> str:
         return f"UsersChannels(id_userschannels={self.id_userschannels}, id_user={self.id_user}, id_channel={self.id_channel})"

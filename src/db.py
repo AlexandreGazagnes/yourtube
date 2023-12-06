@@ -19,6 +19,8 @@ from src.channels.models import Channel
 from src.languages.models import Language
 from src.status.models import Status
 from src.users.models import User
+
+# from src.usersqueries.models import UserQuery
 from src.userschannels.models import UserChannel
 from src.usersvideos.models import UserVideo
 from src.videos.models import Video
@@ -91,6 +93,7 @@ def _boot(
         ("status.csv", Status),
         ("users.csv", User),
         ("userschannels.csv", UserChannel),
+        # ("usersqueries.csv", UserQuery),
         ("usersvideos.csv", UserVideo),
         ("videos.csv", Video),
     ]
@@ -99,7 +102,7 @@ def _boot(
 
     for fn, Obj in pair_dict:
         # pass videos
-        if "videos" in fn:
+        if "videos.csv" == fn:
             continue
 
         logging.warning(f"{fn}")
@@ -151,6 +154,8 @@ def _export(engine=engine, path="./data/tables/"):
         ("status.csv", Status),
         ("users.csv", User),
         ("userschannels.csv", UserChannel),
+        # ("usersqueries.csv", UserQuery),
+        ("usersvideos.csv", UserVideo),
         ("videos.csv", Video),
     ]
 

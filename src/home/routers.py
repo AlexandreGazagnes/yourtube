@@ -6,8 +6,8 @@ from src.db import Channel, Video, session, engine, Session
 from src.helpers.routers import jsonify, validate_token  # token_required
 from src.helpers.queries import query_all
 
-from src.home.helpers import HomeHelpers
-from src.home.functions import HomeFunctions
+# from src.home.helpers import HomeHelpers
+# from src.home.functions import HomeFunctions
 from src.videos.queries import VideoQuery
 
 # from src.queries import query_all, jsonify
@@ -45,13 +45,13 @@ async def state():
     return jsonify({"video_count": result}, message="success")
 
 
-@home.get("/update", status_code=200)
-async def update(token: str = Depends(validate_token)):
-    """Update bdd with new feeds"""
+# @home.get("/update", status_code=200)
+# async def update(token: str = Depends(validate_token)):
+#     """Update bdd with new feeds"""
 
-    payload = HomeFunctions.update()
+#     payload = HomeFunctions.update()
 
-    return jsonify(payload, message="Done")
+#     return jsonify(payload, message="Done")
 
 
 # if __name__ == "__main__":

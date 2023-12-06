@@ -44,3 +44,5 @@ notebooks/*
 .github/*
 
 # poetry.lock
+
+nohup.out
