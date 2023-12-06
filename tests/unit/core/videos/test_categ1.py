@@ -2,7 +2,7 @@ import logging
 
 import pytest
 
-from src.core.videos.queries import query_one
+# from src.core.videos.queries import CoreVideoQueries
 from src.core.videos.categ1 import _find_cate1, pairs
 from src.db import Session, engine
 
@@ -28,3 +28,5 @@ class TestCateg1:
     new_video_dict = _find_cate1(video_dict, data, pairs)
 
     assert new_video_dict["id_categ_1"].lower() == "poker"
+
+    logging.info(f"new_video_dict : {new_video_dict}")

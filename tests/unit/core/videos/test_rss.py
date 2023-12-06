@@ -3,7 +3,7 @@ import pytest
 import pandas as pd
 import logging
 
-from src.core.videos.rss import _scrap_one_rss, _scrap_rss_list, _update_rss_list
+from src.core.videos.rss import _scrap_one, _scrap_list, _update_list
 
 from pandarallel import pandarallel
 
@@ -11,11 +11,11 @@ from pandarallel import pandarallel
 class TestRSS:
     """ """
 
-    def test_scrap_one_rss(self):
+    def test_scrap_one_raw(self):
         """ """
 
         id_channel = "UCFqV9b9ji8yIMw3GyNlueuA"
-        results = _scrap_one_rss(id_channel)
+        results = _scrap_one(id_channel, clean=False)
 
         logging.info(results)
 
@@ -23,7 +23,25 @@ class TestRSS:
         assert results
         assert isinstance(results[0], dict)
 
-    def test_scrap_rss_list(self):
+        df = pd.DataFrame(results)
+        df = df.astype(str)
+        df.to_csv("./tmp/test_scrap_one_raw.csv", index=False)
+
+    def test_scrap_one_clean(self):
+        """ """
+
+        id_channel = "UCFqV9b9ji8yIMw3GyNlueuA"
+        results = _scrap_one(id_channel, clean=True)
+
+        logging.info(results)
+
+        assert isinstance(results, list)
+        assert results
+        assert isinstance(results[0], dict)
+
+        pd.DataFrame(results).to_csv("./tmp/test_scrap_one_clean.csv", index=False)
+
+    def test_scrap_list(self):
         """ " """
 
         channel_list = [
@@ -31,14 +49,14 @@ class TestRSS:
             "UC8ggH3zU61XO0nMskSQwZdA",
         ]
 
-        rss_list = _scrap_rss_list(channel_list, parallel=True)
+        rss_list = _scrap_list(channel_list, parallel=True)
         assert isinstance(rss_list, list)
         assert rss_list
         assert isinstance(rss_list[0], dict)
 
         pd.DataFrame(rss_list).to_csv("./tmp/test_rss_list.csv", index=False)
 
-    def test_update_rss_list_details(self):
+    def test_update_list_details(self):
         """ """
 
         channel_list = [
@@ -46,10 +64,10 @@ class TestRSS:
             "UC8ggH3zU61XO0nMskSQwZdA",
         ]
 
-        rss_list = _scrap_rss_list(channel_list, parallel=True)
+        rss_list = _scrap_list(channel_list, parallel=True)
 
-        updated_rss_list_details = _update_rss_list(
-            rss_list, video_detail=True, categ_1=False, parallel=True
+        updated_rss_list_details = _update_list(
+            rss_list, detail=True, categ_1=False, parallel=True
         )
 
         assert isinstance(updated_rss_list_details, list)
@@ -60,7 +78,7 @@ class TestRSS:
             "./tmp/updated_rss_list_details.csv", index=False
         )
 
-    def test_update_rss_list_categ1(self):
+    def test_update_list_categ1(self):
         """ """
 
         channel_list = [
@@ -68,10 +86,10 @@ class TestRSS:
             "UC8ggH3zU61XO0nMskSQwZdA",
         ]
 
-        rss_list = _scrap_rss_list(channel_list, parallel=True)
+        rss_list = _scrap_list(channel_list, parallel=True)
 
-        updated_rss_list_categ1 = _update_rss_list(
-            rss_list, video_detail=False, categ_1=True, parallel=True
+        updated_rss_list_categ1 = _update_list(
+            rss_list, detail=False, categ_1=True, parallel=True
         )
 
         assert isinstance(updated_rss_list_categ1, list)
@@ -82,7 +100,7 @@ class TestRSS:
             "./tmp/updated_rss_list_categ1.csv", index=False
         )
 
-    def test_update_rss_list_both(self):
+    def test_update_list_both(self):
         """ """
 
         channel_list = [
@@ -90,10 +108,10 @@ class TestRSS:
             "UC8ggH3zU61XO0nMskSQwZdA",
         ]
 
-        rss_list = _scrap_rss_list(channel_list, parallel=True)
+        rss_list = _scrap_list(channel_list, parallel=True)
 
-        updated_rss_list_both = _update_rss_list(
-            rss_list, video_detail=True, categ_1=True, parallel=True
+        updated_rss_list_both = _update_list(
+            rss_list, detail=True, categ_1=True, parallel=True
         )
 
         assert isinstance(updated_rss_list_both, list)
