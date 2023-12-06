@@ -7,23 +7,25 @@ import logging, os, time
 
 from sqlalchemy.sql import text
 
+from src.params import get_params, params
+
 from src.db import Session, engine
 from src.db import Db
 
-from src.params import get_params, params
-from src.channels.queries import ChannelQuery
 from src.videos.queries import VideoQuery
+from src.channels.queries import ChannelQuery
 
 
 def _query_one(id_channel: str, engine=None) -> dict:
     """Query one video by id_video"""
 
+    # needed id_channel
     if not isinstance(id_channel, (str, int)):
         raise AttributeError(
             f"error type id_channel, expected (str, int), recieved {id_channel}"
         )
 
-    # engine
+    # engine if needed
     if not engine:
         engine = Db.engine(get_params("dev"))
 
@@ -35,8 +37,10 @@ def _query_one(id_channel: str, engine=None) -> dict:
     ;
     """
 
+    # query
     sql_query = text(query_string)
 
+    # execute
     try:
         with Session(engine) as session:
             result = session.execute(sql_query)
@@ -44,6 +48,7 @@ def _query_one(id_channel: str, engine=None) -> dict:
         logging.error(f"error in query: {e} for id_channel: {id_channel}")
         return {}
 
+    # build list of dict
     try:
         keys = result.keys()
         result = [dict(zip(keys, row)) for row in result]
@@ -51,6 +56,7 @@ def _query_one(id_channel: str, engine=None) -> dict:
         logging.error(f"error in query results: {e} for id_channel: {id_channel}")
         return {}
 
+    # check if result is not empty
     if not len(result):
         logging.error(f"no results for id_channel: {id_channel}")
         return {}
@@ -59,35 +65,50 @@ def _query_one(id_channel: str, engine=None) -> dict:
 
 
 def _channels_ids() -> tuple[list[str], float]:
-    """ """
+    """give all channels ids id db"""
 
+    # timer
     t0 = time.time()
 
-    logging.warning("load channels")
+    logging.info("load channels")
 
+    # query
     channel_list_ids = ChannelQuery.all_id_channel()
+
+    # filter
     channel_list_ids = [i for i in channel_list_ids if not i.lower().startswith("fake")]
     channel_list_ids = [i for i in channel_list_ids if not i.lower().startswith("test")]
 
+    # timer
     time_load_channels = round(time.time() - t0, 4)
 
     return channel_list_ids, time_load_channels
 
 
 def _old_videos_ids() -> tuple[list[str], float]:
-    """ """
+    """give all id videos in db"""
 
+    # timer
     t0 = time.time()
+
     logging.warning("load videos")
 
+    # query
     old_videos_ids = VideoQuery.all_id_videos()
+
+    # timer
     time_load_videos = round(time.time() - t0, 4)
 
     return old_videos_ids, time_load_videos
 
 
 class CoreVideoQueries:
-    """class for core video queries"""
+    """class for core video queries
+    public methods:
+        - query_one
+        - channels_ids
+        - old_videos_ids
+    """
 
     query_one = _query_one
     channels_ids = _channels_ids

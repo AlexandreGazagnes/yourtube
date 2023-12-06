@@ -2,8 +2,6 @@ import logging
 
 import requests
 
-# from bs4 import BeautifulSoup
-
 
 def _manage_response(url, label="label"):
     """manage the response of a request"""
