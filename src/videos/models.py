@@ -9,6 +9,10 @@ from src.helpers.helpers import make_now, make_token
 from src.base.models import Base
 
 
+DEFAULT_THUMBNAIL_VIDEO_URL = "https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A"
+DEFAULT_DURATION = 360
+
+
 class Video(Base):
     """ """
 
@@ -40,7 +44,7 @@ class Video(Base):
     )
     thumbnail_video_url: Mapped[str] = mapped_column(
         String(300),
-        default="https://i.ytimg.com/vi/kJQP7kiw5Fk/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7mQvF1DbgLkymd5TjUQjWLbaJ3A",
+        default=DEFAULT_THUMBNAIL_VIDEO_URL,
         nullable=False,
         unique=False,
     )
@@ -72,7 +76,7 @@ class Video(Base):
     )
     duration: Mapped[int] = mapped_column(
         Integer(),
-        default=360,
+        default=DEFAULT_DURATION,
         nullable=False,
         unique=False,
     )
