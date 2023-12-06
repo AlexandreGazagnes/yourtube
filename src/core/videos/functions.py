@@ -25,7 +25,7 @@ from src.videos.models import Video
 # from src.channels.queries import ChannelQuery
 
 # from src.core.channels.extracts import extract_video_detail
-from src.core.videos.rss import Rss
+from src.core.videos.rss import CoreVideoRss
 from src.core.videos.helpers import CoreVideoHelpers as CVH
 from src.core.videos.queries import CoreVideoQueries as CVQ
 
@@ -96,7 +96,7 @@ def fix_old_videos(
 
         # enhance video
         try:
-            video = Rss.update_one(video, detail=True, categ_1=True)
+            video = CoreVideoRss.update_one(video, detail=True, categ_1=True)
         except Exception as e:
             logging.error(f"enhance video - {e} - {video}")
             continue
@@ -204,3 +204,10 @@ def fix_old_videos(
 
 # # if __name__ == "__main__":
 # #     """ """
+
+
+class CoreVideoFuncions:
+    """Class for core videos functions"""
+
+    update = update
+    fix_old_videos = fix_old_videos

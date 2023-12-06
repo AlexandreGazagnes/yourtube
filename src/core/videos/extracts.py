@@ -126,5 +126,5 @@ def _update_video_detail(video_dict: dict) -> dict:
     return video_dict
 
 
-class Extracts:
+class CoreVideoExtracts:
     update_video_detail = _update_video_detail

@@ -87,6 +87,8 @@ def _old_videos_ids() -> tuple[list[str], float]:
 
 
 class CoreVideoQueries:
+    """class for core video queries"""
+
     query_one = _query_one
     channels_ids = _channels_ids
     old_videos_ids = _old_videos_ids

@@ -22,9 +22,9 @@ from src.channels.queries import ChannelQuery
 # from src.core.feeds import extract_rss, extract_rss_and_flatten
 # from src.core.videos.DEPRECATED_rapid_api import enhance_video
 from src.helpers.helpers import make_now
-from src.core.videos.rss import Rss
+from src.core.videos.rss import CoreVideoRss
 
-from src.core.videos.queries import CoreVideoQueries
+# from src.core.videos.queries import CoreVideoQueries
 
 from src.videos.models import DEFAULT_DURATION, DEFAULT_THUMBNAIL_VIDEO_URL
 
@@ -61,10 +61,12 @@ def _scrap_feeds(
 
     logging.warning("get feeds")
     if scrap:
-        new_videos = Rss.scrap_list(channel_list_ids, parallel=parallel)
+        new_videos = CoreVideoRss.scrap_list(channel_list_ids, parallel=parallel)
 
     if detail:
-        new_videos = Rss.update_list(new_videos, detail=True, parallel=parallel)
+        new_videos = CoreVideoRss.update_list(
+            new_videos, detail=True, parallel=parallel
+        )
 
     if clean:
         new_videos = _clean_video_list(new_videos)
@@ -88,14 +90,14 @@ def _update_feeds(
     logging.warning("get feeds")
 
     if video_detail:
-        feeds_list = Rss.update_list(
+        feeds_list = CoreVideoRss.update_list(
             feeds_list,
             detail=True,
             parallel=parallel,
         )
 
     if categ_1:
-        feeds_list = Rss.update_list(
+        feeds_list = CoreVideoRss.update_list(
             feeds_list,
             categ_1=True,
             detail=False,
@@ -166,7 +168,7 @@ def _add_update_db(
             # enhance video
             if enhance_old:  # enhance video
                 try:
-                    video = Rss.update_one(video, detail=True, categ_1=True)
+                    video = CoreVideoRss.update_one(video, detail=True, categ_1=True)
                 except Exception as e:
                     logging.error(f"{e} - enhance video -> {video}")
 
@@ -240,6 +242,8 @@ def _get_broken_videos(
 
 
 class CoreVideoHelpers:
+    """Helper class for core videos functions"""
+
     # _clean_video_list = _clean_video_list
     scrap_feeds = _scrap_feeds
     update_feeds = _update_feeds

@@ -4,7 +4,7 @@ regarding the channel name/categ1 or overdire with keywords
 from the title of video
 """
 
-from src.core.videos.queries import query_one
+from src.core.videos.queries import CoreVideoQueries as CVQ
 from collections import OrderedDict
 import logging
 
@@ -109,9 +109,9 @@ def _manage_categ1(video_dict: dict) -> dict:
         return video_dict
 
     # extra data
-    data = query_one(video_dict["id_video"], video_dict["id_channel"])
+    data = CVQ.query_one(video_dict["id_video"], video_dict["id_channel"])
     if not data:
-        logging.error(f"no data from query_one for video_dict: {video_dict}")
+        logging.error(f"no data from CVQ.query_one for video_dict: {video_dict}")
         video_dict["id_categ_1"] = "?"
         return video_dict
 
@@ -120,5 +120,5 @@ def _manage_categ1(video_dict: dict) -> dict:
     return new_video_dict
 
 
-class Categ1:
+class CoreVideoCateg1:
     manage_categ1 = _manage_categ1
