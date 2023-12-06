@@ -13,9 +13,13 @@ from src.channels.queries import ChannelQuery
 # from src.core.feeds import extract_rss, extract_rss_and_flatten
 from src.core.videos.DEPRECATED_rapid_api import enhance_video
 from src.helpers.helpers import make_now
+from src.core.videos.rss import _scrap_rss_list, _update_rss_list, _update_one_rss
 
 
-def _load_channels_ids():
+from src.videos.models import DEFAULT_DURATION, DEFAULT_THUMBNAIL_VIDEO_URL
+
+
+def load_channels_ids() -> tuple[list[str], float]:
     """ """
 
     t0 = time.time()
@@ -31,7 +35,7 @@ def _load_channels_ids():
     return channel_list_ids, time_load_channels
 
 
-def _load_old_videos_ids() -> tuple:
+def load_old_videos_ids() -> tuple[list[str], float]:
     """ """
 
     t0 = time.time()
@@ -43,21 +47,7 @@ def _load_old_videos_ids() -> tuple:
     return old_videos_ids, time_load_videos
 
 
-def _load_feeds(channel_list_ids: list):
-    """ """
-
-    t0 = time.time()
-
-    logging.warning("get feeds")
-
-    new_videos = extract_rss_and_flatten(channel_list_ids)
-
-    time_get_feeds = round(time.time() - t0, 4)
-
-    return new_videos, time_get_feeds
-
-
-def _clean_videos(video_list):
+def clean_video_list(video_list: list[dict]) -> list[dict]:
     """ """
 
     for i, video in enumerate(video_list):
@@ -76,7 +66,66 @@ def _clean_videos(video_list):
     return video_list
 
 
-def _make_payload():
+def scrap_feeds(
+    channel_list_ids: list[str],
+    scrap: bool = True,
+    detail: bool = True,
+    clean: bool = True,
+    parallel: bool = True,
+) -> tuple[list[dict], float]:
+    """scrap feeds form list of channel id and add detail and clean"""
+
+    t0 = time.time()
+
+    logging.warning("get feeds")
+    if scrap:
+        new_videos = _scrap_rss_list(channel_list_ids, parallel=parallel)
+
+    if detail:
+        new_videos = _update_rss_list(new_videos, detail=True, parallel=parallel)
+
+    if clean:
+        new_videos = clean_video_list(new_videos)
+
+    time_get_feeds = round(time.time() - t0, 4)
+
+    return new_videos, time_get_feeds
+
+
+def update_feeds(
+    feeds_list: list[dict],
+    video_detail: bool = True,
+    categ_1: bool = True,
+    clean: bool = True,
+    parallel: bool = True,
+) -> tuple[list[dict], float]:
+    """from feed list add detail and categ and clean"""
+
+    t0 = time.time()
+
+    logging.warning("get feeds")
+
+    if video_detail:
+        feeds_list = _update_rss_list(
+            feeds_list,
+            detail=True,
+            parallel=parallel,
+        )
+
+    if categ_1:
+        feeds_list = _update_rss_list(
+            feeds_list, categ_1=True, detail=False, parallel=parallel
+        )
+
+    if clean:
+        feeds_list = clean_video_list(feeds_list)
+
+    time_get_feeds = round(time.time() - t0, 4)
+
+    return feeds_list, time_get_feeds
+
+
+def make_payload() -> dict:
     payload = {
         "added": 0,
         "updated": 0,
@@ -86,13 +135,13 @@ def _make_payload():
     return payload
 
 
-def _add_update_db(
+def add_update_db(
     new_videos: list,
     old_videos_ids: list,
     payload: dict,
     new=True,
     old=True,
-    enhance_new=True,
+    # enhance_new=True,
     enhance_old=False,
     random_=True,
 ) -> dict:
@@ -108,13 +157,7 @@ def _add_update_db(
             id_video not in old_videos_ids
         ) and new:  # add the video to the db if needed
             # enhance video
-            if enhance_new:
-                try:
-                    video = enhance_video(video)  # enhance
-                except Exception as e:
-                    logging.error(f"{e} - enhance video -> {video}")
 
-            # do add
             try:
                 with Session(engine) as session:
                     session.add(Video(**video))
@@ -137,7 +180,7 @@ def _add_update_db(
             # enhance video
             if enhance_old:  # enhance video
                 try:
-                    video = enhance_video(video)
+                    video = _update_one_rss(video, detail=True, categ_1=True)
                 except Exception as e:
                     logging.error(f"{e} - enhance video -> {video}")
 
@@ -157,7 +200,7 @@ def _add_update_db(
     return payload
 
 
-def _reshape_payload(payload, T0):
+def reshape_payload(payload, T0):
     """reshape payload"""
 
     payload = {
@@ -185,26 +228,23 @@ def _reshape_payload(payload, T0):
     return payload
 
 
-def _get_broken_videos(shuffle_=True):
-    """ """
+def get_broken_videos(shuffle_=True, clean: bool = True) -> list[dict]:
+    """return list of videos if broke (ie respond criterions such as category, duration etc)"""
 
     broken_videos = VideoQuery.all()
-    broken_videos = [i for i in broken_videos if i["category"] == "Unknown"]
+
+    f = (
+        lambda i: (i["category"] == "Unknown")
+        or (i["id_categ_1"] == "?")
+        or (i["duration"] == DEFAULT_DURATION)
+        or (i["thumbnail_video_url"] == DEFAULT_THUMBNAIL_VIDEO_URL)
+    )
+    broken_videos = [i for i in broken_videos if f(i)]
 
     if shuffle_:
         random.shuffle(broken_videos)
 
+    if clean:
+        broken_videos = clean_video_list(broken_videos)
+
     return broken_videos
-
-
-class HomeHelpers:
-    """Home Helpers"""
-
-    load_channels_ids = _load_channels_ids
-    load_feeds = _load_feeds
-    clean_videos = _clean_videos
-    load_old_videos_ids = _load_old_videos_ids
-    make_payload = _make_payload
-    add_update_db = _add_update_db
-    reshape_payload = _reshape_payload
-    get_broken_videos = _get_broken_videos

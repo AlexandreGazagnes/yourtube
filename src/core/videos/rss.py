@@ -11,7 +11,7 @@ from src.core.videos.categ1 import manage_categ1
 from src.core.videos.extracts import extract_video_detail, update_video_detail
 
 
-def _clean_video_dict(video_dict, id_channel=""):
+def _clean_raw_rss_dict(raw_rss_item: dict, id_channel: str = "") -> dict:
     """clean a video dict from a rss feed"""
 
     # accepted_keys
@@ -30,39 +30,41 @@ def _clean_video_dict(video_dict, id_channel=""):
     ]
 
     # update dict
-    video_dict = {i: j for i, j in video_dict.items() if i in accepted_keys}
+    raw_rss_item = {i: j for i, j in raw_rss_item.items() if i in accepted_keys}
 
     # id_video
-    video_dict["id_video"] = video_dict["yt_videoid"]
+    raw_rss_item["id_video"] = raw_rss_item["yt_videoid"]
 
     # media_starrating
-    media_starrating = video_dict.get("media_starrating", {})
-    video_dict["votes"] = int(media_starrating.get("count", -1))
-    video_dict["stars"] = float(media_starrating.get("average", -1.0))
-    # video_dict["stars"] = int(video_dict["stars"])
+    media_starrating = raw_rss_item.get("media_starrating", {})
+    raw_rss_item["votes"] = int(media_starrating.get("count", -1))
+    raw_rss_item["stars"] = float(media_starrating.get("average", -1.0))
+    # raw_rss_item["stars"] = int(raw_rss_item["stars"])
 
     # media_statistics
-    video_dict["views"] = int(video_dict.get("media_statistics", {}).get("views", 0))
+    raw_rss_item["views"] = int(
+        raw_rss_item.get("media_statistics", {}).get("views", 0)
+    )
 
     # clean dict
-    video_dict = {
+    raw_rss_item = {
         k: v
-        for k, v in video_dict.items()
+        for k, v in raw_rss_item.items()
         if k not in ["media_starrating", "media_statistics"]
     }
 
     # id_channel
-    video_dict["id_channel"] = id_channel
+    raw_rss_item["id_channel"] = id_channel
 
     # clean title
-    video_dict["title"] = video_dict["title"][:100]
+    raw_rss_item["title"] = raw_rss_item["title"][:100]
 
     # "published"
-    video_dict["published"] = pd.to_datetime(video_dict["published"])
+    raw_rss_item["published"] = pd.to_datetime(raw_rss_item["published"])
 
     return {
         k: v
-        for k, v in video_dict.items()
+        for k, v in raw_rss_item.items()
         if k
         not in [
             "yt_videoid",
@@ -70,7 +72,7 @@ def _clean_video_dict(video_dict, id_channel=""):
     }
 
 
-def _scrap_one_rss(id_channel: str):
+def _scrap_one_rss(id_channel: str) -> list[dict]:
     """extract the rss feed from a channel id"""
 
     if not id_channel:
@@ -82,7 +84,7 @@ def _scrap_one_rss(id_channel: str):
     # entries
     entries = feeds.entries
 
-    entries_cleaned = [_clean_video_dict(i, id_channel) for i in entries]
+    entries_cleaned = [_clean_raw_rss_dict(i, id_channel) for i in entries]
     # entries_cleaned = clean_entries(entries, id_channel=id_channel)
 
     return entries_cleaned
@@ -109,9 +111,28 @@ def _scrap_rss_list(
     return li
 
 
+def _update_one_rss(
+    rss_item: dict,
+    detail: bool = True,
+    categ_1: bool = True,
+    parallel: bool = True,
+    verbose: int = 1,
+):
+    if not rss_item:
+        logging.error("rsss item empty")
+        return {}
+
+    if detail:
+        rss_item = update_video_detail(rss_item)
+    if categ_1:
+        rss_item = manage_categ1(rss_item)
+
+    return rss_item
+
+
 def _update_rss_list(
     rss_list: list[dict],
-    video_detail=False,
+    detail=False,
     categ_1=False,
     parallel=True,
     verbose: int = 1,
