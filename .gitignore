@@ -180,3 +180,8 @@ nohub.out
 
 
 tmp.csv
+
+tmp
+tmp/
+logs
+logs/
