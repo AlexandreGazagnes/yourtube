@@ -31,4 +31,4 @@ class TestUsers:
         json = response.json()
         assert len(json.keys())
         assert len(json["payload"].keys())
-        logging.warning(response.json())
+        logging.info(response.json())
