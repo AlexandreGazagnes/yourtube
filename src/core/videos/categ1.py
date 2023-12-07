@@ -15,6 +15,7 @@ base_dict = OrderedDict(
         "poker": "Poker",
         "d'un pro": "Poker",
         "ufc": "Bagarre",
+        "mma": "Bagarre",
         "tennis": "Sport",
         "uber eats": "Foot",
         "foot": "Foot",
