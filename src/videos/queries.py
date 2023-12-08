@@ -83,6 +83,36 @@ c.author, c.id_language, c.id_categ_1, cc.id_categ_2 "
 #     return result
 
 
+def _prepare_query(query: str | None = None):
+    """lower stip and remove accent if needed"""
+
+    query = query.strip().lower() if query else ""
+
+    query = (
+        query.replace("é", "e")
+        .replace("è", "e")
+        .replace("ê", "e")
+        .replace("ë", "e")
+        .replace("à", "a")
+        .replace("â", "a")
+        .replace("ä", "a")
+        .replace("ù", "u")
+        .replace("û", "u")
+        .replace("ü", "u")
+        .replace("î", "i")
+        .replace("ï", "i")
+        .replace("ô", "o")
+        .replace("ö", "o")
+        .replace("ç", "c")
+        .replace("œ", "oe")
+        .replace("æ", "ae")
+        .replace("ÿ", "y")
+        .replace("ñ", "n")
+        # .replace(" ", "%") ==> why not
+    )
+    return query
+
+
 def _query_video_count():
     """count all rows from a table"""
 
@@ -137,6 +167,7 @@ def _query_all_videos(
                 {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
                 {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
                 {f"and c.id_language like '{id_language}'" if id_language else ""}
+                {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
                 order by v.{order_by} {order_direction}
                 ;
                 """
@@ -187,6 +218,7 @@ def _query_video_by_user(
                 {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
                 {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
                 {f"and c.id_language like '{id_language}'" if id_language else ""}
+                {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
                 {f"and v.id_status like '{id_status}'" if id_status else ""}
                 order by v.{order_by} {order_direction}
                 ;
@@ -235,6 +267,7 @@ def _query_video_by_channel(
                 {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
                 {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
                 {f"and c.id_language like '{id_language}'" if id_language else ""}
+                {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
                 order by v.{order_by} {order_direction}
                 ;
                 """  #                 limit {limit};
