@@ -21,9 +21,9 @@ from src.db import Session, engine
 from src.helpers.helpers import stringify_duration
 
 
-fields = "v.title, v.category, v.thumbnail_video_url, v.published, \
-    v.duration, v.views, v.id_video, v.keywords, v.stars, v.id_channel,\
-    v.votes, c.thumbnail_channel_url, c.name, c.author, c.id_language,  \
+base_fields = "v.title, v.category, v.thumbnail_video_url, v.published, \
+    v.duration, v.views, v.id_video, v.keywords, v.stars, v.id_channel, \
+    v.votes, v.id_categ_0, c.id_channel, c.thumbnail_channel_url, c.name, c.author, c.id_language,  \
         cc.id_categ_1, cc.id_categ_2 "
 
 
@@ -124,7 +124,7 @@ def _query_all_videos(
     """query all rows from a table"""
 
     query_string = f"""
-                select {fields} 
+                select {base_fields} 
                 from videos v
                 left join channels c on c.id_channel = v.id_channel
                 left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
@@ -170,7 +170,7 @@ def _query_by_user(
             detail=f"bad argument for  id_user  {id_user}",
         )
     query_string = f"""
-                select {fields} , u.id_user
+                select {base_fields} , u.id_user
                 from videos v
                 left join userschannels u on u.id_channel = v.id_channel
                 left join channels c on c.id_channel = v.id_channel
