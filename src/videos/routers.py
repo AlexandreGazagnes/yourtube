@@ -153,7 +153,7 @@ async def get_videos_by_user(
 
 @videos.get("/by_channel", status_code=200)
 async def get_videos_by_channel(
-    id_channel: int | None,
+    id_channel: str | None,
     query: str | None = None,
     skip: int = 0,
     limit: int = 200,
