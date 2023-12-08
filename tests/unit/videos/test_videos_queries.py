@@ -1,4 +1,5 @@
 import logging, json
+from pprint import pformat
 
 from src.videos.queries import (
     _query_video_count,
@@ -26,16 +27,15 @@ class TestVideosQuery:
     def test_query_all_id_videos(self, verbose: bool = True, csv: bool = True):
         """test preferences"""
 
-        payload = _query_all_id_videos()
+        result = _query_all_id_videos()
 
         # assert isinstance(payload, dict)
         # assert "id_user" in payload.keys()
         # assert isinstance(payload["id_user"], int)
 
-        payload = payload[:10]
-
+        result = result[:5]
         if verbose:
-            logging.info(payload)
+            logging.info(pformat(result))
 
     def test_query_video_by_user(self, verbose: bool = True, csv: bool = True):
         """test channels"""
@@ -48,9 +48,9 @@ class TestVideosQuery:
         # assert "id_channel" in payload[0].keys()
         # assert isinstance(payload[0]["id_channel"], int)
 
-        result = result[:10]
+        result = result[:5]
         if verbose:
-            logging.info(result)
+            logging.info(pformat(result))
 
     def test_query_video_by_channel(self, verbose: bool = True, csv: bool = True):
         """ """
@@ -60,6 +60,6 @@ class TestVideosQuery:
 
         result, _ = _query_video_by_channel(id_channel=id_channel, days_max=360)
 
-        result = result[:10]
+        result = result[:5]
         if verbose:
-            logging.info(result)
+            logging.info(pformat(result))

@@ -1,4 +1,5 @@
 import logging
+from pprint import pprint, pformat
 
 # Import TestClient and your FastAPI app
 from fastapi.testclient import TestClient
@@ -15,42 +16,32 @@ prefix = "/videos"
 class TestVideos:
     """Test the videos routes"""
 
-    # def get_all_videos(self):
-    #     """Test the get videos route"""
-
-    #     # response = client.get(f"{prefix}")
-    #     # assert response.status_code == 200
-    #     # assert len(response.json()) > 0
-
-    #     # logging.warning(response.json())
-
-    def videos_counts(self):
+    def get_all(self):
         """Test the get videos route"""
 
-        response = client.get(f"{prefix}/counts")
-        # # assert response.status_code == 200
-        # # assert len(response.json()) > 0
+        response = client.get(f"{prefix}")
+        assert response.status_code == 200
+        assert len(response.json()) > 0
+        video_list = response.json()["videos"]
+        assert len(video_list) > 0
 
-        # logging.warning(response.json())
+        logging.info(pformat(video_list[:5]))
 
-    # def test_videos(self):
-    #     """Test the get videos route all"""
+    # def videos_counts(self):
+    #     """Test the get videos route"""
 
-    #     response = client.get(f"{prefix}")
-    #     assert response.status_code == 200
-    #     # assert len(response.json()) > 0
+    #     response = client.get(f"{prefix}/counts")
+    #     # # assert response.status_code == 200
+    #     # # assert len(response.json()) > 0
 
-    #     payload = response.json()
-    #     assert len(payload)
-
-    #     logging.warning(response.json())
+    #     # logging.info(response.json())
 
     @pytest.mark.parametrize(
         "params",
         [
             ({"id_user": 3}),
             ({"id_user": 3, "query": "psg"}),
-            ({"id_user": 3, "id_language": "En"}),
+            ({"id_user": 1, "id_language": "En"}),
             ({"id_user": 1, "id_categ_1": "Misc."}),
         ],
     )
@@ -64,4 +55,24 @@ class TestVideos:
         assert response.status_code == 200
         # assert len(response.json()) > 0
 
-        logging.warning(response.json())
+        video_list = response.json()["videos"]
+        logging.info(pformat(video_list[:5]))
+
+    @pytest.mark.parametrize(
+        "params",
+        [
+            ({"id_channel": "UCENv8pH4LkzvuSV_qHIcslg", "days_max": 100}),
+        ],
+    )
+    def test_get_videos_by_channel(
+        self,
+        params: dict | None,
+    ) -> dict:
+        """Test the get videos route by user"""
+
+        response = client.get(f"{prefix}/by_channel", params=params)
+        assert response.status_code == 200
+        # assert len(response.json()) > 0
+
+        video_list = response.json()["videos"]
+        logging.info(pformat(video_list[:5]))
