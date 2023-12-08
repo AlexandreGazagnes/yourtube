@@ -53,5 +53,12 @@ class UserChannel(Base):
         unique=False,
     )
 
+    enable_shorts: Mapped[int] = mapped_column(
+        Integer(),
+        default=0,
+        nullable=False,
+        unique=False,
+    )
+
     def __repr__(self) -> str:
         return f"UsersChannels(id_userschannels={self.id_userschannels}, id_user={self.id_user}, id_channel={self.id_channel})"
