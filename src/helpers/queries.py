@@ -18,7 +18,8 @@ def query_all(Table, engine=engine, limit: int = 300):
 
 
 def _perform_raw_query(query_string: str):
-    """ """
+    """take a sql raw query and return a list of dict from the query"""
+
     sql_query = text(query_string)
 
     with Session(engine) as session:
