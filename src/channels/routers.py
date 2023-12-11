@@ -49,13 +49,16 @@ channels = APIRouter(
 
 
 @channels.get("", status_code=200)
-async def get_all_channels():
+async def get_all_channels(
+    limit: int = -1,
+    skip: int = 0,
+):
     """Get all channels"""
 
-    results = ChannelsQueries.all(Channel)
-    total = len(results)
-    skip = 0
-    limit = total
+    results, total = ChannelsQueries.all(
+        limit=limit,
+        skip=skip,
+    )
 
     return {
         "channels": results,
@@ -97,8 +100,8 @@ async def get_all_channels():
 @channels.get("/by_user", status_code=200)
 async def get_channels_by_user(
     id_user: int,
-    limit: int | None = None,
-    skip: int | None = None,
+    limit: int = -1,
+    skip: int = 0,
     order_by: str = "id_channel",
     order_direction: str = "desc",
 ):
@@ -106,7 +109,7 @@ async def get_channels_by_user(
 
     # not implemented
 
-    results = ChannelsQueries.by_user(
+    results, total = ChannelsQueries.by_user(
         id_user,
         limit=limit,
         skip=skip,
@@ -116,7 +119,42 @@ async def get_channels_by_user(
 
     return {
         "channels": results,
-        "total": len(results),
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+        "message": "done",
+    }
+
+    # payload = query_all(Channel)
+    # return jsonify(payload=payload, message="done")
+    # raise HTTPException(status_code=501, detail="Not implemented")
+
+
+@channels.get("/by_categ_1", status_code=200)
+async def get_channels_by_categ_1(
+    id_user: int,
+    id_categ_1: str,
+    limit: int = -1,
+    skip: int = 0,
+    order_by: str | None = None,
+    order_direction: str = "desc",
+):
+    """Get all channels by user"""
+
+    # not implemented
+
+    results, total = ChannelsQueries.by_categ_1(
+        id_user,
+        id_categ_1,
+        limit=limit,
+        skip=skip,
+        order_by=order_by,
+        order_direction=order_direction,
+    )
+
+    return {
+        "channels": results,
+        "total": total,
         "skip": skip,
         "limit": limit,
         "message": "done",
