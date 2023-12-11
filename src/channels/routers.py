@@ -159,7 +159,3 @@ async def get_channels_by_categ_1(
         "limit": limit,
         "message": "done",
     }
-
-    # payload = query_all(Channel)
-    # return jsonify(payload=payload, message="done")
-    # raise HTTPException(status_code=501, detail="Not implemented")
