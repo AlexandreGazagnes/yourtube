@@ -12,19 +12,18 @@ from src.channels.models import Channel
 from src.channels.queries import ChannelQuery, ChannelsQueries
 
 
+#############################
+# CHANNEL
+#############################
+
 channel = APIRouter(
     prefix="/channel",
     tags=["channel"],
 )
 
 
-#############################
-# CHANNEL
-#############################
-
-
 @channel.get("/{id_channel}", status_code=200)
-async def get_channel(id_channel: str):
+async def get_a_channel(id_channel: str):
     """Get a channel"""
 
     results = ChannelQuery.by_id_channel(id_channel)
@@ -38,22 +37,22 @@ async def get_channel(id_channel: str):
     }
 
 
+#############################
+# CHANNELS
+#############################
+
+
 channels = APIRouter(
     prefix="/channels",
     tags=["channels"],
 )
 
 
-#############################
-# CHANNELS
-#############################
-
-
 @channels.get("", status_code=200)
 async def get_all_channels():
     """Get all channels"""
 
-    results = ChannelQuery.all(Channel)
+    results = ChannelsQueries.all(Channel)
     total = len(results)
     skip = 0
     limit = total
@@ -107,7 +106,7 @@ async def get_channels_by_suer(
 
     # not implemented
 
-    results = ChannelQuery.by_user(
+    results = ChannelsQueries.by_user(
         id_user,
         limit=limit,
         skip=skip,

@@ -72,7 +72,7 @@ def _query_channels_by_user(
     return resuts
 
 
-def _query_channel_all_id():
+def _query_all_ids_channels():
     """Return all id_channel"""
 
     with Session(engine) as session:
@@ -83,7 +83,7 @@ def _query_channel_all_id():
     return list(set(results))
 
 
-class ChannelQueries:
+class ChannelQuery:
     """ """
 
     by_id_channel = _query_channel_by_id
@@ -93,5 +93,5 @@ class ChannelsQueries:
     """channels queries"""
 
     all = _query_all_channels
-    all_id = _query_channel_all_id
+    all_id = _query_all_ids_channels
     by_user = _query_channels_by_user
