@@ -7,7 +7,7 @@ from src.core.videos.extracts import _extract_video_detail
 
 
 class TestUnitExtract:
-    """class TestExtract"""
+    """class TestUnitExtract"""
 
     def test_extract_video_detail(self, verbose: bool = True):
         """test _extract_video_detail"""
