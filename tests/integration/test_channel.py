@@ -16,7 +16,7 @@ test_non_existing_channel = "test_24920dezezdezdzeddzedz68e"
 true_channel = "UC-06IzcwOHu9_Xgqr-NMkUQ"  # yann leonardi
 
 
-class TestChannel:
+class TestIntegrationChannel:
     @pytest.mark.parametrize(
         "id_channel,expected",
         [
