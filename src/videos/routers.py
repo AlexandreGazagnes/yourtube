@@ -2,7 +2,7 @@ import logging
 
 from fastapi import FastAPI, HTTPException, APIRouter
 from src.videos.models import *
-from src.videos.queries import VideoQuery
+from src.videos.queries import VideoQuery, VideosQueries
 from src.videos.validators import VideoValidator
 
 from src.helpers.routers import jsonify
@@ -27,28 +27,36 @@ video = APIRouter(
 async def get_a_video(id_video: str):
     """Get a video"""
 
-    raise HTTPException(status_code=501, detail="Not implemented")
+    results = VideoQuery.by_id_channel(id_video)
+
+    return {
+        "video": results,
+        "message": "done",
+        "total": 1,
+        "limit": 1,
+        "skip": 0,
+    }
 
 
-@video.post("/{id_video}", status_code=201)
-async def update_a_video_watched(id_video: str):
-    """Update a video watched"""
+# @video.post("/{id_video}", status_code=201)
+# async def update_a_video_watched(id_video: str):
+#     """Update a video watched"""
 
-    raise HTTPException(status_code=501, detail="Not implemented")
-
-
-@video.put("/{id_video}", status_code=201)
-async def update_a_video(id_video: str, video: VideoValidator.base):
-    """Update a video"""
-
-    raise HTTPException(status_code=501, detail="Not implemented")
+#     raise HTTPException(status_code=501, detail="Not implemented")
 
 
-@video.delete("/{id_video}", status_code=201)
-async def delete_a_video(id_video: str):
-    """Delete a video"""
+# @video.put("/{id_video}", status_code=201)
+# async def update_a_video(id_video: str, video: VideoValidator.base):
+#     """Update a video"""
 
-    raise HTTPException(status_code=501, detail="Not implemented")
+#     raise HTTPException(status_code=501, detail="Not implemented")
+
+
+# @video.delete("/{id_video}", status_code=201)
+# async def delete_a_video(id_video: str):
+#     """Delete a video"""
+
+#     raise HTTPException(status_code=501, detail="Not implemented")
 
 
 ############################
@@ -81,7 +89,7 @@ async def get_all_videos(
 ):
     """Get all videos"""
 
-    video_list, total = VideoQuery.all(
+    video_list, total = VideosQueries.all(
         query,
         skip,
         limit,
@@ -130,7 +138,7 @@ async def get_videos_by_user(
 ):
     """Get all videos"""
 
-    video_list, total = VideoQuery.by_user(
+    video_list, total = VideosQueries.by_user(
         id_user,
         query,
         skip,
@@ -180,7 +188,7 @@ async def get_videos_by_channel(
 ):
     """Get all videos"""
 
-    video_list, total = VideoQuery.by_channel(
+    video_list, total = VideosQueries.by_channel(
         id_channel,
         query,
         skip,

@@ -121,12 +121,25 @@ def _prepare_query(query: str | None = None):
 def _query_video_by_id(id_video: str):
     """query video by id_video"""
 
-    raise NotImplementedError("not implemented")
+    with Session(engine) as session:
+        result = session.query(Video).filter_by(id_video=id_video).first()
 
-    return {"message": "not implemented"}
+    if not result:
+        logging.error(f"video not found: {id_video}")
+        return {"message": "video not found"}
+
+    logging.warning(result.to_dict())
+    result = result.to_dict()
+
+    return result
 
 
-def _query_video_count():
+#################################
+#   VIDEOS
+#################################
+
+
+def _query_videos_count():
     """count all rows from a table"""
 
     with Session(engine) as session:
@@ -135,7 +148,7 @@ def _query_video_count():
     return result
 
 
-def _query_all_id_videos(
+def _query_all_ids_videos(
     limit: int = 10_000,
     last_days: int = 10_000,
 ):
@@ -196,7 +209,7 @@ def _query_all_videos(
     return result, total
 
 
-def _query_video_by_user(
+def _query_videos_by_user(
     id_user: int,
     query: str | None = None,
     skip: int = 0,
@@ -246,7 +259,7 @@ def _query_video_by_user(
     return result, total
 
 
-def _query_video_by_channel(
+def _query_videos_by_channel(
     id_channel: int,
     query: str | None = None,
     skip: int = 0,
@@ -294,18 +307,18 @@ def _query_video_by_channel(
     return result, total
 
 
-class VideoQueries:
-    by_channel = _query_video_by_channel
+class VideoQuery:
+    by_id_video = _query_video_by_id
 
 
 class VideosQueries:
     """ """
 
-    count = _query_video_count
-    all_id_videos = _query_all_id_videos
+    count = _query_videos_count
+    all_id_videos = _query_all_ids_videos
     all = _query_all_videos
-    by_user = _query_video_by_user
-    by_channel = _query_video_by_channel
+    by_user = _query_videos_by_user
+    by_channel = _query_videos_by_channel
 
     # by_categ_1 = _query_by_categ_1
     # by_categ_2 = _query_by_categ_2
