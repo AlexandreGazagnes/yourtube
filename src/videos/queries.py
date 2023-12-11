@@ -113,6 +113,19 @@ def _prepare_query(query: str | None = None):
     return query
 
 
+#################################
+#   VIDEO
+#################################
+
+
+def _query_video_by_id(id_video: str):
+    """query video by id_video"""
+
+    raise NotImplementedError("not implemented")
+
+    return {"message": "not implemented"}
+
+
 def _query_video_count():
     """count all rows from a table"""
 
@@ -281,7 +294,11 @@ def _query_video_by_channel(
     return result, total
 
 
-class VideoQuery:
+class VideoQueries:
+    by_channel = _query_video_by_channel
+
+
+class VideosQueries:
     """ """
 
     count = _query_video_count

@@ -13,11 +13,9 @@ from src.videos.validators import VideoValidator
 # from src.validators import ChannelBase, default_channel
 
 
-videos = APIRouter(
-    prefix="/videos",
-    tags=["videos"],
-)
-
+############################
+#   VIDEO
+#############################
 
 video = APIRouter(
     prefix="/video",
@@ -51,6 +49,16 @@ async def delete_a_video(id_video: str):
     """Delete a video"""
 
     raise HTTPException(status_code=501, detail="Not implemented")
+
+
+############################
+#   VIDEOS
+#############################
+
+videos = APIRouter(
+    prefix="/videos",
+    tags=["videos"],
+)
 
 
 @videos.get("")
