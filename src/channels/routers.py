@@ -52,12 +52,16 @@ channels = APIRouter(
 async def get_all_channels(
     limit: int = -1,
     skip: int = 0,
+    order_by: str | None = None,
+    order_direction: str = "desc",
 ):
     """Get all channels"""
 
     results, total = ChannelsQueries.all(
         limit=limit,
         skip=skip,
+        order_by=order_by,
+        order_direction=order_direction,
     )
 
     return {
