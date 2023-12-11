@@ -100,12 +100,14 @@ def _query_channels_by_user(
 
 def _query_channels_by_categ_1(
     id_user: int,
-    id_categ_1: str,
     limit=1_000,
     skip: int = 0,
     order_by=None,
     order_direction: str | None = None,
 ) -> dict[str : list[dict]]:
+    """Return all channels by user"""
+
+    # query
     query_string = f"""select c.id_channel, c.name, c.author, 
     c.channel_description, c.created_at, c.updated_at, c.id_language, 
     c.id_categ_1, c.thumbnail_channel_url

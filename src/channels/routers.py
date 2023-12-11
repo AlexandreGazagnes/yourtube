@@ -137,8 +137,7 @@ async def get_channels_by_user(
 @channels.get("/by_categ_1", status_code=200)
 async def get_channels_by_categ_1(
     id_user: int,
-    id_categ_1: str,
-    limit: int = -1,
+    limit: int = 1_000,
     skip: int = 0,
     order_by: str | None = None,
     order_direction: str = "desc",
@@ -149,7 +148,6 @@ async def get_channels_by_categ_1(
 
     results, total = ChannelsQueries.by_categ_1(
         id_user,
-        id_categ_1,
         limit=limit,
         skip=skip,
         order_by=order_by,
@@ -157,7 +155,7 @@ async def get_channels_by_categ_1(
     )
 
     return {
-        "channels": results,
+        "id_categ_1": results,
         "total": total,
         "skip": skip,
         "limit": limit,
