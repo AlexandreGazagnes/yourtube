@@ -8,7 +8,7 @@ from src.core.videos.rss import _scrap_one, _scrap_list, _update_list
 from pandarallel import pandarallel
 
 
-class TestRSS:
+class TestUnitRSS:
     """ """
 
     def test_scrap_one_raw(self, verbose: bool = True, csv: bool = True):

@@ -12,8 +12,8 @@ from src.params import get_params, params
 from src.db import Session, engine
 from src.db import Db
 
-from src.videos.queries import VideoQuery
-from src.channels.queries import ChannelQuery
+from src.videos.queries import VideosQueries
+from src.channels.queries import ChannelsQueries
 
 
 def _query_one(id_channel: str, engine=None) -> dict:
@@ -73,7 +73,7 @@ def _channels_ids() -> tuple[list[str], float]:
     logging.info("load channels")
 
     # query
-    channel_list_ids = ChannelQuery.all_id_channel()
+    channel_list_ids = ChannelsQueries.all_ids()
 
     # filter
     channel_list_ids = [i for i in channel_list_ids if not i.lower().startswith("fake")]
@@ -94,7 +94,7 @@ def _old_videos_ids() -> tuple[list[str], float]:
     logging.warning("load videos")
 
     # query
-    old_videos_ids = VideoQuery.all_id_videos()
+    old_videos_ids = VideosQueries.all_ids()
 
     # timer
     time_load_videos = round(time.time() - t0, 4)

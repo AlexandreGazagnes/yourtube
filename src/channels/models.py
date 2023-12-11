@@ -115,3 +115,6 @@ class Channel(Base):
 
     def __repr__(self) -> str:
         return f"Channels(id_channel={self.id_channel}, name={self.name}, id_categ_1={self.id_categ_1}"
+
+    def to_dict(self):
+        return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
