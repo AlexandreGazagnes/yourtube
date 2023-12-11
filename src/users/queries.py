@@ -156,10 +156,17 @@ def _query_preferences_by_id(id_user: str, limit: int = 5):
 
 
 class UserQuery:
+    """ """
+
+    # rajouter un get tout court
+
+    # renommer en get_preferences
     preferences_by_id = _query_preferences_by_id
 
 
 class UsersQueries:
+    """ """
+
     all_ids = _query_all_id_users
     count = _query_user_counts
 

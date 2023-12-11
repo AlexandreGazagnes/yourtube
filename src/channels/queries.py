@@ -86,6 +86,7 @@ def _query_all_ids_channels():
 class ChannelQuery:
     """ """
 
+    # renommer en get tout court
     by_id_channel = _query_channel_by_id
 
 
