@@ -8,14 +8,17 @@ import pytest
 
 client = TestClient(app)
 
+prefix = "/user"
+
 
 class TestIntegrationUser:
     """Test the users routes"""
 
-    def test_users_preferences(self, id_user=3):
+    @pytest.mark.parametrize("id_user,expected", [3])
+    def test_users_preferences(self, id_user):
         """Test the get users route"""
 
-        response = client.get(f"/user/preferences", params={"id_user": id_user})
+        response = client.get(f"{prefix}/preferences", params={"id_user": id_user})
         assert response.status_code == 200
         # assert len(response.json()) > 0
 

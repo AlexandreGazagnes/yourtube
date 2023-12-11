@@ -21,7 +21,7 @@ class TestIntegrationVideos:
     def test_get_video(self, id_video, expected):
         """Test the ping route"""
 
-        response = client.get(f"{prefix}/{id_video}")
+        response = client.get(f"{prefix}", params={"id_video": id_video})
         assert response.status_code == expected
         # assert response.json() == {"message": "Hello World"}
 

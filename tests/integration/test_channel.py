@@ -26,7 +26,7 @@ class TestIntegrationChannel:
     def test_get_channel(self, id_channel, expected):
         """Test the ping route"""
 
-        response = client.get(f"{prefix}/{id_channel}")
+        response = client.get(f"{prefix}", params={"id_channel": id_channel})
         assert response.status_code == expected
         # assert response.json() == {"message": "Hello World"}
 

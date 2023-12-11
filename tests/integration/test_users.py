@@ -8,6 +8,8 @@ import pytest
 
 client = TestClient(app)
 
+prefix = "/users"
+
 
 class TestIntegrationUsers:
     """Test the users routes"""
@@ -15,7 +17,7 @@ class TestIntegrationUsers:
     def test_users_counts(self):
         """Test the get users route"""
 
-        response = client.get("/users/counts")
+        response = client.get(f"{prefix}/counts")
         # assert response.status_code == 200
         # assert len(response.json()) > 0
 
