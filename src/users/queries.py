@@ -21,7 +21,7 @@ def _query_all_id_users():
     pass
 
 
-def _pre_query_preferences(
+def _pre_query_preferences_by_id(
     id_user: str,
 ) -> dict[str:list]:
     """get user preferences from db and return as json as list
@@ -134,11 +134,11 @@ def _pre_query_last_videos(id_channel: str, limit: int = 5) -> list[dict]:
     return result
 
 
-def _query_preferences(id_user: str, limit: int = 5):
+def _query_preferences_by_id(id_user: str, limit: int = 5):
     """get user preferences from db and return as json"""
 
     # main preferences
-    json = _pre_query_preferences(id_user=id_user)
+    json = _pre_query_preferences_by_id(id_user=id_user)
 
     # list of channels with details
     json["channels"] = _pre_query_channels(id_channel_list=json["id_channel"])
@@ -156,9 +156,12 @@ def _query_preferences(id_user: str, limit: int = 5):
 
 
 class UserQuery:
-    counts = _query_user_counts
-    all_id_users = _query_all_id_users
-    preferences = _query_preferences
+    preferences_by_id = _query_preferences_by_id
+
+
+class UsersQueries:
+    all_ids = _query_all_id_users
+    count = _query_user_counts
 
 
 # video_item = {
