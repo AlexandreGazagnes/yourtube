@@ -65,7 +65,6 @@ def _pre_query_channels(
         select  c.id_channel,
                 c.name,
                 c.author,
-                c.interest,
                 c.thumbnail_channel_url,
                 c.id_language,
                 c.id_categ_1,
@@ -113,7 +112,7 @@ def _pre_query_last_videos(id_channel: str, limit: int = 5) -> list[dict]:
                 cc.id_categ_2
         from videos v
         left join channels c on c.id_channel = v.id_channel
-        left join categ_1 cc on cc.id_categ_1 = v.id_categ_1
+        left join categ_1 cc on cc.id_categ_1 = v.id_categ_0
         where v.id_channel = '{id_channel}'
         order by v.published desc
         limit {limit};
@@ -161,7 +160,7 @@ class UserQuery:
     # rajouter un get tout court
 
     # renommer en get_preferences
-    preferences_by_id = _query_preferences_by_id
+    get_preferences = _query_preferences_by_id
 
 
 class UsersQueries:

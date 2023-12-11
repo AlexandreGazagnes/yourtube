@@ -32,7 +32,7 @@ async def get_user_preferences(
 ):
     """get user preferences from db and return as json"""
 
-    payload = UserQuery.preferences(id_user=id_user)
+    payload = UserQuery.get_preferences(id_user=id_user)
 
     return jsonify(payload, message="done")
 
@@ -52,5 +52,5 @@ users = APIRouter(
 async def get_users_counts():
     """counts users in"""
 
-    payload = UsersQueries.counts()
+    payload = UsersQueries.count()
     return jsonify(payload, message="done")
