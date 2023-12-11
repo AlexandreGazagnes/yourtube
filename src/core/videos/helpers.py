@@ -12,7 +12,7 @@ from src.db import Session, engine
 
 from src.videos.models import Video
 from src.videos.models import DEFAULT_DURATION, DEFAULT_THUMBNAIL_VIDEO_URL
-from src.videos.queries import VideoQuery
+from src.videos.queries import VideosQueries
 
 from src.channels.models import Channel
 from src.channels.queries import ChannelQuery
@@ -228,7 +228,7 @@ def _get_broken_videos(
     """return list of videos if broken (ie respond criterions such as category, duration etc)"""
 
     # query all videos
-    broken_videos = VideoQuery.all(clean_duration_=False)
+    broken_videos, _ = VideosQueries.all()
 
     # filter function
     f = (
