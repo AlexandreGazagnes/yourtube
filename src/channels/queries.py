@@ -93,5 +93,5 @@ class ChannelsQueries:
     """channels queries"""
 
     all = _query_all_channels
-    all_id = _query_all_ids_channels
+    all_ids = _query_all_ids_channels
     by_user = _query_channels_by_user

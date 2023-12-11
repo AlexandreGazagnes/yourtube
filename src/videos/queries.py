@@ -308,6 +308,8 @@ def _query_videos_by_channel(
 
 
 class VideoQuery:
+    """ """
+
     by_id_video = _query_video_by_id
 
 
@@ -315,7 +317,7 @@ class VideosQueries:
     """ """
 
     count = _query_videos_count
-    all_id_videos = _query_all_ids_videos
+    all_ids = _query_all_ids_videos
     all = _query_all_videos
     by_user = _query_videos_by_user
     by_channel = _query_videos_by_channel
