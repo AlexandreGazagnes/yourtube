@@ -14,8 +14,8 @@ prefix = "/user"
 class TestIntegrationUser:
     """Test the users routes"""
 
-    @pytest.mark.parametrize("id_user,expected", [3])
-    def test_users_preferences(self, id_user):
+    @pytest.mark.parametrize("id_user", [(3)])
+    def test_user_preferences(self, id_user):
         """Test the get users route"""
 
         response = client.get(f"{prefix}/preferences", params={"id_user": id_user})
