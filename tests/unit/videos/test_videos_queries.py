@@ -10,7 +10,7 @@ from src.videos.queries import (
 )
 
 
-class TestVideosQueries:
+class TestUnitVideosQueries:
     """test user queries"""
 
     def test_query_video_count(self, verbose: bool = True, csv: bool = True):

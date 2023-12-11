@@ -5,7 +5,7 @@ import pytest
 from src.videos.queries import _query_video_by_id
 
 
-class TestVideoQuery:
+class TestUnitVideoQuery:
     """TestVideoQuery"""
 
     @pytest.mark.parametrize("id_video", [("_URmd_ff8HU",)])

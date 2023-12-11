@@ -10,7 +10,7 @@ from src.channels.queries import ChannelQuery
 from src.channels.queries import _query_channel_by_id
 
 
-class TestChannelQuery:
+class TestUnitChannelQuery:
     """TestChannelQueries"""
 
     @pytest.mark.parametrize("id_channel", [("UC-06IzcwOHu9_Xgqr-NMkUQ",)])
