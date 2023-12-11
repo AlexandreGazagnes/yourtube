@@ -23,7 +23,7 @@ channel = APIRouter(
 
 
 @channel.get("", status_code=200)
-async def get_a_channel(id_channel: str):
+async def get_channel(id_channel: str):
     """Get a channel"""
 
     results = ChannelQuery.by_id_channel(id_channel)
@@ -95,7 +95,7 @@ async def get_all_channels():
 
 
 @channels.get("/by_user", status_code=200)
-async def get_channels_by_suer(
+async def get_channels_by_user(
     id_user: int,
     limit: int | None = None,
     skip: int | None = None,

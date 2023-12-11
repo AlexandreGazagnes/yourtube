@@ -24,7 +24,7 @@ video = APIRouter(
 
 
 @video.get("", status_code=200)
-async def get_a_video(id_video: str):
+async def get_video(id_video: str):
     """Get a video"""
 
     results = VideoQuery.by_id_video(id_video)

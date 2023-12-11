@@ -27,7 +27,7 @@ user = APIRouter(
 
 
 @user.get("/preferences", status_code=200)
-async def users_preferences(
+async def get_user_preferences(
     id_user: int | None = 3,
 ):
     """get user preferences from db and return as json"""
@@ -49,7 +49,7 @@ users = APIRouter(
 
 
 @users.get("/counts", status_code=200)
-async def users_counts():
+async def get_users_counts():
     """counts users in"""
 
     payload = UsersQueries.counts()
