@@ -72,8 +72,8 @@ videos = APIRouter(
 @videos.get("")
 async def get_all_videos(
     query: str | None = None,
-    skip: int = 0,
     limit: int = 200,
+    skip: int = 0,
     days_min: int = 0,
     days_max: int = 30,
     duration_min: int = 3 * 60,
@@ -121,8 +121,8 @@ async def get_all_videos(
 async def get_videos_by_user(
     id_user: int | None,
     query: str | None = None,
-    skip: int = 0,
     limit: int = 200,
+    skip: int = 0,
     days_min: int = 0,
     days_max: int = 30,
     duration_min: int = 3 * 60,
@@ -171,8 +171,8 @@ async def get_videos_by_user(
 async def get_videos_by_channel(
     id_channel: str | None,
     query: str | None = None,
-    skip: int = 0,
     limit: int = 200,
+    skip: int = 0,
     days_min: int = 0,
     days_max: int = 30,
     duration_min: int = 3 * 60,
@@ -215,53 +215,3 @@ async def get_videos_by_channel(
         "message": "done",
         "params": {},
     }
-
-
-# @videos.get("/by_categ_1")
-# async def get_videos_by_category(
-#     limit: int = 100,
-#     last_days: int = 2,
-# ):
-#     """Get all videos by category 1"""
-
-#     pass
-
-
-# @videos.get("/by_categ_2")
-# async def get_videos_by_category(
-#     limit: int = 100,
-#     last_days: int = 2,
-# ):
-#     """Get all videos by category 2"""
-
-#     pass
-
-
-# @videos.get("/by_language")
-# async def get_videos_by_language(
-#     limit: int = 100,
-#     last_days: int = 2,
-# ):
-#     """Get all videos by language"""
-
-#     pass
-
-
-# @videos.get("/by_status")
-# async def get_videos_by_status(
-#     limit: int = 100,
-#     last_days: int = 2,
-# ):
-#     """Get all videos by status"""
-
-#     pass
-
-
-# @videos.get("/by_watched")
-# async def get_videos_by_watched(
-#     limit: int = 100,
-#     last_days: int = 2,
-# ):
-#     """Get all videos by watched"""
-
-#     pass
