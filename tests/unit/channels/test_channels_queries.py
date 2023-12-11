@@ -7,7 +7,7 @@ import pytest
 
 
 from src.channels.queries import ChannelQuery
-from src.channels.queries import _query_channel_by_id, _query_channels_by_user
+from src.channels.queries import _query_channels_by_user
 
 
 class TestChannelsQueries:
