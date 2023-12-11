@@ -22,7 +22,7 @@ channel = APIRouter(
 )
 
 
-@channel.get("/{id_channel}", status_code=200)
+@channel.get("", status_code=200)
 async def get_a_channel(id_channel: str):
     """Get a channel"""
 

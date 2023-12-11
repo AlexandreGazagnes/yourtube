@@ -23,7 +23,7 @@ video = APIRouter(
 )
 
 
-@video.get("/{id_video}", status_code=200)
+@video.get("", status_code=200)
 async def get_a_video(id_video: str):
     """Get a video"""
 

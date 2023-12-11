@@ -26,7 +26,7 @@ user = APIRouter(
 )
 
 
-@user.get("/preferences_by_id", status_code=200)
+@user.get("/preferences", status_code=200)
 async def users_preferences(
     id_user: int | None = 3,
 ):
