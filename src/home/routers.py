@@ -8,7 +8,7 @@ from src.helpers.queries import query_all
 
 # from src.home.helpers import HomeHelpers
 # from src.home.functions import HomeFunctions
-from src.videos.queries import VideoQuery
+from src.videos.queries import VideosQueries
 
 # from src.queries import query_all, jsonify
 # from src.validators import ChannelBase, default_channel
@@ -41,7 +41,7 @@ async def ping():
 async def state():
     """Get the state of the app"""
 
-    result = VideoQuery.count()
+    result = VideosQueries.count()
     return jsonify({"video_count": result}, message="success")
 
 

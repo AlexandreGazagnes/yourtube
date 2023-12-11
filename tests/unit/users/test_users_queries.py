@@ -9,7 +9,7 @@ from src.users.queries import (
 )
 
 
-class TestUserQuery:
+class TestUnitUserQuery:
     """test user queries"""
 
     def test_counts(self, verbose: bool = True, csv: bool = True):

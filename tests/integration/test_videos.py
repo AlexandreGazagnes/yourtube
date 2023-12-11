@@ -13,7 +13,7 @@ client = TestClient(app)
 prefix = "/videos"
 
 
-class TestVideos:
+class TestIntegrationVideos:
     """Test the videos routes"""
 
     def get_all(self):
