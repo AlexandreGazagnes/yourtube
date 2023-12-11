@@ -318,8 +318,8 @@ class VideosQueries:
     """ """
 
     count = _query_videos_count
-    all_ids = _query_all_ids_videos
     all = _query_all_videos
+    all_ids = _query_all_ids_videos
     by_user = _query_videos_by_user
     by_channel = _query_videos_by_channel
 

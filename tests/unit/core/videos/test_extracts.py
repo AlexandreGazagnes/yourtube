@@ -1,19 +1,19 @@
 import logging
 from random import shuffle
 
-from src.videos.queries import VideoQuery
+from src.videos.queries import VideosQueries
 
 from src.core.videos.extracts import _extract_video_detail
 
 
-class TestExtract:
+class TestUnitExtract:
     """class TestExtract"""
 
     def test_extract_video_detail(self, verbose: bool = True):
         """test _extract_video_detail"""
 
         # get random video
-        video_list = VideoQuery.all()
+        video_list, _ = VideosQueries.all()
         shuffle(video_list)
 
         # select one
