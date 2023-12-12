@@ -40,8 +40,6 @@ def _query_all_ids_channels():
 
     results = [result[0] for result in results]
 
-    # CAREFULL : PREVIOUS CODE USE JUST RETURN OF LIST NOT A TUPLE (results, len(results))
-
     return list(set(results)), len(results)
 
 
