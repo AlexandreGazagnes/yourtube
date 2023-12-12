@@ -126,7 +126,7 @@ def _query_video_by_id(id_video: str):
 
     if not result:
         logging.error(f"video not found: {id_video}")
-        return {"message": "video not found"}
+        return {}
 
     logging.warning(result.to_dict())
     result = result.to_dict()

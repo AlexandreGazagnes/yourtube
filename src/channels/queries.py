@@ -19,7 +19,7 @@ def _query_channel_by_id(id_channel: str):
 
     if not result:
         logging.error(f"channel not found: {id_channel}")
-        return {"message": "channel not found"}
+        return {}
 
     logging.warning(result.to_dict())
     result = result.to_dict()
