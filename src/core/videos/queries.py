@@ -73,7 +73,7 @@ def _channels_ids() -> tuple[list[str], float]:
     logging.info("load channels")
 
     # query
-    channel_list_ids = ChannelsQueries.all_ids()
+    channel_list_ids, _ = ChannelsQueries.all_ids()
 
     # filter
     channel_list_ids = [i for i in channel_list_ids if not i.lower().startswith("fake")]
@@ -94,7 +94,7 @@ def _old_videos_ids() -> tuple[list[str], float]:
     logging.warning("load videos")
 
     # query
-    old_videos_ids = VideosQueries.all_ids()
+    old_videos_ids, _ = VideosQueries.all_ids()
 
     # timer
     time_load_videos = round(time.time() - t0, 4)
