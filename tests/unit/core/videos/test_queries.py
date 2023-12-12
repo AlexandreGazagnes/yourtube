@@ -12,7 +12,7 @@ from src.core.videos.queries import _query_one
 # verbose = True
 
 
-class TestUnitQuery:
+class TestUnitCoreVideosQuery:
     """Test queries"""
 
     def test_query_one(self, verbose: bool = True):
