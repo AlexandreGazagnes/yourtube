@@ -126,7 +126,7 @@ def _query_video_by_id(id_video: str):
 
     if not result:
         logging.error(f"video not found: {id_video}")
-        return {"message": "video not found"}
+        return {}
 
     logging.warning(result.to_dict())
     result = result.to_dict()
@@ -158,7 +158,7 @@ def _query_all_ids_videos(
         result = session.query(Video.id_video).all()
 
     result = [row[0].strip() for row in result]
-    return list(set(result))
+    return list(set(result)), len(result)
 
 
 def _query_all_videos(
@@ -181,22 +181,22 @@ def _query_all_videos(
     """query all rows from a table"""
 
     query_string = f"""
-                select {base_fields} 
-                from videos v
-                left join channels c on c.id_channel = v.id_channel
-                left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
-                where v.published   >= '{make_time_delta(days_max)}'
-                and v.published <= '{make_time_delta(days_min)}'
-                and v.duration > {duration_min}
-                and v.duration < {duration_max}
-                {f"and v.id_categ_0 like '{id_categ_0}'" if id_categ_0 else ""}
-                {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
-                {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
-                {f"and c.id_language like '{id_language}'" if id_language else ""}
-                {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
-                order by v.{order_by} {order_direction}
-                ;
-                """
+        select {base_fields} 
+        from videos v
+        left join channels c on c.id_channel = v.id_channel
+        left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
+        where v.published   >= '{make_time_delta(days_max)}'
+        and v.published <= '{make_time_delta(days_min)}'
+        and v.duration > {duration_min}
+        and v.duration < {duration_max}
+        {f"and v.id_categ_0 like '{id_categ_0}'" if id_categ_0 else ""}
+        {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
+        {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
+        {f"and c.id_language like '{id_language}'" if id_language else ""}
+        {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
+        order by v.{order_by} {order_direction}
+        ;
+        """
 
     # limit {limit};
 
@@ -230,25 +230,25 @@ def _query_videos_by_user(
     """query all rows from a user"""
 
     query_string = f"""
-                select {base_fields}
-                from videos v
-                left join userschannels u on u.id_channel = v.id_channel
-                left join channels c on c.id_channel = v.id_channel
-                left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
-                where u.id_user = {id_user}
-                and v.published   >= '{make_time_delta(days_max)}'
-                and v.published <= '{make_time_delta(days_min)}'
-                and v.duration > {duration_min}
-                and v.duration < {duration_max}
-                {f"and v.id_categ_0 like '{id_categ_0}'" if id_categ_0 else ""}
-                {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
-                {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
-                {f"and c.id_language like '{id_language}'" if id_language else ""}
-                {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
-                {f"and v.id_status like '{id_status}'" if id_status else ""}
-                order by v.{order_by} {order_direction}
-                ;
-                """  #                 limit {limit};
+        select {base_fields}
+        from videos v
+        left join userschannels u on u.id_channel = v.id_channel
+        left join channels c on c.id_channel = v.id_channel
+        left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
+        where u.id_user = {id_user}
+        and v.published   >= '{make_time_delta(days_max)}'
+        and v.published <= '{make_time_delta(days_min)}'
+        and v.duration > {duration_min}
+        and v.duration < {duration_max}
+        {f"and v.id_categ_0 like '{id_categ_0}'" if id_categ_0 else ""}
+        {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
+        {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
+        {f"and c.id_language like '{id_language}'" if id_language else ""}
+        {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
+        {f"and v.id_status like '{id_status}'" if id_status else ""}
+        order by v.{order_by} {order_direction}
+        ;
+        """  #                 limit {limit};
 
     logging.warning(query_string)
 
@@ -280,23 +280,23 @@ def _query_videos_by_channel(
     """query all rows from a user"""
 
     query_string = f"""
-                select {base_fields}
-                from videos v
-                left join channels c on c.id_channel = v.id_channel
-                left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
-                where c.id_channel like '{id_channel}'
-                and v.published   >= '{make_time_delta(days_max)}'
-                and v.published <= '{make_time_delta(days_min)}'
-                and v.duration > {duration_min}
-                and v.duration < {duration_max}
-                {f"and v.id_categ_0 like '{id_categ_0}'" if id_categ_0 else ""}
-                {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
-                {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
-                {f"and c.id_language like '{id_language}'" if id_language else ""}
-                {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
-                order by v.{order_by} {order_direction}
-                ;
-                """  #                 limit {limit};
+        select {base_fields}
+        from videos v
+        left join channels c on c.id_channel = v.id_channel
+        left join categ_1 cc on cc.id_categ_1 = c.id_categ_1
+        where c.id_channel like '{id_channel}'
+        and v.published   >= '{make_time_delta(days_max)}'
+        and v.published <= '{make_time_delta(days_min)}'
+        and v.duration > {duration_min}
+        and v.duration < {duration_max}
+        {f"and v.id_categ_0 like '{id_categ_0}'" if id_categ_0 else ""}
+        {f"and c.id_categ_1 like '{id_categ_1}'" if id_categ_1 else ""}
+        {f"and cc.id_categ_2 like '{id_categ_2}'" if id_categ_2 else ""}
+        {f"and c.id_language like '{id_language}'" if id_language else ""}
+        {f"and v.title like '%{_prepare_query(query)}%'" if query else ""}
+        order by v.{order_by} {order_direction}
+        ;
+        """  #                 limit {limit};
 
     logging.warning(query_string)
 

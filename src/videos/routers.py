@@ -29,6 +29,15 @@ async def get_video(id_video: str):
 
     results = VideoQuery.by_id_video(id_video)
 
+    if not results:
+        return {
+            "video": {},
+            "message": "no videos found",
+            "total": 0,
+            "limit": 1,
+            "skip": 0,
+        }
+
     return {
         "video": results,
         "message": "done",

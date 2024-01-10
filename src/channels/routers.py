@@ -28,6 +28,16 @@ async def get_channel(id_channel: str):
 
     results = ChannelQuery.by_id_channel(id_channel)
 
+    # manage if null
+    if not results:
+        return {
+            "channel": {},
+            "message": "no channels found",
+            "total": 0,
+            "limit": 1,
+            "skip": 0,
+        }
+
     return {
         "channel": results,
         "message": "done",

@@ -19,7 +19,7 @@ def _query_channel_by_id(id_channel: str):
 
     if not result:
         logging.error(f"channel not found: {id_channel}")
-        return {"message": "channel not found"}
+        return {}
 
     logging.warning(result.to_dict())
     result = result.to_dict()
@@ -39,8 +39,6 @@ def _query_all_ids_channels():
         results = session.query(Channel.id_channel).all()
 
     results = [result[0] for result in results]
-
-    # CAREFULL : PREVIOUS CODE USE JUST RETURN OF LIST NOT A TUPLE (results, len(results))
 
     return list(set(results)), len(results)
 

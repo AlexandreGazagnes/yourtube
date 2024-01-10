@@ -1,5 +1,6 @@
 __pycache__
 *.pyc
+
 *.pyo
 *.pyd
 .Python
@@ -19,30 +20,21 @@ coverage.xml
 .pytest_cache
 .hypothesis
 
-.venv
-.venv/*
 
+# folders
 tests
-tests/*
-
 sandbox
-sandbox/*
-
 utils
-utils/*
-
 data
-data/*
-
 notebooks
-notebooks/*
-
 .git
-.git/*
-
 .github
-.github/*
+.venv
 
-# poetry.lock
-
+# files
 nohup.out
+# poetry.lock
+README.md
+LICENSE
+CHANGELOG.md
+.gitignore
